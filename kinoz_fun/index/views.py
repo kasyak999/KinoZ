@@ -5,4 +5,9 @@ from django.http import HttpResponse, HttpRequest
 
 def index(request: HttpRequest) -> HttpResponse:
     """ Главная страница """
-    return render(request, 'index/index.html')
+    context = {
+        'title': 'Гланвая страница',
+        'name': 'Главная',
+        'film_array': [i for i in range(50)],
+    }
+    return render(request, 'index/index.html', context)

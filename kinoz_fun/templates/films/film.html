@@ -1,12 +1,40 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}
-  Гfilm
+  Название фильма
 {% endblock %}
 
 {% block content %}     
-  <h3>film</h3>
-  film
-  {{ id }}
-  
+  <link rel="stylesheet" href="{% static 'css/film-film.css' %}" type="text/css">
+  <h1>Название фильма</a> <font color=#676767>/ Оригинальное название фильма</font> (2024)</h1>
+  <div class="top">
+    <div class="top_right">
+      <img src="{% static 'images/test.gif' %}">
+    </div>
+    <div class="top_left">
+      <p><b>Год выпуска</b> 2001</p>
+      <p><b>Страна</b> США, Германия</p>
+      <p><b>Жанр</b> триллер, криминал, боевик</p>
+      <p><b>Рейтинг кинопоиска</b> 7 (оценок 307 428)</p>
+      <p><b>Категория</b> фильм</p>
+      <p><b>Режиссер</b> Роб Коэн</p>
+      <p><b>Актеры</b> Пол Уокер, Вин Дизель, Мишель Родригес, Джордана Брюстер, Мэтт Шульце</p>
+      <br>
+      <p>
+        <img src="{% static 'images/scrin.gif' %}">
+        <img src="{% static 'images/scrin.gif' %}">
+        <img src="{% static 'images/scrin.gif' %}">
+        <img src="{% static 'images/scrin.gif' %}">
+      </p>
+    </div>
+  </div>
+  <div class="text">
+    <p><b>О фильме:</b>
+      Его зовут Брайан, и он - фанатик турбин и нитроускорителей. Он пытается попасть 
+      в автобанду легендарного Доминика Торетто, чемпиона опасных и незаконных уличных 
+      гонок. Брайан также полицейский, и его задание - втереться в доверие к Торетто, 
+      подозреваемому в причастности к дерзким грабежам грузовиков, совершенным прямо на ходу.
+    </p>
+  </div>
 {% endblock %}

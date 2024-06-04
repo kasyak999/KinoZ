@@ -1,17 +1,31 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}
-  Гланвая страница
+  {{ title }}
 {% endblock %}
 
-{% block content %}     
-  <h3>Главная</h3>
-  <a href="{% url 'films:film' 1 %}">{% url 'films:film' 1 %}</a>
-  <br>
-  gtgtgtgt gt tgtgtgtgtgtgtgt gg tgtgtg tgtgt ggtgtg tgtgtgtgtgtgtgtgtgtgfvfv f vf f f f f fgf gfgfgfgf
-  fgfgfgf  fgfgfgf gf f fgf g fgfgfgfgf fg f  fgfg fgf 
-  f gfgfgfgfgfgfgtg tgtgtg tgt gt gtg t gtg tgtg tgt gt tgtgtg ttg
-  tgtgtgtgtgt g gt t gtgtgtgtgtg tgtgtgtg gttgtgtg  tgtgtgt tg gt tg tgt gtgtgtgt
-  tgtgtgt tgtgtgtgtgt
-  
+{% block content %}   
+  <link rel="stylesheet" href="{% static 'css/index-index.css' %}" type="text/css">  
+  <h3>{{ name }}</h3>
+
+  {% for id in film_array %}
+    <div class="osnova">
+      <div class="osnova-head">
+        <div>
+          <a href="{% url 'films:film' id %}"><img src="{% static 'images/test.gif' %}"></a>
+        </div>
+        <div>
+          <h2><a href="{% url 'films:film' id %}">
+            Название фильма <font color=#676767>/ Ориг название</font> (2024)
+          </a></h2>
+          <p><b>Жанр:</b> драма</p>
+          <p><b>Страна:</b> Великобритания</p>
+          <p><b>Категория:</b> фильм</p>
+          <p><b>Рейтинг кинопоиска:</b> 7 (оценок 464)</p>
+        </div>
+      </div>
+      <p><b>О фильме:</b> frfrfrfr  rfrfrfr frfr</p>
+    </div>
+  {% endfor %}
 {% endblock %}
