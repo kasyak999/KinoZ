@@ -25,10 +25,8 @@ header {
     width: 50%;
   }
   .menu-top {
-    position: sticky; /* двигается вместе с браузером */
-    top: 0;
     background-color: black;
-    background: rgba(48, 48, 48, 0.8); /*прозрачный фон*/
+    background: rgba(48, 48, 48, 0.7); /*прозрачный фон*/
     color: aliceblue;
     display: flex; /*див друг за другом*/
     justify-content: center;
@@ -52,7 +50,6 @@ main {
   .menu {
     position: sticky; /* двигается вместе с браузером */
     top: 0;/**/
-    /*height: 160px;*/
     max-height: 160px;
     border: 1px solid #006600;  /*рамка*/
     border-radius: 10px; /*закругление*/
@@ -122,5 +119,8 @@ p {
   main .menu li{
     display: inline;
     margin-left: 0; 
+  }
+  main .menu {
+    position: relative;
   }
 }

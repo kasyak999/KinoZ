@@ -8,6 +8,6 @@ def index(request: HttpRequest) -> HttpResponse:
     context = {
         'title': 'Гланвая страница',
         'name': 'Главная',
-        'film_array': [i for i in range(50)],
+        'film_array': [i for i in range(15)],
     }
     return render(request, 'index/index.html', context)
