@@ -5,9 +5,13 @@
   Название фильма
 {% endblock %}
 
-{% block content %}     
+{% block content %}    
+  {{ result }}
+  <hr>
+  {{ result.title}}
+
   <link rel="stylesheet" href="{% static 'css/film-film.css' %}" type="text/css">
-  <h1>Название фильма</a> <font color=#676767>/ Оригинальное название фильма</font> (2024)</h1>
+  <h1>{{ result.title}}</a> <font color=#676767>/ {{ result.orig_title}}</font> (2024)</h1>
   <div class="top">
     <div class="top_right">
       <img src="{% static 'images/test.gif' %}">
