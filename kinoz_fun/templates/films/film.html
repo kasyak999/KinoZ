@@ -2,26 +2,24 @@
 {% load static %}
 
 {% block title %}
-  Название фильма
+  {{ result_kp.name }} / {{ result_kp.name_orig }} ({{ result_kp.year }})
 {% endblock %}
 
 {% block content %}    
-  {{ result }}
-  <hr>
-  {{ result.title}}
+  <!-- {{ result }} -->
 
   <link rel="stylesheet" href="{% static 'css/film-film.css' %}" type="text/css">
-  <h1>{{ result.title}}</a> <font color=#676767>/ {{ result.orig_title}}</font> (2024)</h1>
+  <h1>{{ result_kp.name }}</a> <font color=#676767>/ {{ result_kp.name_orig }}</font> ({{ result_kp.year }})</h1>
   <div class="top">
     <div class="top_right">
-      <img src="{% static 'images/test.gif' %}">
+      <img src="{{ result_kp.poster}}">
     </div>
     <div class="top_left">
-      <p><b>Год выпуска</b> 2001</p>
-      <p><b>Страна</b> США, Германия</p>
-      <p><b>Жанр</b> триллер, криминал, боевик</p>
-      <p><b>Рейтинг кинопоиска</b> 7 (оценок 307 428)</p>
-      <p><b>Категория</b> фильм</p>
+      <p><b>Год выпуска</b> {{ result_kp.year }}</p>
+      <p><b>Страна</b> {{ result_kp.country }}</p>
+      <p><b>Жанр</b> {{ result_kp.genres }}</p>
+      <p><b>Рейтинг кинопоиска</b> {{ result_kp.rating }} (оценок {{ result_kp.votecount }})</p>
+      <p><b>Категория</b> {{ result_kp.cat }}</p>
       <p><b>Режиссер</b> Роб Коэн</p>
       <p><b>Актеры</b> Пол Уокер, Вин Дизель, Мишель Родригес, Джордана Брюстер, Мэтт Шульце</p>
       <br>
@@ -35,10 +33,7 @@
   </div>
   <div class="text">
     <p><b>О фильме:</b>
-      Его зовут Брайан, и он - фанатик турбин и нитроускорителей. Он пытается попасть 
-      в автобанду легендарного Доминика Торетто, чемпиона опасных и незаконных уличных 
-      гонок. Брайан также полицейский, и его задание - втереться в доверие к Торетто, 
-      подозреваемому в причастности к дерзким грабежам грузовиков, совершенным прямо на ходу.
+      {{ result_kp.description }}
     </p>
   </div>
 {% endblock %}

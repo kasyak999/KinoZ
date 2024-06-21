@@ -6,7 +6,61 @@ from pprint import pprint
 
 
 # URL сервера API
-api_url = "https://videocdn.tv/api/short"
+API_URL = "https://videocdn.tv/api/short"
+TOKEN = 'fa6af878405af7b07dfe9f0d88ae421f'
+
+KINOPOISK_URL = 'https://kinopoiskapiunofficial.tech'
+KINOPOISK_URL_MAIN = '/api/v2.2/films/'
+DATA_KP = {  # Параметры запроса
+    'X-API-KEY': "2c84e19c-996a-4c40-a8bd-9375dfa4678b",
+    'Content-Type': 'application/json'
+}
+
+
+def information_film(kp):
+    """Собираем информацию о фильме"""
+    data_kp = KINOPOISK_URL + KINOPOISK_URL_MAIN + str(kp)
+    response_kp = requests.get(data_kp, headers=DATA_KP)
+    if response_kp.status_code == 200:
+        response_kp = response_kp.json()
+        pprint(response_kp)
+        print('-----------------------')
+        print(response_kp['type'])
+        # print('-----------------------')
+        if response_kp['type'] == 'FILM':
+            cat = 'Фильм'
+        elif response_kp['type'] == 'TV_SERIES':
+            cat = 'Сериал'
+        else:
+            cat = response_kp['type']
+
+        votecount = f"{response_kp['ratingKinopoiskVoteCount']:,}".replace(',', ' ')
+        genres = ''
+        for i in response_kp['genres']:
+            for value in dict.values(i):
+                genres += value + ', '
+        country = ''
+        for i in response_kp['countries']:
+            for value in dict.values(i):
+                country += value + ', '
+        result = {
+            'name': response_kp['nameRu'],
+            'name_orig': response_kp['nameOriginal'],
+            'year': response_kp['year'],
+            'poster': response_kp['posterUrl'],
+            'country': country[:-2],
+            'genres': genres[:-2],
+            'rating': response_kp['ratingKinopoisk'],
+            'votecount': votecount,
+            'description': response_kp['description'],
+            'cat': cat,
+            # 'name': response_kp['nameRu'],
+            # 'name': response_kp['nameRu'],
+            # 'name': response_kp['nameRu'],
+            # 'name': response_kp['nameRu'],
+        }
+        return result
+    raise Http404
 
 
 def film(request: HttpRequest, kp: int) -> HttpResponse:
@@ -14,11 +68,13 @@ def film(request: HttpRequest, kp: int) -> HttpResponse:
     # Параметры запроса
     data = {
         'kinopoisk_id': kp,
-        'api_token': "fa6af878405af7b07dfe9f0d88ae421f",
+        'api_token': TOKEN,
     }
-    # Отправка запроса POST с данными JSON
-    response = requests.get(api_url, data)
+    response = requests.get(API_URL, data)
     if response.json()['result']:
-        context = {'result': response.json()['data'][0]}
+        context = {
+            'result': response.json()['data'][0],
+            'result_kp': information_film(kp),
+        }
         return render(request, 'films/film.html', context)
     raise Http404

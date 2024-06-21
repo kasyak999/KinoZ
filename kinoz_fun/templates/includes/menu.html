@@ -4,7 +4,7 @@
       <li><a href="{% url 'index:index' %}" class="{% if view_name == 'index:index' %}a-active{% endif %}">Главная</a></li>
       <li><a href="{% url 'search:index' %}" class="{% if view_name == 'search:index' %}a-active{% endif %}">Поиск</a></li>
       <li><a href="#" class="{% if view_name == '' %}a-active{% endif %}">Комментарии</a></li>
-      <li><a href="#" class="{% if view_name == '' %}a-active{% endif %}">Контакты</a></li>
+      <li><a href="{% url "index:contacts" %}" class="{% if view_name == 'index:contacts' %}a-active{% endif %}">Контакты</a></li>
       <li><a href="#" class="{% if view_name == '' %}a-active{% endif %}">Новинки кино</a></li>
       <li><a href="{% url 'admin:index' %}" class="{% if view_name == '' %}a-active{% endif %}">Admin меню</a></li>
       {% endwith %}
