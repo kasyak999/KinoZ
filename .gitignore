@@ -3,3 +3,4 @@ venv
 __pycache__
 key_name.py
 te.py
+db.sqlite3
