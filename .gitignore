@@ -4,5 +4,5 @@ __pycache__
 key_name.py
 te.py
 db.sqlite3
-migrations/
+migrations/*
 !migrations/__init__.py
