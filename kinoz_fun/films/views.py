@@ -6,16 +6,28 @@ from pprint import pprint
 from . import key_name  # Импорт переменых и токенов для подключения к Api
 
 
+def add_scrinshot_film(data_kp):
+    """Добавление кадров из фильма"""
+    data_kp += '/images'
+    response_kp = requests.get(data_kp, headers=key_name.DATA_KP)
+    if response_kp.status_code == 200:
+        response_kp = response_kp.json()
+        scrinshot = response_kp['items']
+        # pprint(response_kp['items'])
+        return scrinshot
+
+
 def information_film(kp):
     """Собираем информацию о фильме"""
     data_kp = key_name.KINOPOISK_URL + key_name.KINOPOISK_URL_MAIN + str(kp)
     response_kp = requests.get(data_kp, headers=key_name.DATA_KP)
     if response_kp.status_code == 200:
+        scrinshot = add_scrinshot_film(data_kp)
         response_kp = response_kp.json()
-        pprint(response_kp)
-        print('-----------------------')
-        print(response_kp['type'])
+        # pprint(response_kp)
         # print('-----------------------')
+        # print(response_kp['type'])
+        # # print('-----------------------')
         if response_kp['type'] == 'FILM':
             cat = 'Фильм'
         elif response_kp['type'] == 'TV_SERIES':
@@ -36,17 +48,14 @@ def information_film(kp):
             'name': response_kp['nameRu'],
             'name_orig': response_kp['nameOriginal'],
             'year': response_kp['year'],
-            'poster': response_kp['posterUrl'],
+            'poster': (response_kp['posterUrl'], response_kp['posterUrlPreview']),
             'country': country[:-2],
             'genres': genres[:-2],
             'rating': response_kp['ratingKinopoisk'],
             'votecount': votecount,
             'description': response_kp['description'],
             'cat': cat,
-            # 'name': response_kp['nameRu'],
-            # 'name': response_kp['nameRu'],
-            # 'name': response_kp['nameRu'],
-            # 'name': response_kp['nameRu'],
+            'scrinshot': scrinshot,
         }
         return result
     raise Http404

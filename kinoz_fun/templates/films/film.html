@@ -12,7 +12,7 @@
   <h1>{{ result_kp.name }}</a> <font color=#676767>/ {{ result_kp.name_orig }}</font> ({{ result_kp.year }})</h1>
   <div class="top">
     <div class="top_right">
-      <img src="{{ result_kp.poster}}">
+      <a href='{{ result_kp.poster.0}}' target="_blank"><img src="{{ result_kp.poster.1}}"></a>
     </div>
     <div class="top_left">
       <p><b>Год выпуска</b> {{ result_kp.year }}</p>
@@ -20,15 +20,16 @@
       <p><b>Жанр</b> {{ result_kp.genres }}</p>
       <p><b>Рейтинг кинопоиска</b> {{ result_kp.rating }} (оценок {{ result_kp.votecount }})</p>
       <p><b>Категория</b> {{ result_kp.cat }}</p>
-      <p><b>Режиссер</b> Роб Коэн</p>
+      <!-- <p><b>Режиссер</b> Роб Коэн</p>
       <p><b>Актеры</b> Пол Уокер, Вин Дизель, Мишель Родригес, Джордана Брюстер, Мэтт Шульце</p>
-      <br>
-      <p>
-        <img src="{% static 'images/scrin.gif' %}">
-        <img src="{% static 'images/scrin.gif' %}">
-        <img src="{% static 'images/scrin.gif' %}">
-        <img src="{% static 'images/scrin.gif' %}">
-      </p>
+      -->
+      {% if result_kp.scrinshot %}
+        <p>
+          {% for i in result_kp.scrinshot %}
+          <a href='{{ i.imageUrl }}' target="_blank"><img src="{{ i.previewUrl }}"></a>
+          {% endfor %}
+        </p>
+      {% endif %}
     </div>
   </div>
   <div class="text">
