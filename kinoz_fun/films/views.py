@@ -3,24 +3,13 @@ from django.http import HttpResponse, HttpRequest, Http404
 # Http404
 import requests
 from pprint import pprint
-
-
-# URL сервера API
-API_URL = "https://videocdn.tv/api/short"
-TOKEN = 'fa6af878405af7b07dfe9f0d88ae421f'
-
-KINOPOISK_URL = 'https://kinopoiskapiunofficial.tech'
-KINOPOISK_URL_MAIN = '/api/v2.2/films/'
-DATA_KP = {  # Параметры запроса
-    'X-API-KEY': "2c84e19c-996a-4c40-a8bd-9375dfa4678b",
-    'Content-Type': 'application/json'
-}
+from . import key_name  # Импорт переменых и токенов для подключения к Api
 
 
 def information_film(kp):
     """Собираем информацию о фильме"""
-    data_kp = KINOPOISK_URL + KINOPOISK_URL_MAIN + str(kp)
-    response_kp = requests.get(data_kp, headers=DATA_KP)
+    data_kp = key_name.KINOPOISK_URL + key_name.KINOPOISK_URL_MAIN + str(kp)
+    response_kp = requests.get(data_kp, headers=key_name.DATA_KP)
     if response_kp.status_code == 200:
         response_kp = response_kp.json()
         pprint(response_kp)
@@ -68,9 +57,9 @@ def film(request: HttpRequest, kp: int) -> HttpResponse:
     # Параметры запроса
     data = {
         'kinopoisk_id': kp,
-        'api_token': TOKEN,
+        'api_token': key_name.TOKEN,
     }
-    response = requests.get(API_URL, data)
+    response = requests.get(key_name.API_URL, data)
     if response.json()['result']:
         context = {
             'result': response.json()['data'][0],
