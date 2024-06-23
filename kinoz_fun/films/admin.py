@@ -1,10 +1,12 @@
 from django.contrib import admin
-from . models import FilmsdModel
+from . models import FilmsdModel, Category, Genres, Country
+# СategoriesModel
 from django.utils.html import mark_safe
 
 
 class FilmsAdmin(admin.ModelAdmin):
     list_display = (
+        'id_kp',
         'poster_img',
         'name',
         'year',
@@ -25,4 +27,14 @@ class FilmsAdmin(admin.ModelAdmin):
     poster_img.short_description = 'poster'
 
 
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = (
+        'name',
+        'created_at',
+    )
+
+
 admin.site.register(FilmsdModel, FilmsAdmin)
+admin.site.register(Category, CategoryAdmin)
+admin.site.register(Genres, CategoryAdmin)
+admin.site.register(Country, CategoryAdmin)
