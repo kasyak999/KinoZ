@@ -12,9 +12,8 @@ def add_scrinshot_film(data_kp):
     data_kp += '/images'
     response_kp = requests.get(data_kp, headers=key_name.DATA_KP)
     if response_kp.status_code == 200:
-        response_kp = response_kp.json()
-        scrinshot = response_kp['items']
-        # pprint(response_kp['items'])
+        scrinshot = response_kp.json()['items']
+        # pprint(scrinshot)
         return scrinshot
 
 
@@ -26,9 +25,6 @@ def information_film(kp):
         scrinshot = add_scrinshot_film(data_kp)
         response_kp = response_kp.json()
         # pprint(response_kp)
-        # print('-----------------------')
-        # print(response_kp['type'])
-        # # print('-----------------------')
         if response_kp['type'] == 'FILM':
             cat = 'Фильм'
         elif response_kp['type'] == 'TV_SERIES':
@@ -65,19 +61,22 @@ def select_database(result_sql):
     genres = ', '.join(genres)
     country = [country.name for country in result_sql[0].country.all()]
     country = ', '.join(country)
-
+    if 'url' in result_sql[0].poster:
+        poster = (result_sql[0].poster['url'], result_sql[0].poster['prev'])
+    else:
+        poster = result_sql[0].poster
     result = {
             'name': result_sql[0].name,
             'name_orig': result_sql[0].name_orig,
             'year': result_sql[0].year,
-            # 'poster': (response_kp['posterUrl'], response_kp['posterUrlPreview']),
+            'poster': poster,
             'country': country,
             'genres': genres,
             'rating': result_sql[0].rating,
             'votecount': result_sql[0].votecount,
             'description': result_sql[0].description,
             'cat': result_sql[0].cat.name,
-            # 'scrinshot': scrinshot,
+            'scrinshot': result_sql[0].scrinshot,
         }
     return result
 
@@ -105,10 +104,8 @@ def film(request: HttpRequest, kp: int) -> HttpResponse:
         # # блок с фреймом видео
 
         result = information_film(kp)
-
-    context = {
-        'result_kp': result,
-    }
-    return render(request, 'films/film.html', context)
+    return render(
+        request, 'films/film.html', {'result_kp': result}
+    )
     # print('ошибка')
     # raise Http404

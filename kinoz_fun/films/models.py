@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 # from django.utils import timezone
-
+# from django.contrib.postgres.fields import JSONField
+# django.db.models.JSONField
 
 User = get_user_model()
 
@@ -26,6 +27,7 @@ class MainModel(models.Model):
 
 class FilmsdModel(MainModel):
     """Фильмы модель"""
+    # image = models.URLField(max_length=200)
     is_published = models.BooleanField(
         default=False, verbose_name='Опубликовано',
         help_text='Снимите галочку, чтобы скрыть публикацию.'
@@ -36,7 +38,13 @@ class FilmsdModel(MainModel):
         max_length=256, verbose_name='Оригинальное', blank=True
     )
     year = models.IntegerField(verbose_name='Год')
-    poster = models.TextField(verbose_name='Постер')
+    poster = models.JSONField(
+        default=dict, verbose_name='Постер', blank=True,
+        help_text=(
+            'url - оригинал, "prev - превью'
+            '{"url": "ссылка", "prev": "ссылка"}'
+        ),
+    )
     country = models.ManyToManyField(
         'Country', verbose_name='Страна', blank=True
     )
@@ -44,9 +52,9 @@ class FilmsdModel(MainModel):
         'Genres', verbose_name='Жанр', blank=True
     )
     # null=True, verbose_name='Жанр', blank=True
-    rating = models.FloatField(null=True, verbose_name='Рейтинг', blank=True)
+    rating = models.FloatField(default=0, null=True, verbose_name='Рейтинг', blank=True)
     votecount = models.IntegerField(
-        null=True, verbose_name='Голосов', blank=True
+        default=0, null=True, verbose_name='Голосов', blank=True
     )
     description = models.TextField(
         default='Нет описания', verbose_name='Описание'
@@ -58,7 +66,13 @@ class FilmsdModel(MainModel):
         on_delete=models.SET_NULL,
         null=True
     )
-    scrinshot = models.TextField(verbose_name='Скриншоты', blank=True)
+    scrinshot = models.JSONField(
+        default=list, verbose_name='Скриншоты', blank=True,
+        help_text=(
+            'imageUrl - оригинал, "previewUrl - превью'
+            '[{"imageUrl": "ссылка", "previewUrl": "ссылка"}, ]'
+        )
+    )
 
     class Meta(MainModel.Meta):
         verbose_name = 'фильм'
