@@ -73,7 +73,6 @@ class FilmsdModel(MainModel):
             '[{"imageUrl": "ссылка", "previewUrl": "ссылка"}, ]'
         )
     )
-    
 
     class Meta(MainModel.Meta):
         verbose_name = 'фильм'
