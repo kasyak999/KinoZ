@@ -12,10 +12,11 @@ class MainModel(models.Model):
     created_at = models.DateTimeField(
         auto_now_add=True, verbose_name='Добавлен'
     )
+    name = models.CharField(max_length=256, verbose_name='Название')
 
     class Meta:
         abstract = True
-        ordering = ('created_at',)
+        ordering = ('-created_at',)
 
     def __str__(self):
         if len(self.name) > 20:
@@ -33,9 +34,9 @@ class FilmsdModel(MainModel):
         help_text='Снимите галочку, чтобы скрыть публикацию.'
     )
     id_kp = models.IntegerField(verbose_name='id кинопоиска')
-    name = models.CharField(max_length=256, verbose_name='Название')
     name_orig = models.CharField(
-        max_length=256, verbose_name='Оригинальное', blank=True
+        max_length=256, verbose_name='Оригинальное',
+        blank=True, null=True
     )
     year = models.IntegerField(verbose_name='Год')
     poster = models.JSONField(
@@ -54,17 +55,18 @@ class FilmsdModel(MainModel):
     # null=True, verbose_name='Жанр', blank=True
     rating = models.FloatField(default=0, null=True, verbose_name='Рейтинг', blank=True)
     votecount = models.IntegerField(
-        default=0, null=True, verbose_name='Голосов', blank=True
+        default=0, verbose_name='Голосов', blank=True, null=True,
     )
     description = models.TextField(
-        default='Нет описания', verbose_name='Описание'
+        default='Нет описания', verbose_name='Описание', null=True,
     )
     cat = models.ForeignKey(
         'Category',
         max_length=256,
         verbose_name='Категория',
         on_delete=models.SET_NULL,
-        null=True
+        null=True,
+        blank=True
     )
     scrinshot = models.JSONField(
         default=list, verbose_name='Скриншоты', blank=True,
@@ -86,8 +88,6 @@ class FilmsdModel(MainModel):
 class Category(MainModel):
     """Катагории фильмов"""
 
-    name = models.CharField(max_length=256, verbose_name='Название')
-
     class Meta(MainModel.Meta):
         verbose_name = 'категория'
         verbose_name_plural = 'Категории'
@@ -95,8 +95,6 @@ class Category(MainModel):
 
 class Genres(MainModel):
     """Жанры фильмов"""
-
-    name = models.CharField(max_length=256, verbose_name='Название')
 
     class Meta(MainModel.Meta):
         verbose_name = 'жанр'

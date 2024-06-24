@@ -6,6 +6,7 @@ from django.utils.html import mark_safe
 
 class FilmsAdmin(admin.ModelAdmin):
     list_display = (
+        'id',
         'id_kp',
         'poster_img',
         'name',
