@@ -88,7 +88,7 @@ def select_database(kp):
             'rating': result_sql.rating,
             'votecount': result_sql.votecount,
             'description': result_sql.description,
-            'cat': result_sql.cat['name'],
+            'cat': result_sql.cat.name,
             'scrinshot': result_sql.scrinshot,
         }
     return result
