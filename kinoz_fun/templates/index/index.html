@@ -2,14 +2,14 @@
 {% load static %}
 
 {% block title %}
-  {{ title }}
+  {{ html_title }}
 {% endblock %}
 
 {% block content %}   
   <link rel="stylesheet" href="{% static 'css/index-index.css' %}" type="text/css">  
-  <h3>{{ name }}</h3>
+  <h3>{{ html_name }}</h3>
 
-  {% for id in film_array %}
+  {% for id in results %}
     <div class="osnova">
       <div class="osnova-head">
         <div>

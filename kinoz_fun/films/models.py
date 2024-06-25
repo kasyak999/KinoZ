@@ -39,12 +39,9 @@ class FilmsdModel(MainModel):
         blank=True, null=True
     )
     year = models.IntegerField(verbose_name='Год')
-    poster = models.JSONField(
-        default=dict, verbose_name='Постер', blank=True,
-        help_text=(
-            'url - оригинал, "prev - превью'
-            '{"url": "ссылка", "prev": "ссылка"}'
-        ),
+    poster = models.TextField(
+        verbose_name='Постер', blank=True,
+        help_text=('Пример: http://оригинал, http://превью'),
     )
     country = models.ManyToManyField(
         'Country', verbose_name='Страна', blank=True
@@ -52,7 +49,6 @@ class FilmsdModel(MainModel):
     genres = models.ManyToManyField(
         'Genres', verbose_name='Жанр', blank=True
     )
-    # null=True, verbose_name='Жанр', blank=True
     rating = models.FloatField(default=0, null=True, verbose_name='Рейтинг', blank=True)
     votecount = models.IntegerField(
         default=0, verbose_name='Голосов', blank=True, null=True,
@@ -68,8 +64,8 @@ class FilmsdModel(MainModel):
         null=True,
         blank=True
     )
-    scrinshot = models.JSONField(
-        default=list, verbose_name='Скриншоты', blank=True,
+    scrinshot = models.TextField(
+        null=True, verbose_name='Скриншоты', blank=True,
         help_text=(
             'imageUrl - оригинал, "previewUrl - превью'
             '[{"imageUrl": "ссылка", "previewUrl": "ссылка"}, ]'

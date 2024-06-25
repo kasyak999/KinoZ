@@ -20,7 +20,7 @@ def add_scrinshot_film(data_kp):
         return scrinshot
 
 
-def information_film(kp):
+def information_film(kp: int):
     """Собираем информацию о фильме из кинопоиска"""
     data_kp = key_name.KINOPOISK_URL + key_name.KINOPOISK_URL_MAIN + str(kp)
     response_kp = requests.get(data_kp, headers=key_name.DATA_KP)
@@ -35,12 +35,14 @@ def information_film(kp):
         else:
             cat = response_kp['type']
 
-        votecount = f"{response_kp['ratingKinopoiskVoteCount']:,}".replace(',', ' ')
-        genres = [list(dict.values(i))[0] for i in response_kp['genres']]
+        # genres = [list(dict.values(i))[0] for i in response_kp['genres']]
+        # genres = ', '.join(genres)
+        genres = [list(i.values())[0] for i in response_kp['genres']]
+        print(genres)
         genres = ', '.join(genres)
+
         country = [list(dict.values(i))[0] for i in response_kp['countries']]
         country = ', '.join(country)
-
         result = {
             'id_kp': response_kp['kinopoiskId'],
             'name': response_kp['nameRu'],
@@ -50,7 +52,7 @@ def information_film(kp):
             'country': country,
             'genres': genres,
             'rating': response_kp['ratingKinopoisk'],
-            'votecount': votecount,
+            'votecount': response_kp['ratingKinopoiskVoteCount'],
             'description': response_kp['description'],
             'cat': cat,
             'scrinshot': scrinshot,
@@ -59,25 +61,24 @@ def information_film(kp):
     raise Http404
 
 
-def select_database(kp):
+def select_database(kp: int):
     """Вывод из базы данных"""
     result_sql = get_object_or_404(
         FilmsdModel.objects.filter(
-            is_published=True, id_kp=kp
+            is_published=True
         ).select_related('cat'),
         id_kp=kp
     )
-    # print(result_sql.name)
-    genres = [genre.name for genre in result_sql.genres.values('name')]
-    genres = ', '.join(genres)
-    country = [country for country in result_sql.country.values('name')]
-    # доделать тут
-    country = ', '.join(country[0].value())
-    print(country)
-    if 'url' in result_sql.poster:
-        poster = (result_sql.poster['url'], result_sql.poster['prev'])
-    else:
-        poster = result_sql.poster
+    # pprint(result_sql)
+    genres = ', '.join(
+        [genre['name'] for genre in result_sql.genres.values('name')]
+    )
+    country = ', '.join(
+        [country['name'] for country in result_sql.country.values('name')]
+    )
+    poster = result_sql.poster.split(', ')
+    votecount = f"{result_sql.votecount:,}".replace(',', ' ')
+    scrinshot = json.loads(result_sql.scrinshot)
     result = {
             'name': result_sql.name,
             'name_orig': result_sql.name_orig,
@@ -86,40 +87,38 @@ def select_database(kp):
             'country': country,
             'genres': genres,
             'rating': result_sql.rating,
-            'votecount': result_sql.votecount,
+            'votecount': votecount,
             'description': result_sql.description,
-            'cat': result_sql.cat.name,
-            'scrinshot': result_sql.scrinshot,
+            'cat': result_sql.cat,
+            'scrinshot': scrinshot,
         }
     return result
 
 
 def add_bd_sql(result):
     """Добавление в базу данных"""
-    # json_string = json.dumps(dict())
-    # print(json_string)
-
     con = sqlite3.connect('db.sqlite3')
     cur = con.cursor()
-    sql_SELECT = '''
+    sql_select = '''
         SELECT MAX(id)
         FROM films_filmsdmodel;
     '''
-    sql_INSERT = '''
+    sql_inzert = '''
         INSERT INTO films_filmsdmodel
         VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     '''
-    id_add = cur.execute(sql_SELECT)
+    poster = ', '.join(result['poster'])
+    scrinshot = json.dumps(result['scrinshot'])
+    id_add = cur.execute(sql_select)
     id_add = id_add.fetchone()
     id_add = id_add[0] + 1 if id_add[0] is not None else 1
     sql_request = (
-        id_add, timezone.now(), 0,
-        result['id_kp'], 'Название', None,
-        '2024', json.dumps(dict()), None,
-        None, 'Нет', 0,
-        json.dumps(list()),
+        id_add, timezone.now(), result['name'],
+        1, result['id_kp'], result['name_orig'], result['year'],
+        poster, result['rating'], result['votecount'],
+        result['description'], None, scrinshot,
     )
-    cur.execute(sql_INSERT, sql_request)
+    cur.execute(sql_inzert, sql_request)
     con.commit()
     con.close()
 
@@ -132,6 +131,7 @@ def film(request: HttpRequest, kp: int) -> HttpResponse:
     ).values('id_kp')
     if result_sql:  # Есть в базе
         result = select_database(kp)
+        print('есть')
     else:
         print('нет в базе')
         # data = {
@@ -145,8 +145,8 @@ def film(request: HttpRequest, kp: int) -> HttpResponse:
         #     raise Http404
         # # блок с фреймом видео
 
-        result = information_film(kp)
-        add_bd_sql(result)
+        add_bd_sql(information_film(kp))
+        result = select_database(kp)
 
     return render(
         request, 'films/film.html', {'result_kp': result}

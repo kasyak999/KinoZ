@@ -20,9 +20,10 @@ class FilmsAdmin(admin.ModelAdmin):
     list_per_page = 10
 
     def poster_img(self, obj):
-        if obj.poster and 'url' in obj.poster:
+        if obj.poster:
+            obj.poster = obj.poster.split(', ')
             return mark_safe(
-                f'<img src="{obj.poster["url"]}" width="100" height="100">'
+                f'<img src="{obj.poster[1]}" width="100" height="100">'
             )
         else:
             return "Пусто"
