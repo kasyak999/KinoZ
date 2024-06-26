@@ -1,0 +1,8 @@
+{% load static %}
+{% load my_filters %} 
+
+{% if result.poster %}
+  <img src="{{ poster.1 }}">
+{% else %}
+  <img src="{% static "images/no_foto.jpg" %}">
+{% endif %}

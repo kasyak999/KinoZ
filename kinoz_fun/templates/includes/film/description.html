@@ -1,0 +1,23 @@
+{% load my_filters %} 
+
+<p><b>Жанр:</b> 
+{% for genres in result.genres.all %}
+    {% if forloop.last %}
+    {{ genres }}
+    {% else %}
+    {{ genres }}, 
+    {% endif %}
+{% endfor %}</p></p>
+<p><b>Страна:</b>
+{% for country in result.country.all %}
+    {% if forloop.last %}
+    {{ country }}
+    {% else %}
+    {{ country }}, 
+    {% endif %}
+{% endfor %}</p>
+<p><b>Рейтинг кинопоиска</b> {{ result.rating }} (оценок {{ result.votecount|numeric }})</p>
+<p><b>Категория</b> {{ result.cat }}</p>
+<!-- <p><b>Режиссер</b> Роб Коэн</p>
+<p><b>Актеры</b> Пол Уокер, Вин Дизель, Мишель Родригес, Джордана Брюстер, Мэтт Шульце</p>
+-->

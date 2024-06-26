@@ -15,8 +15,9 @@
 
 .osnova-head {
   /* border: 1px solid #3be208;  /*рамка*/
+  word-wrap: break-word;
   display: flex;
-  flex-wrap: wrap; /* свойство, указывающее правило переноса элементов при изменении ширины окна*/
+  /*flex-wrap: wrap; /* свойство, указывающее правило переноса элементов при изменении ширины окна*/
   img {
     width: 55px;
     height: 90px;

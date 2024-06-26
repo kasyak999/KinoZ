@@ -69,25 +69,20 @@ def select_database(kp: int):
         ).select_related('cat'),
         id_kp=kp
     )
-    # pprint(result_sql)
-    genres = ', '.join(
-        [genre['name'] for genre in result_sql.genres.values('name')]
+    scrinshot = (
+        json.loads(result_sql.scrinshot)
+        if result_sql.scrinshot
+        else result_sql.scrinshot
     )
-    country = ', '.join(
-        [country['name'] for country in result_sql.country.values('name')]
-    )
-    poster = result_sql.poster.split(', ')
-    votecount = f"{result_sql.votecount:,}".replace(',', ' ')
-    scrinshot = json.loads(result_sql.scrinshot)
     result = {
             'name': result_sql.name,
             'name_orig': result_sql.name_orig,
             'year': result_sql.year,
-            'poster': poster,
-            'country': country,
-            'genres': genres,
+            'poster': result_sql.poster,
+            'country': result_sql.country,
+            'genres': result_sql.genres,
             'rating': result_sql.rating,
-            'votecount': votecount,
+            'votecount': result_sql.votecount,
             'description': result_sql.description,
             'cat': result_sql.cat,
             'scrinshot': scrinshot,
@@ -149,7 +144,7 @@ def film(request: HttpRequest, kp: int) -> HttpResponse:
         result = select_database(kp)
 
     return render(
-        request, 'films/film.html', {'result_kp': result}
+        request, 'films/film.html', {'result': result}
     )
     # print('ошибка')
     # raise Http404

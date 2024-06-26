@@ -4,9 +4,11 @@ from . models import FilmsdModel, Category, Genres, Country
 from django.utils.html import mark_safe
 
 
+admin.site.empty_value_display = 'Не задано'
+
+
 class FilmsAdmin(admin.ModelAdmin):
     list_display = (
-        'id',
         'id_kp',
         'poster_img',
         'name',
@@ -18,6 +20,7 @@ class FilmsAdmin(admin.ModelAdmin):
     list_filter = ('is_published',)
     search_fields = ['name']
     list_per_page = 10
+    filter_horizontal = ('country', 'genres',)
 
     def poster_img(self, obj):
         if obj.poster:

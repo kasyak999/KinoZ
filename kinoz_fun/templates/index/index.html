@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load my_filters %} 
 {% load static %}
 
 {% block title %}
@@ -9,23 +10,23 @@
   <link rel="stylesheet" href="{% static 'css/index-index.css' %}" type="text/css">  
   <h3>{{ html_name }}</h3>
 
-  {% for id in results %}
+  {% for result in results %}
     <div class="osnova">
       <div class="osnova-head">
         <div>
-          <a href="{% url 'films:film' id %}"><img src="{% static 'images/test.gif' %}"></a>
+          {% with result.poster|split as poster %}
+            <a href="{% url 'films:film' result.id_kp %}">
+            {% include "includes/film/poster.html" %}</a>
+          {% endwith %}
         </div>
         <div>
-          <h2><a href="{% url 'films:film' id %}">
-            Название фильма <font color=#676767>/ Ориг название</font> (2024)
+          <h2><a href="{% url 'films:film' result.id_kp %}">
+            {{ result }} <font color=#676767>/ {{ result.name_orig }}</font> ({{ result.year }})
           </a></h2>
-          <p><b>Жанр:</b> драма</p>
-          <p><b>Страна:</b> Великобритания</p>
-          <p><b>Категория:</b> фильм</p>
-          <p><b>Рейтинг кинопоиска:</b> 7 (оценок 464)</p>
+          {% include "includes/film/description.html" %}
         </div>
       </div>
-      <p><b>О фильме:</b> frfrfrfr  rfrfrfr frfr</p>
+      <p><b>О фильме:</b> {{ result.description|truncatewords:15 }}</p>
     </div>
   {% endfor %}
 {% endblock %}
