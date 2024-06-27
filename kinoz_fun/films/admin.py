@@ -14,10 +14,11 @@ class FilmsAdmin(admin.ModelAdmin):
         'name',
         'year',
         'is_published',
+        'verified',
         'created_at',
     )
     list_display_links = ('poster_img',)
-    list_filter = ('is_published',)
+    list_filter = ('is_published', 'verified')
     search_fields = ['name']
     list_per_page = 10
     filter_horizontal = ('country', 'genres',)

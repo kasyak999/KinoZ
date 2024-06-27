@@ -35,10 +35,8 @@ def information_film(kp: int):
         else:
             cat = response_kp['type']
 
-        # genres = [list(dict.values(i))[0] for i in response_kp['genres']]
-        # genres = ', '.join(genres)
         genres = [list(i.values())[0] for i in response_kp['genres']]
-        print(genres)
+        # print(genres)
         genres = ', '.join(genres)
 
         country = [list(dict.values(i))[0] for i in response_kp['countries']]
@@ -64,10 +62,10 @@ def information_film(kp: int):
 def select_database(kp: int):
     """Вывод из базы данных"""
     result_sql = get_object_or_404(
-        FilmsdModel.objects.filter(
-            is_published=True
-        ).select_related('cat'),
-        id_kp=kp
+        FilmsdModel.objects.select_related('cat').prefetch_related(
+            'genres', 'country'
+        ),
+        id_kp=kp, is_published=True
     )
     scrinshot = (
         json.loads(result_sql.scrinshot)

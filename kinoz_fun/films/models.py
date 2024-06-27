@@ -29,6 +29,10 @@ class MainModel(models.Model):
 class FilmsdModel(MainModel):
     """Фильмы модель"""
     # image = models.URLField(max_length=200)
+    verified = models.BooleanField(
+        default=False, verbose_name='Проверено',
+        help_text='Снимите галочку, если все проверено.'
+    )
     is_published = models.BooleanField(
         default=False, verbose_name='Опубликовано',
         help_text='Снимите галочку, чтобы скрыть публикацию.'
