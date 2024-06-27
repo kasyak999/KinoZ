@@ -19,8 +19,8 @@ class MainModel(models.Model):
         ordering = ('-created_at',)
 
     def __str__(self):
-        if len(self.name) > 20:
-            result = self.name[:20] + '...'
+        if len(self.name) > 50:
+            result = self.name[:50] + '...'
         else:
             result = self.name
         return result

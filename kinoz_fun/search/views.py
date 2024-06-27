@@ -4,5 +4,5 @@ from django.http import HttpResponse, HttpRequest
 
 
 def index(request: HttpRequest) -> HttpResponse:
-    """ Главная страница """
+    """ Главная страница поиска"""
     return render(request, 'search/index.html')

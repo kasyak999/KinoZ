@@ -3,11 +3,12 @@ from django.http import HttpResponse, HttpRequest, Http404
 # Http404
 import requests
 from pprint import pprint
-from . import key_name  # Импорт переменых и токенов для подключения к Api
+import key_name  # Импорт переменых и токенов для подключения к Api
 from films.models import FilmsdModel
 import sqlite3
 from django.utils import timezone
 import json
+from django.conf import settings
 
 
 def add_scrinshot_film(data_kp):
@@ -98,7 +99,7 @@ def add_bd_sql(result):
     '''
     sql_inzert = '''
         INSERT INTO films_filmsdmodel
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     '''
     poster = ', '.join(result['poster'])
     scrinshot = json.dumps(result['scrinshot'])
@@ -109,7 +110,7 @@ def add_bd_sql(result):
         id_add, timezone.now(), result['name'],
         1, result['id_kp'], result['name_orig'], result['year'],
         poster, result['rating'], result['votecount'],
-        result['description'], None, scrinshot,
+        result['description'], None, scrinshot, 0
     )
     cur.execute(sql_inzert, sql_request)
     con.commit()
@@ -119,12 +120,14 @@ def add_bd_sql(result):
 def film(request: HttpRequest, kp: int) -> HttpResponse:
     """ страница фильма """
     # -----------------------------
+    print(settings.SERVER_EMAIL)
     result_sql = FilmsdModel.objects.filter(
         id_kp=kp
     ).values('id_kp')
     if result_sql:  # Есть в базе
         result = select_database(kp)
         print('есть')
+        print(key_name.qwe)
     else:
         print('нет в базе')
         # data = {
