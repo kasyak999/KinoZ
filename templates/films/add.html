@@ -6,6 +6,12 @@
 {% endblock %}
 
 {% block content %}  
+<style>
+  .error-text {
+      color: red;
+  }
+</style>
+
   <form method="post">
     {% csrf_token %}
     {{ form.as_ul }}

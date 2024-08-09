@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 # from django.utils import timezone
 # from django.contrib.postgres.fields import JSONField
 # django.db.models.JSONField
@@ -37,7 +38,9 @@ class FilmsdModel(MainModel):
         default=False, verbose_name='Опубликовано',
         help_text='Снимите галочку, чтобы скрыть публикацию.'
     )
-    id_kp = models.IntegerField(verbose_name='id кинопоиска', unique=True)
+    id_kp = models.IntegerField(
+        verbose_name='id кинопоиска', unique=True,
+    )
     name_orig = models.CharField(
         max_length=256, verbose_name='Оригинальное название',
         blank=True, null=True
@@ -85,6 +88,12 @@ class FilmsdModel(MainModel):
 
     # def __str__(self) -> str:
     #     return self.name
+
+    # def clean(self):
+    #     super().clean()
+    #     result = FilmsdModel.objects.filter(id_kp=self.id_kp).exclude(pk=self.pk).count()
+    #     if result > 0:
+    #         raise ValidationError("Такой id_kp уже существует!")
 
 
 class Category(MainModel):
