@@ -1,0 +1,7 @@
+{% load static %}
+
+{% if object.poster %}
+  <img src="{{ poster.1 }}">
+{% else %}
+  <img src="{% static "images/no_foto.jpg" %}">
+{% endif %}

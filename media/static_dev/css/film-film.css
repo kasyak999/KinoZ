@@ -1,0 +1,39 @@
+h1 {
+  margin: 0px;
+  font-size: 22px;/**/
+  font-family: "ChareInk-Regular";/*скаченый шрифт*/
+  letter-spacing: 1px; /*интервал между буквами*/
+}
+
+.top {
+  /* border: 1px solid #fd0909;  /*рамка*/
+  display: flex; /*див друг за другом*/
+  flex-wrap: wrap; /* свойство, указывающее правило переноса элементов при изменении ширины окна*/
+  .top_right {
+    /* border: 1px solid #3308cc;  /*рамка*/
+    margin-right: 10px;
+    img {
+      max-width: 240px;
+      width: 100%;
+      border: 1px solid #006600;  /*рамка*/
+      border-radius: 10px; /*закругление*/
+      box-shadow: -5px 5px 7px #003300; /* тень элемента: x y размытие цвет*/
+    }
+  }
+  .top_left {
+    min-width: 200px;
+    /* border: 1px solid #fded09;  /*рамка*/
+    margin-top: 10px;
+    flex: 1;  /* Растягивает блок на всю ширину родителя */
+    img {
+      width: 120px;
+      height: 70px;
+      border: 1px solid #006600;  /*рамка*/
+      border-radius: 10px; /*закругление*/
+    }
+  }
+}
+
+.text {
+  margin-top: 5px;
+}

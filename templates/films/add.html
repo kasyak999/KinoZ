@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load static %}
+{% load my_filters %}
+{% block title %}
+1111
+{% endblock %}
+
+{% block content %}  
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_ul }}
+    <input type="submit" value="Submit">
+  </form>
+{% endblock %}

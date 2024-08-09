@@ -1,0 +1,126 @@
+@font-face{ /*шрифтыы*/
+  font-family: "ChareInk-Regular";
+  src: url("../fonts/ChareInk-Regular.ttf") format("truetype");
+  font-style: normal; 
+  font-weight: normal; 
+}
+
+body {
+  background-image: url('../images/fon.png');
+  background-repeat: no-repeat; /*изображение не повторяется.*/
+  background-attachment: fixed; /*фон остаётся неподвижным.*/
+  background-size: 100% 100%; /*размер фонового изображения*/
+  font-family: Tahoma, Geneva, sans-serif;
+  font-size: 16px;/**/
+  margin: 0px;
+}
+
+header {
+  background-image: url('../images/fon_baner.jpg');
+  background-repeat: no-repeat; /*изображение не повторяется.*/
+  background-attachment: fixed; /*фон остаётся неподвижным.*/
+  background-size: 100% 75%; /*размер фонового изображения*/
+  text-align: center;
+  img {
+    width: 50%;
+  }
+  .menu-top {
+    background-color: black;
+    background: rgba(48, 48, 48, 0.7); /*прозрачный фон*/
+    color: aliceblue;
+    display: flex; /*див друг за другом*/
+    justify-content: center;
+    flex-wrap: wrap; /* свойство, указывающее правило переноса элементов при изменении ширины окна*/
+    div {
+      border: 1px solid #f0160e;  /*рамка*/
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+  }
+}
+
+main {
+  /* border: 1px solid #d9f00e;  /*рамка*/
+  display: flex; /*див друг за другом*/
+  flex-wrap: wrap; /* свойство, указывающее правило переноса элементов при изменении ширины окна*/
+  justify-content: center;
+  margin-top: 12px;
+  margin-left: 5px;
+  margin-right: 5px;
+  .menu {
+    position: sticky; /* двигается вместе с браузером */
+    top: 0;/**/
+    max-height: 160px;
+    border: 1px solid #006600;  /*рамка*/
+    border-radius: 10px; /*закругление*/
+    box-shadow: -5px 5px 7px #003300; /* тень элемента: x y размытие цвет*/
+    background-image: url('../images/1fon.png');
+    background-repeat: no-repeat; /*изображение не повторяется.*/
+    background-attachment: fixed; /*фон остаётся неподвижным.*/
+    background-size: 100% 100%; /*размер фонового изображения*/
+    margin-right: 10px;
+    padding: 5px;
+    font-family: "ChareInk-Regular";
+    margin-bottom: 10px;
+    li {
+      list-style: none; /*УБРАТЬ ТОЧКИ*/
+      margin:5px 0; /*растояние между блоками по высоте*/
+      margin-left:-25px; /**/
+      padding-right: 15px;
+    }
+  }
+  .content {
+    /* border: 1px solid #0e12f0;  /*рамка*/
+    width: 700px;
+  }
+}
+
+footer {
+  margin-top: 12px;
+  margin-bottom: 15px;
+  text-align: center;
+  /*border: 1px solid #b1d411;  /*рамка*/
+  font-family: "ChareInk-Regular";
+}
+
+a {
+  color: #005900;
+  text-decoration:none; /*убрать подчеркивание*/
+  cursor: pointer; /*появляется палец при наведении на ссылку*/
+}
+.a-active {
+  text-shadow: 1px 1px 2px #003300, 0 0 1em #006600; /* Параметры тени */
+}
+a:hover {
+  font-weight: 900; /*жирность текста (400 стандарт, 900 максимум)*/
+}
+
+hr {
+  margin: -50px auto 10px;
+  padding: 0;
+  height: 50px;
+  border: none;
+  border-bottom: 1px solid #1f1209;
+  box-shadow: 0 15px 20px -20px #006600;
+  width: 90%;
+}
+
+h3 {
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+
+p {
+  margin: 0px;
+  font-size: 17px;/**/
+}
+
+@media (max-width: 876px) {
+  main .menu li{
+    display: inline;
+    margin-left: 0; 
+  }
+  main .menu {
+    position: relative;
+  }
+}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+{% load my_filters %}
+{% block title %}
+  {{ object.name }} / {{ object.name_orig }} ({{ object.year }})
+{% endblock %}
+
+{% block content %}  
+  <link rel="stylesheet" href="{% static 'css/film-film.css' %}" type="text/css">
+  <h1>{{ object.name }}</a> <font color=#676767>/ {{ object.name_orig }}</font> ({{ object.year }})</h1>
+  <div class="top">
+    <div class="top_right">
+      {% with object.poster|split as poster %}
+        <a href='{{ poster.0 }}' target="_blank">
+        {% include "includes/film/poster.html" %}</a>
+      {% endwith %}
+    </div>
+    <div class="top_left">
+      <p><b>Год выпуска</b> {{ object.year }}</p>
+      {% include "includes/film/description.html" %}
+      {% if scrinshot %}
+        <p>
+          {% for i in scrinshot%}
+          <a href='{{ i.imageUrl }}' target="_blank"><img src="{{ i.previewUrl }}"></a>
+          {% endfor %}
+        </p>
+      {% endif %}
+    </div>
+  </div>
+  <div class="text">
+    <p><b>О фильме:</b>
+      {{ object.description }}
+    </p>
+  </div>
+{% endblock %}

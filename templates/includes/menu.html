@@ -1,0 +1,8 @@
+<div class="menu">
+    <ul>
+      {% with request.resolver_match.view_name as view_name %}  
+      <li><a href="{% url 'films:index' %}" class="{% if view_name == 'films:index' %}a-active{% endif %}">Главная</a></li>
+      <li><a href="{% url 'admin:index' %}" class="{% if view_name == '' %}a-active{% endif %}">Admin меню</a></li>
+      {% endwith %}
+    </ul>
+  </div>
