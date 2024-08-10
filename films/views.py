@@ -78,16 +78,16 @@ class CreateFilm(CreateView):
         return reverse('films:index')
 
     def get_initial(self):
-        # return self._result_api if self._result_api else super().get_initial()
-        initial = super().get_initial()
-        # result = FilmsdModel.objects.filter(id_kp=self.kwargs[self.pk_url_kwarg]).count()
-        # if result > 0:
-        #     raise ValidationError("Такой id_kp уже существует!!!")
-        initial['id_kp'] = self.kwargs[self.pk_url_kwarg]
-        return initial
+        if self._result_api:
+            return self._result_api
+        else:
+            initial = super().get_initial()
+            initial['id_kp'] = self.kwargs[self.pk_url_kwarg]
+            return initial
 
     def form_valid(self, form):
-        form.instance.id_kp = self.kwargs[self.pk_url_kwarg]
-        # if self._result_api:
-        #     form.instance.id_kp = self.kwargs[self.pk_url_kwarg]
+        if self._result_api:
+            form.instance.id_kp = self.kwargs[self.pk_url_kwarg]
+        else:
+            form.instance.id_kp = self.kwargs[self.pk_url_kwarg]
         return super().form_valid(form)

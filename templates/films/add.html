@@ -6,15 +6,12 @@
 {% endblock %}
 
 {% block content %}  
-<style>
-  .error-text {
-      color: red;
-  }
-</style>
 
   <form method="post">
+    <table>
     {% csrf_token %}
-    {{ form.as_ul }}
+    {{ form }}
+    </table>
     <input type="submit" value="Submit">
   </form>
 {% endblock %}

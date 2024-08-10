@@ -3,9 +3,9 @@ from .models import FilmsdModel
 
 
 def erorr_id_kp(value) -> None:
-    result = FilmsdModel.objects.filter(id_kp=value).count()
-    print(result)
-    # if result:
-    #     raise ValidationError(
-    #         'Уже есть в базе'
-    #     )
+    # result = FilmsdModel.objects.filter(id_kp=value).count()
+    print(value)
+    if value:
+        raise ValidationError(
+            'Уже есть в базе'
+        )
