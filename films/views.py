@@ -23,7 +23,6 @@ class IndexListView(ListView):
     template_name = 'films/index.html'
     paginate_by = OBJECTS_PER_PAGE
     context_object_name = 'results'
-    paginate_by = 1
 
     def get_queryset(self):
         return super().get_queryset().filter(
