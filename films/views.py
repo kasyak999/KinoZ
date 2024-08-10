@@ -11,7 +11,7 @@ from django.http import HttpResponse, HttpRequest, Http404
 import json
 from django.urls import reverse, reverse_lazy
 from django.core.exceptions import ValidationError
-
+from pprint import pprint
 
 OBJECTS_PER_PAGE = 10
 
@@ -23,7 +23,7 @@ class IndexListView(ListView):
     template_name = 'films/index.html'
     paginate_by = OBJECTS_PER_PAGE
     context_object_name = 'results'
-    paginate_by = 5
+    paginate_by = 1
 
     def get_queryset(self):
         return super().get_queryset().filter(
@@ -70,22 +70,32 @@ class CreateFilm(CreateView):
     template_name = 'films/add.html'
     form_class = AddFilmBaza
 
+    @property
+    def _result_api(self):
+        rez = information_film(self.kwargs[self.pk_url_kwarg])
+        return rez
+
     def get_success_url(self):
         return reverse('films:index')
 
     def get_initial(self):
-        result = information_film(self.kwargs[self.pk_url_kwarg])
-        if result:
-            return result
-        else:
+        initial = self._result_api
+        # pprint(initial['poster'])
+        if not initial:
             initial = super().get_initial()
             initial['id_kp'] = self.kwargs[self.pk_url_kwarg]
-            return initial
+        return initial
 
     def form_valid(self, form):
         # print(form)
-        # if self._result_api:
-        #     form.instance.id_kp = self.kwargs[self.pk_url_kwarg]
+        initial = self._result_api
+        if initial:
+            form.instance.poster = initial['poster']
+            form.instance.scrinshot = initial['scrinshot']
+
+            form.instance.rating = initial['rating']
+            form.instance.votecount = initial['votecount']
+
 
         form.instance.id_kp = self.kwargs[self.pk_url_kwarg]
         result = FilmsdModel.objects.filter(id_kp=self.kwargs[self.pk_url_kwarg])

@@ -18,9 +18,9 @@
     <div class="top_left">
       <p><b>Год выпуска</b> {{ object.year }}</p>
       {% include "includes/film/description.html" %}
-      {% if scrinshot %}
+      {% if object.scrinshot %}
         <p>
-          {% for i in scrinshot%}
+          {% for i in object.scrinshot %}
           <a href='{{ i.imageUrl }}' target="_blank"><img src="{{ i.previewUrl }}"></a>
           {% endfor %}
         </p>

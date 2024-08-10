@@ -73,7 +73,7 @@ class FilmsdModel(MainModel):
         null=True,
         blank=True
     )
-    scrinshot = models.TextField(
+    scrinshot = models.JSONField(
         null=True, verbose_name='Скриншоты', blank=True,
         help_text=(
             'imageUrl - оригинал, "previewUrl - превью'
@@ -88,12 +88,6 @@ class FilmsdModel(MainModel):
 
     # def __str__(self) -> str:
     #     return self.name
-
-    # def clean(self):
-    #     super().clean()
-    #     result = FilmsdModel.objects.filter(id_kp=self.id_kp).exclude(pk=self.pk).count()
-    #     if result > 0:
-    #         raise ValidationError("Такой id_kp уже существует!")
 
 
 class Category(MainModel):
