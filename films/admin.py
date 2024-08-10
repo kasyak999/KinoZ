@@ -1,5 +1,5 @@
 from django.contrib import admin
-from . models import FilmsdModel, Category, Genres, Country
+from . models import FilmsdModel, Category, Genres, Country, Coment
 
 
 class FilmsAdmin(admin.ModelAdmin):
@@ -29,7 +29,13 @@ class CategoryAdmin(admin.ModelAdmin):
     films_count.short_description = ('Количество фильмов')
 
 
+class ComentAdmin(admin.ModelAdmin):
+    list_display = (
+        'text',
+    )
+
 admin.site.register(FilmsdModel, FilmsAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Genres, admin.ModelAdmin)
 admin.site.register(Country, admin.ModelAdmin)
+admin.site.register(Coment, ComentAdmin)

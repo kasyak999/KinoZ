@@ -114,3 +114,24 @@ class Country(MainModel):
     class Meta(MainModel.Meta):
         verbose_name = 'страна'
         verbose_name_plural = 'Страны'
+
+
+class Coment(models.Model):
+    text = models.TextField(verbose_name='Текст', blank=True)
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name='Добавлен'
+    )
+    film = models.ForeignKey(
+        FilmsdModel,
+        on_delete=models.CASCADE,
+        related_name='coment',
+        verbose_name='Фильм'
+    )
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, verbose_name='Автор'
+    )
+
+    class Meta(MainModel.Meta):
+        verbose_name = 'комментарии'
+        verbose_name_plural = 'Комментарии'
+        ordering = ('-created_at',)

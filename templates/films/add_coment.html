@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+{% load my_filters %}
+{% block title %}
+1111
+{% endblock %}
+
+{% block content %}  
+<style>
+  .errorlist.nonfield {
+    color: red;
+  }
+</style>
+  <form method="post">
+    <table>
+    {% csrf_token %}
+    {{ form.as_table }}
+    </table>
+    <input type="submit" value="Отправить">
+  </form>
+{% endblock %}

@@ -32,4 +32,13 @@
       {{ object.description }}
     </p>
   </div>
+
+  {% if user.is_authenticated %}
+    <!-- Указываем, на какой адрес нужно отправить POST-запрос -->
+    <form action="{% url 'films:add_comment' object.pk %}" method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="Отправить">
+    </form>
+  {% endif %}
 {% endblock %}

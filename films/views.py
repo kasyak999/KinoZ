@@ -3,10 +3,10 @@ from django.db.models.query import QuerySet
 from django.views.generic import (
     DetailView, UpdateView, ListView, CreateView, DeleteView, TemplateView
 )
-from films.models import FilmsdModel
+from films.models import FilmsdModel, Coment
 from django.shortcuts import get_object_or_404, redirect, render
 from .api import information_film
-from .form import AddFilmBaza
+from .form import AddFilmBaza, ComentForm
 from django.http import HttpResponse, HttpRequest, Http404
 import json
 from django.urls import reverse, reverse_lazy
@@ -54,14 +54,23 @@ class DetailFilm(DetailView):
                     }
                 )
             )
-        # except self.model.IntegrityError:
-        #     raise Http404
 
     def get_object(self):
         return self.model.objects.get(
                 id_kp=self.kwargs[self.pk_url_kwarg], verified=True,
                 is_published=True
             )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # context['form'] = ComentForm()
+        context['form'] = ComentForm(initial={'film': self.get_object()})  # Передаем film в initial
+        return context
+
+    # def get_success_url(self):
+    #     return reverse('films:add_comment', kwargs={
+    #         'pk': self.kwargs[self.pk_url_kwarg]
+    #     })
 
 
 class CreateFilm(CreateView):
@@ -95,7 +104,6 @@ class CreateFilm(CreateView):
             form.instance.rating = initial['rating']
             form.instance.votecount = initial['votecount']
 
-
         form.instance.id_kp = self.kwargs[self.pk_url_kwarg]
         result = FilmsdModel.objects.filter(id_kp=self.kwargs[self.pk_url_kwarg])
         if result.count() > 0:
@@ -106,3 +114,25 @@ class CreateFilm(CreateView):
             return render(self.request, self.template_name, {'form': form})
         else:
             return super().form_valid(form)
+
+
+class AddComment(CreateView):
+    model = Coment
+    template_name = 'films/add_coment.html'
+    form_class = ComentForm
+
+    def get_success_url(self):
+        return reverse('films:film', kwargs={
+            'id_kp': self.kwargs[self.pk_url_kwarg]
+        })
+
+    def form_valid(self, form):
+        pprint(self.kwargs[self.pk_url_kwarg])
+        form.instance.author = self.request.user
+        # form.instance.film = FilmsdModel.objects.get(
+        #     id=self.kwargs[self.pk_url_kwarg]
+        # )
+        form.instance.film = FilmsdModel.objects.get(
+            id_kp=self.kwargs[self.pk_url_kwarg]
+        )
+        return super().form_valid(form)
