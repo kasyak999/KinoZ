@@ -13,7 +13,7 @@ def add_scrinshot_film(data_kp):
     response_kp = requests.get(data_kp, headers=key_name.DATA_KP)
     if response_kp.status_code == 200:
         scrinshot = response_kp.json()['items']
-        print('--------------------------------------')
+        # print('--------------------------------------')
         # print(scrinshot)
         print('--------------------------------------')
         return scrinshot
@@ -23,7 +23,7 @@ def information_film(kp: int):
     """Собираем информацию о фильме из кинопоиска"""
     data_kp = key_name.KINOPOISK_URL + key_name.KINOPOISK_URL_MAIN + str(kp)
     response_kp = requests.get(data_kp, headers=key_name.DATA_KP)
-    print(response_kp)
+    # print(response_kp)
     if response_kp.status_code == 200:
         scrinshot = add_scrinshot_film(data_kp)
         response_kp = response_kp.json()

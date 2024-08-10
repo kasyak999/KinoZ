@@ -4,7 +4,7 @@ from django.views.generic import (
     DetailView, UpdateView, ListView, CreateView, DeleteView, TemplateView
 )
 from films.models import FilmsdModel
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from .api import information_film
 from .form import AddFilmBaza
 from django.http import HttpResponse, HttpRequest, Http404
@@ -70,24 +70,30 @@ class CreateFilm(CreateView):
     template_name = 'films/add.html'
     form_class = AddFilmBaza
 
-    @property
-    def _result_api(self):
-        return information_film(self.kwargs[self.pk_url_kwarg])
-
     def get_success_url(self):
         return reverse('films:index')
 
     def get_initial(self):
-        if self._result_api:
-            return self._result_api
+        result = information_film(self.kwargs[self.pk_url_kwarg])
+        if result:
+            return result
         else:
             initial = super().get_initial()
             initial['id_kp'] = self.kwargs[self.pk_url_kwarg]
             return initial
 
     def form_valid(self, form):
-        if self._result_api:
-            form.instance.id_kp = self.kwargs[self.pk_url_kwarg]
+        # print(form)
+        # if self._result_api:
+        #     form.instance.id_kp = self.kwargs[self.pk_url_kwarg]
+
+        form.instance.id_kp = self.kwargs[self.pk_url_kwarg]
+        result = FilmsdModel.objects.filter(id_kp=self.kwargs[self.pk_url_kwarg])
+        if result.count() > 0:
+            print('уже есть')
+            form.add_error(
+                None, "Фильм с таким ID кинопоиска уже находится в базе на проверке."
+            )
+            return render(self.request, self.template_name, {'form': form})
         else:
-            form.instance.id_kp = self.kwargs[self.pk_url_kwarg]
-        return super().form_valid(form)
+            return super().form_valid(form)

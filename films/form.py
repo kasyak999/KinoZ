@@ -1,7 +1,6 @@
 from films.models import FilmsdModel
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
-from .validators import erorr_id_kp
 from django import forms
 
 
@@ -17,7 +16,7 @@ class AddFilmBaza(ModelForm):
         model = FilmsdModel
         fields = '__all__'
         exclude = (
-            'verified', 'is_published', 'poster', 'rating',
+            'verified', 'is_published', 'poster', 'rating', 'id_kp',
             'votecount', 'scrinshot'
         )
 
@@ -27,12 +26,12 @@ class AddFilmBaza(ModelForm):
     #         raise forms.ValidationError("<b>www</b>")
     #     return name
 
-    def clean_id_kp(self):
-        """Проверяем, существует ли уже фильм с таким id_kp"""
-        id_kp = self.cleaned_data['id_kp']
-        if FilmsdModel.objects.filter(id_kp=id_kp).exists():
-            raise forms.ValidationError(
-                "Фильм с таким ID кинопоиска уже существует в базе."
-                "Пожалуйста, введите другой ID."
-            )
-        return id_kp
+    # def clean_id_kp(self):
+    #     """Проверяем, существует ли уже фильм с таким id_kp"""
+    #     id_kp = self.cleaned_data['id_kp']
+    #     if FilmsdModel.objects.filter(id_kp=id_kp).exists():
+    #         raise forms.ValidationError(
+    #             "Фильм с таким ID кинопоиска уже существует в базе."
+    #             "Пожалуйста, введите другой ID."
+    #         )
+    #     return id_kp
