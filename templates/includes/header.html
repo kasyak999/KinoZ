@@ -2,7 +2,15 @@
 <header>
   <div><a href="{% url 'films:index' %}"><img src="{% static 'images/kinozfun.png' %}"></a></div>
   <div class="menu-top">
-    <div>Здравствуйте Максим Выйти</div>
+    <div>Здравствуйте <b>
+      {% if user.is_authenticated %}
+        {{ user.username }}
+        <a href="{% url 'logout' %}">Выйти</a>
+      {% else %}
+        гость
+        <a href="{% url 'login' %}">Войти</a>
+      {% endif%}</b>
+    </div>
     <div>поле поиска</div>
   </div>
 </header>

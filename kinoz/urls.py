@@ -6,6 +6,7 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('films.urls')),
+    path('user/', include('django.contrib.auth.urls')),
 ]
 
 # Если проект запущен в режиме разработки...

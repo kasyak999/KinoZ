@@ -3,6 +3,16 @@
       {% with request.resolver_match.view_name as view_name %}  
       <li><a href="{% url 'films:index' %}" class="{% if view_name == 'films:index' %}a-active{% endif %}">Главная</a></li>
       <li><a href="{% url 'admin:index' %}" class="{% if view_name == '' %}a-active{% endif %}">Admin меню</a></li>
+      
+      {% if user.is_authenticated %}
+        <!-- Это блок ссылок для авторизованного пользователя -->
+        <li><a class="nav-link" href="{% url 'logout' %}">Выйти</a></li> 
+        <!-- Конец блока ссылок для авторизованного пользователя -->
+      {% else %}
+        <!-- А здесь блок ссылок для неавторизованного пользователя -->
+        <li><a href="{% url 'login' %}" class="{% if view_name == 'login' %} active {% endif %}">Войти</a></li>        
+        <!-- Конец блока ссылок для неавторизованного пользователя -->   
+      {% endif %}
       {% endwith %}
     </ul>
   </div>

@@ -20,7 +20,7 @@ header {
   background-repeat: no-repeat; /*изображение не повторяется.*/
   background-attachment: fixed; /*фон остаётся неподвижным.*/
   background-size: 100% 75%; /*размер фонового изображения*/
-  text-align: center;
+  text-align: center; /**/
   img {
     width: 50%;
   }
@@ -29,12 +29,12 @@ header {
     background: rgba(48, 48, 48, 0.7); /*прозрачный фон*/
     color: aliceblue;
     display: flex; /*див друг за другом*/
-    justify-content: center;
+    justify-content: center; /**/
     flex-wrap: wrap; /* свойство, указывающее правило переноса элементов при изменении ширины окна*/
     div {
-      border: 1px solid #f0160e;  /*рамка*/
+      border: 1px solid #190ef0;  /*рамка*/
       margin-left: 10px;
-      margin-right: 10px;
+      margin-right: 10px; 
     }
   }
 }
@@ -48,7 +48,7 @@ main {
   margin-left: 5px;
   margin-right: 5px;
   .menu {
-    position: sticky; /* двигается вместе с браузером */
+    /* position: sticky; /* двигается вместе с браузером */
     top: 0;/**/
     max-height: 160px;
     border: 1px solid #006600;  /*рамка*/
