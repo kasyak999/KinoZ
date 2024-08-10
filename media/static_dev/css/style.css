@@ -32,7 +32,7 @@ header {
     justify-content: center; /**/
     flex-wrap: wrap; /* свойство, указывающее правило переноса элементов при изменении ширины окна*/
     div {
-      border: 1px solid #190ef0;  /*рамка*/
+      /* border: 1px solid #190ef0;  /*рамка*/
       margin-left: 10px;
       margin-right: 10px; 
     }
@@ -48,7 +48,7 @@ main {
   margin-left: 5px;
   margin-right: 5px;
   .menu {
-    /* position: sticky; /* двигается вместе с браузером */
+    position: sticky; /* двигается вместе с браузером */
     top: 0;/**/
     max-height: 160px;
     border: 1px solid #006600;  /*рамка*/

@@ -2,15 +2,19 @@
     <ul>
       {% with request.resolver_match.view_name as view_name %}  
       <li><a href="{% url 'films:index' %}" class="{% if view_name == 'films:index' %}a-active{% endif %}">Главная</a></li>
-      <li><a href="{% url 'admin:index' %}" class="{% if view_name == '' %}a-active{% endif %}">Admin меню</a></li>
       
       {% if user.is_authenticated %}
         <!-- Это блок ссылок для авторизованного пользователя -->
-        <li><a class="nav-link" href="{% url 'logout' %}">Выйти</a></li> 
+        <li><a href="{% url 'password_change' %}" class="{% if view_name == 'password_change' %}a-active{% endif %}">Изменить пароль</a></li>
+        <li><a href="{% url 'logout' %}" >Выйти</a></li> 
+        <br>
+        <li><a href="{% url 'admin:index' %}" class="{% if view_name == '' %}a-active{% endif %}">Admin меню</a></li>
         <!-- Конец блока ссылок для авторизованного пользователя -->
       {% else %}
         <!-- А здесь блок ссылок для неавторизованного пользователя -->
-        <li><a href="{% url 'login' %}" class="{% if view_name == 'login' %} active {% endif %}">Войти</a></li>        
+        <li><a href="{% url 'login' %}" class="{% if view_name == 'login' %}a-active{% endif %}">Войти</a></li>
+        <li><a class="{% if view_name == 'registration' %}a-active{% endif %}" href="{% url 'registration' %}">Регистрация</a></li>
+                 
         <!-- Конец блока ссылок для неавторизованного пользователя -->   
       {% endif %}
       {% endwith %}

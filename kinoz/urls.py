@@ -1,12 +1,24 @@
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, reverse_lazy
 from django.conf import settings
+# Добавьте новые строчки с импортами классов.
+from django.contrib.auth.forms import UserCreationForm
+from django.views.generic.edit import CreateView
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('films.urls')),
     path('user/', include('django.contrib.auth.urls')),
+    path(
+        'user/registration/',
+        CreateView.as_view(
+            template_name='registration/registration_form.html',
+            form_class=UserCreationForm,
+            success_url=reverse_lazy('films:index'),
+        ),
+        name='registration',
+    ),
 ]
 
 # Если проект запущен в режиме разработки...

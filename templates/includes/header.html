@@ -1,11 +1,15 @@
 {% load static %}
+<style>
+  header a {
+    color: aliceblue;
+  }
+</style>
 <header>
   <div><a href="{% url 'films:index' %}"><img src="{% static 'images/kinozfun.png' %}"></a></div>
   <div class="menu-top">
     <div>Здравствуйте <b>
       {% if user.is_authenticated %}
         {{ user.username }}
-        <a href="{% url 'logout' %}">Выйти</a>
       {% else %}
         гость
         <a href="{% url 'login' %}">Войти</a>
