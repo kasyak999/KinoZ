@@ -26,10 +26,9 @@ class SearchView(ListView):
     def get_queryset(self):
         result = super().get_queryset()
         if self.request.GET.get('search'):
-            result.filter(
-                verified=True, is_published=True
-            )
             return result.filter(
+                verified=True, is_published=True
+            ).filter(
                 Q(name__iregex=self.request.GET.get('search')) | 
                 Q(name_orig__iregex=self.request.GET.get('search'))
             ).select_related('cat').prefetch_related('genres', 'country')
