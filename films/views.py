@@ -24,6 +24,7 @@ class SearchView(ListView):
 
     model = FilmsdModel
     template_name = 'films/index.html'
+    paginate_by = 1
 
     def get_queryset(self):
         if self.request.GET.get('search'):
@@ -43,21 +44,6 @@ class SearchView(ListView):
         else:
             context['html_name'] = 'Поиск'
         return context
-
-
-# def search_view(request):
-#     if request.method == 'GET':
-#         search_term = request.GET.get('search')
-#         # Здесь вы можете использовать search_term для поиска фильма
-#         # Например, сделать запрос к базе данных или внешнему API
-#         results = '# ... результат поиска'
-#         context = {
-#             'search_term': search_term,
-#             'results': results,
-#         }
-#         return render(request, 'films/search_results.html', context)
-#     else:
-#         return render(request, 'search_form.html')
 
 
 class IndexListView(ListView):
