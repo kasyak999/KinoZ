@@ -2,7 +2,7 @@
     <ul>
       {% with request.resolver_match.view_name as view_name %}  
       <li><a href="{% url 'films:index' %}" class="{% if view_name == 'films:index' %}a-active{% endif %}">Главная</a></li>
-      
+      <li><a href="{% url 'films:search' %}" class="{% if view_name == 'films:search' %}a-active{% endif %}">Поиск</a></li>
       {% if user.is_authenticated %}
         <!-- Это блок ссылок для авторизованного пользователя -->
         <li><a href="{% url 'password_change' %}" class="{% if view_name == 'password_change' %}a-active{% endif %}">Изменить пароль</a></li>

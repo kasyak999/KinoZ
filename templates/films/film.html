@@ -32,14 +32,19 @@
       {{ object.description }}
     </p>
   </div>
-
+  <br>
+  <style>
+    form label {
+      display: none;
+    }
+  </style>
   {% if user.is_authenticated %}
     <!-- Указываем, на какой адрес нужно отправить POST-запрос -->
-    <form action="{% url 'films:add_comment' object.pk %}" method="post">
+    <center><form action="{% url 'films:add_comment' object.pk %}" method="post">
       {% csrf_token %}
       {{ form.as_p }}
       <input type="submit" value="Добавить комментарий">
-    </form>
+    </form> </center>
   {% endif %}
 
   <br><p>Всего комментариев: {{ page_obj.paginator.count }}</p><br>

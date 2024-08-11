@@ -1,9 +1,5 @@
 {% load static %}
-<style>
-  header a {
-    color: aliceblue;
-  }
-</style>
+
 <header>
   <div><a href="{% url 'films:index' %}"><img src="{% static 'images/kinozfun.png' %}"></a></div>
   <div class="menu-top">
@@ -17,7 +13,8 @@
     </div>
     <div>
       <form action="/search/" method="get">
-        <input type="text" size="25" placeholder='Введите название фильма' name="search">
+        <input type="text" size="25" placeholder='Введите название фильма' name="search"
+        value="{{ request.GET.search }}">
         <input type="submit" value="поиск">
       </form>
     </div>

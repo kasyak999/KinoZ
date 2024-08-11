@@ -83,6 +83,10 @@ footer {
   font-family: "ChareInk-Regular";
 }
 
+header a {
+  color: rgba(240, 248, 255, 0.584);
+}
+
 a {
   color: #005900;
   text-decoration:none; /*убрать подчеркивание*/

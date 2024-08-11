@@ -1,5 +1,4 @@
 from typing import Any
-from django.db.models.query import QuerySet
 from django.views.generic import (
     DetailView, UpdateView, ListView, CreateView, DeleteView, TemplateView
 )
@@ -8,12 +7,11 @@ from django.shortcuts import get_object_or_404, redirect, render
 from .api import information_film
 from .form import AddFilmBaza, ComentForm
 from django.http import HttpResponse, HttpRequest, Http404
-import json
 from django.urls import reverse, reverse_lazy
-from django.core.exceptions import ValidationError
 from pprint import pprint
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 
 OBJECTS_PER_PAGE = 10
@@ -21,26 +19,28 @@ OBJECTS_PER_PAGE = 10
 
 class SearchView(ListView):
     """Поиск фильмов"""
-
     model = FilmsdModel
     template_name = 'films/index.html'
-    paginate_by = 1
+    paginate_by = OBJECTS_PER_PAGE
 
     def get_queryset(self):
+        result = super().get_queryset()
         if self.request.GET.get('search'):
-            return super().get_queryset().filter(
-                verified=True,
-                is_published=True,
-                name__iregex=self.request.GET.get('search')
-            ).select_related('cat').prefetch_related(
-                'genres', 'country'
+            result.filter(
+                verified=True, is_published=True
             )
+            return result.filter(
+                Q(name__iregex=self.request.GET.get('search')) | 
+                Q(name_orig__iregex=self.request.GET.get('search'))
+            ).select_related('cat').prefetch_related('genres', 'country')
+        else:
+            return result.none()
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         if self.request.GET.get('search'):
-            context['html_name'] = f'Поиск {self.request.GET.get('search')}'
-            context['search'] = f'Найдено {self.get_queryset().count()}'
+            context['html_name'] = f'Поиск «{self.request.GET.get('search')}»'
+            context['search'] = f'Найдено {self.object_list.count()}'
         else:
             context['html_name'] = 'Поиск'
         return context
@@ -48,7 +48,6 @@ class SearchView(ListView):
 
 class IndexListView(ListView):
     """Главная страница"""
-
     model = FilmsdModel
     template_name = 'films/index.html'
     paginate_by = OBJECTS_PER_PAGE
@@ -67,7 +66,6 @@ class IndexListView(ListView):
 
 class DetailFilm(DetailView):
     """Пост подробнее"""
-
     model = FilmsdModel
     template_name = 'films/film.html'
     pk_url_kwarg = 'id_kp'
@@ -103,6 +101,7 @@ class DetailFilm(DetailView):
 
 
 class CreateFilm(CreateView):
+    """Добавление нового фильма"""
     model = FilmsdModel
     template_name = 'films/add.html'
     form_class = AddFilmBaza
@@ -148,6 +147,7 @@ class CreateFilm(CreateView):
 
 
 class AddComment(LoginRequiredMixin, CreateView):
+    """Новый комментарий"""
     model = Coment
     template_name = 'films/add_coment.html'
     form_class = ComentForm
