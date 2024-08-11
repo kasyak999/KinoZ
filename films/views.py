@@ -29,7 +29,7 @@ class SearchView(ListView):
             return result.filter(
                 verified=True, is_published=True
             ).filter(
-                Q(name__iregex=self.request.GET.get('search')) | 
+                Q(name__iregex=self.request.GET.get('search')) |
                 Q(name_orig__iregex=self.request.GET.get('search'))
             ).select_related('cat').prefetch_related('genres', 'country')
         else:
@@ -39,7 +39,7 @@ class SearchView(ListView):
         context = super().get_context_data(**kwargs)
         if self.request.GET.get('search'):
             context['html_name'] = f'Поиск «{self.request.GET.get('search')}»'
-            context['search'] = f'Найдено {self.object_list.count()}'
+            context['search'] = self.object_list.count()
         else:
             context['html_name'] = 'Поиск'
         return context

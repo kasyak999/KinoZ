@@ -1,9 +1,16 @@
-<p>{{ search }}</p>
+{% if search %}
+  <p>Найдено: {{ search }}</p>
+{% endif %}
+
 {% if not search and request.resolver_match.view_name == 'films:search' %}
-    <form action="/search/" method="get">
-      <label>Поиск по названию фильма: </label>
-      <input type="text" size="25" placeholder='Введите название фильма' name="search"
-      value="{{ request.GET.search }}">
-      <input type="submit" value="поиск">
-    </form>
+  {% if search is not None %}
+    <p>По вашему запросу ничего не найдено.</p>
+  {% else %}
+  <form action="/search/" method="get">
+    <label>Поиск по названию фильма: </label>
+    <input type="text" size="25" placeholder='Введите название фильма' name="search"
+    value="{{ request.GET.search }}">
+    <input type="submit" value="поиск">
+  </form>
+  {% endif %}
 {% endif %}

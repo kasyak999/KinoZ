@@ -32,9 +32,10 @@ header {
     justify-content: center; /**/
     flex-wrap: wrap; /* свойство, указывающее правило переноса элементов при изменении ширины окна*/
     div {
-      /* border: 1px solid #190ef0;  /*рамка*/
+      /*border: 1px solid #190ef0;  /*рамка*/
       margin-left: 10px;
       margin-right: 10px; 
+      margin: auto;
     }
   }
 }
@@ -133,4 +134,9 @@ form input, form textarea {
   border: 3px solid #006600;  /*рамка*/
   border-radius: 10px; /*закругление*/
   padding: 3px;
+}
+
+/*.errorlist.nonfield { /*Ошибки форм*/
+.errorlist { /*Ошибки форм*/
+  color: red;
 }
