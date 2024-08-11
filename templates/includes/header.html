@@ -15,6 +15,11 @@
         <a href="{% url 'login' %}">Войти</a>
       {% endif%}</b>
     </div>
-    <div>поле поиска</div>
+    <div>
+      <form action="/search/" method="get">
+        <input type="text" size="25" placeholder='Введите название фильма' name="search">
+        <input type="submit" value="поиск">
+      </form>
+    </div>
   </div>
 </header>

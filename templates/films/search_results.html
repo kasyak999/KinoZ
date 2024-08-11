@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load my_filters %} 
+{% load static %}
+
+{% block title %}
+  {{ html_title }}
+{% endblock %}
+
+{% block content %}   
+  <h3>Поиск</h3>
+
+  {% for object in object_list %}
+  {{ object }}
+  {% endfor %}
+{% endblock %}

@@ -12,8 +12,52 @@ import json
 from django.urls import reverse, reverse_lazy
 from django.core.exceptions import ValidationError
 from pprint import pprint
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
+
 
 OBJECTS_PER_PAGE = 10
+
+
+class SearchView(ListView):
+    """Поиск фильмов"""
+
+    model = FilmsdModel
+    template_name = 'films/index.html'
+
+    def get_queryset(self):
+        if self.request.GET.get('search'):
+            return super().get_queryset().filter(
+                verified=True,
+                is_published=True,
+                name__iregex=self.request.GET.get('search')
+            ).select_related('cat').prefetch_related(
+                'genres', 'country'
+            )
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        if self.request.GET.get('search'):
+            context['html_name'] = f'Поиск {self.request.GET.get('search')}'
+            context['search'] = f'Найдено {self.get_queryset().count()}'
+        else:
+            context['html_name'] = 'Поиск'
+        return context
+
+
+# def search_view(request):
+#     if request.method == 'GET':
+#         search_term = request.GET.get('search')
+#         # Здесь вы можете использовать search_term для поиска фильма
+#         # Например, сделать запрос к базе данных или внешнему API
+#         results = '# ... результат поиска'
+#         context = {
+#             'search_term': search_term,
+#             'results': results,
+#         }
+#         return render(request, 'films/search_results.html', context)
+#     else:
+#         return render(request, 'search_form.html')
 
 
 class IndexListView(ListView):
@@ -22,7 +66,6 @@ class IndexListView(ListView):
     model = FilmsdModel
     template_name = 'films/index.html'
     paginate_by = OBJECTS_PER_PAGE
-    context_object_name = 'results'
 
     def get_queryset(self):
         return super().get_queryset().filter(
@@ -42,6 +85,7 @@ class DetailFilm(DetailView):
     model = FilmsdModel
     template_name = 'films/film.html'
     pk_url_kwarg = 'id_kp'
+    paginate_by = OBJECTS_PER_PAGE
 
     def dispatch(self, request, *args, **kwargs):
         try:
@@ -56,21 +100,20 @@ class DetailFilm(DetailView):
             )
 
     def get_object(self):
-        return self.model.objects.get(
+        return self.model.objects.prefetch_related('genres', 'country').get(
                 id_kp=self.kwargs[self.pk_url_kwarg], verified=True,
                 is_published=True
             )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # context['form'] = ComentForm()
-        context['form'] = ComentForm(initial={'film': self.get_object()})  # Передаем film в initial
+        context['form'] = ComentForm()
+        comment_all = self.object.coment.select_related('author')
+        paginator = Paginator(comment_all, self.paginate_by)
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context['page_obj'] = page_obj
         return context
-
-    # def get_success_url(self):
-    #     return reverse('films:add_comment', kwargs={
-    #         'pk': self.kwargs[self.pk_url_kwarg]
-    #     })
 
 
 class CreateFilm(CreateView):
@@ -100,39 +143,40 @@ class CreateFilm(CreateView):
         if initial:
             form.instance.poster = initial['poster']
             form.instance.scrinshot = initial['scrinshot']
-
             form.instance.rating = initial['rating']
             form.instance.votecount = initial['votecount']
 
         form.instance.id_kp = self.kwargs[self.pk_url_kwarg]
-        result = FilmsdModel.objects.filter(id_kp=self.kwargs[self.pk_url_kwarg])
+        result = FilmsdModel.objects.filter(
+            id_kp=self.kwargs[self.pk_url_kwarg]
+        )
         if result.count() > 0:
             print('уже есть')
             form.add_error(
-                None, "Фильм с таким ID кинопоиска уже находится в базе на проверке."
+                None,
+                "Фильм с таким ID кинопоиска уже находится в базе на проверке."
             )
             return render(self.request, self.template_name, {'form': form})
         else:
             return super().form_valid(form)
 
 
-class AddComment(CreateView):
+class AddComment(LoginRequiredMixin, CreateView):
     model = Coment
     template_name = 'films/add_coment.html'
     form_class = ComentForm
 
+    @property
+    def _id_kp(self):
+        rez = FilmsdModel.objects.get(id=self.kwargs[self.pk_url_kwarg])
+        return rez
+
     def get_success_url(self):
         return reverse('films:film', kwargs={
-            'id_kp': self.kwargs[self.pk_url_kwarg]
+            'id_kp': self._id_kp.id_kp
         })
 
     def form_valid(self, form):
-        pprint(self.kwargs[self.pk_url_kwarg])
         form.instance.author = self.request.user
-        # form.instance.film = FilmsdModel.objects.get(
-        #     id=self.kwargs[self.pk_url_kwarg]
-        # )
-        form.instance.film = FilmsdModel.objects.get(
-            id_kp=self.kwargs[self.pk_url_kwarg]
-        )
+        form.instance.film = self._id_kp
         return super().form_valid(form)

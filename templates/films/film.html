@@ -38,7 +38,14 @@
     <form action="{% url 'films:add_comment' object.pk %}" method="post">
       {% csrf_token %}
       {{ form.as_p }}
-      <input type="submit" value="Отправить">
+      <input type="submit" value="Добавить комментарий">
     </form>
   {% endif %}
+
+  <br><p>Всего комментариев: {{ page_obj.paginator.count }}</p><br>
+  {% for comment in page_obj %}
+    <p><b>{{ comment.author.username }}</b>: {{ comment.text }}<br>
+    {{ comment.created_at|date:"d M Y H:i" }}</p>
+  {% endfor %}
+  <p align="center">{% include "includes/paginator.html" %}</p>
 {% endblock %}

@@ -11,6 +11,7 @@
     color: red;
   }
 </style>
+{% if user.is_authenticated %}
   <form method="post">
     <table>
     {% csrf_token %}
@@ -18,4 +19,5 @@
     </table>
     <input type="submit" value="Отправить">
   </form>
+{% endif %}
 {% endblock %}
