@@ -6,8 +6,17 @@
       <br>
       {% if user.is_authenticated %}
         <!-- Это блок ссылок для авторизованного пользователя -->
+				<li><a href="{% url 'user' username=user %}" class="{% if view_name == 'user' %}a-active{% endif %}">Личный кабинет</a></li>
+        
         <li><a href="{% url 'password_change' %}" class="{% if view_name == 'password_change' %}a-active{% endif %}">Изменить пароль</a></li>
-        <li><a href="{% url 'logout' %}" >Выйти</a></li> 
+        <li>
+					<a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+						Выйти
+					</a>
+					<form method="post" action="{% url 'logout' %}" id="logout-form" style="display: none;">
+						{% csrf_token %}
+					</form>
+				</li> 
         <br>
         <li><a href="{% url 'admin:index' %}" class="{% if view_name == '' %}a-active{% endif %}">Admin меню</a></li>
         <!-- Конец блока ссылок для авторизованного пользователя -->

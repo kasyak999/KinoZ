@@ -1,9 +1,10 @@
 from films.models import FilmsdModel, Coment
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
-from django import forms
+from django.contrib.auth import get_user_model
 
 
+User = get_user_model()
 BAD_WORDS = (
     '666',
     # Дополните список на своё усмотрение.
@@ -11,7 +12,7 @@ BAD_WORDS = (
 WARNING = 'Не ругайтесь!'
 
 
-class ComentForm(forms.ModelForm):
+class ComentForm(ModelForm):
     class Meta:
         model = Coment
         fields = ('text',)

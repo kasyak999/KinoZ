@@ -12,8 +12,10 @@ from pprint import pprint
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.contrib.auth import get_user_model
 
 
+User = get_user_model()
 OBJECTS_PER_PAGE = 10
 
 
@@ -165,3 +167,19 @@ class AddComment(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
         form.instance.film = self._id_kp
         return super().form_valid(form)
+
+
+class personal_account(LoginRequiredMixin, TemplateView):
+    """Личный кабинет"""
+    model = User
+    template_name = 'films/user.html'
+    pk_url_kwarg = 'username'
+
+    def get_object(self):
+        return get_object_or_404(
+            self.model, username=self.kwargs[self.pk_url_kwarg])
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['user_profile'] = self.get_object()
+        return context

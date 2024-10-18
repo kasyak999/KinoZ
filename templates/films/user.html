@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+	{% if user.is_authenticated %}
+		<h3>Учетная запись {{ username }}</h3>
+		<p><b>Email:</b> {{ user_profile.email }}</p>
+	{% endif %}
+{% endblock %}
+

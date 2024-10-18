@@ -4,7 +4,7 @@ from django.conf import settings
 # Добавьте новые строчки с импортами классов.
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView
-
+from films.views import personal_account
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -19,6 +19,7 @@ urlpatterns = [
         ),
         name='registration',
     ),
+    path('user/<str:username>', personal_account.as_view(), name='user')
 ]
 
 # Если проект запущен в режиме разработки...
