@@ -13,7 +13,8 @@ SECRET_KEY = 'django-insecure-s3u(#9+x^#c5x)q$!utnw8@3e&5g34-76%o92qcm5hy6oxjc9!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+#ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['89.110.75.220', '127.0.0.1', 'kasyak.ddns.net']
 
 
 # Application definition
@@ -126,6 +127,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'media/static_dev',
 ]
+STATIC_ROOT = BASE_DIR / 'static_backend'
 
 # ссылка пользователя
 LOGIN_REDIRECT_URL = 'films:index'
@@ -135,3 +137,7 @@ LOGIN_URL = 'login'
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 # Указываем директорию, в которую будут сохраняться файлы писем:
 EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://kasyak.ddns.net'
+]  # для пост запросов на домене
