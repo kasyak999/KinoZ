@@ -78,7 +78,7 @@ class DetailFilm(DetailView):
         except self.model.DoesNotExist:
             return redirect(
                 reverse(
-                    'films:add_film', kwargs={
+                    'films:add_film_id', kwargs={
                         'pk': self.kwargs[self.pk_url_kwarg]
                     }
                 )
