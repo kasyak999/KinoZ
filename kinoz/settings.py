@@ -139,5 +139,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://kasyak.ddns.net'
+    'https://kinoz.ddns.net'
 ]  # для пост запросов на домене
