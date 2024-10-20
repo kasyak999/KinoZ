@@ -14,7 +14,7 @@ SECRET_KEY = 'django-insecure-s3u(#9+x^#c5x)q$!utnw8@3e&5g34-76%o92qcm5hy6oxjc9!
 DEBUG = True
 
 #ALLOWED_HOSTS = ['127.0.0.1']
-ALLOWED_HOSTS = ['89.110.75.220', '127.0.0.1', 'kasyak.ddns.net']
+ALLOWED_HOSTS = ['89.110.75.220', '127.0.0.1', 'kinoz.ddns.net']
 
 
 # Application definition
