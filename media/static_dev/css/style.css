@@ -130,7 +130,7 @@ p {
   }
 }
 
-form input, form textarea {
+form input, form textarea, form select {
   border: 3px solid #006600;  /*рамка*/
   border-radius: 10px; /*закругление*/
   padding: 3px;

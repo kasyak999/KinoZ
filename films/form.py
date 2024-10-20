@@ -1,5 +1,5 @@
 from films.models import FilmsdModel, Coment
-from django.forms import ModelForm
+from django.forms import ModelForm, HiddenInput
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 
@@ -21,24 +21,36 @@ class ComentForm(ModelForm):
 class AddFilmBaza(ModelForm):
     class Meta:
         model = FilmsdModel
-        fields = '__all__'
-        exclude = (
-            'verified', 'is_published', 'poster', 'rating', 'id_kp',
-            'votecount', 'scrinshot'
-        )
+        # fields = '__all__'
+        # exclude = (
+        #     'verified', 'is_published', 'rating',
+        #     'votecount'
+        # )
+        fields = [
+            'id_kp',
+            'name',
+            'name_orig',
+            'year',
+            'description',
+            'poster',
+            'scrinshot',
+            'genres',
+            'country'
+        ]
 
-    # def clean_name(self):  # Изменяем метод на clean_name
-    #     name = self.cleaned_data['name']
-    #     if FilmsdModel.objects.filter(name=name).count() > 0:
-    #         raise forms.ValidationError("<b>www</b>")
-    #     return name
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Устанавливаем скрытое поле
+        self.fields['poster'].widget = HiddenInput()
+        self.fields['scrinshot'].widget = HiddenInput()
+        # Устанавливаем поле id_kp как доступное только для чтения
+        self.fields['id_kp'].widget.attrs['readonly'] = True
+        self.fields['name'].widget.attrs['readonly'] = True
+        self.fields['name_orig'].widget.attrs['readonly'] = True
+        self.fields['year'].widget.attrs['readonly'] = True
+        self.fields['description'].widget.attrs['readonly'] = True
 
-    # def clean_id_kp(self):
-    #     """Проверяем, существует ли уже фильм с таким id_kp"""
-    #     id_kp = self.cleaned_data['id_kp']
-    #     if FilmsdModel.objects.filter(id_kp=id_kp).exists():
-    #         raise forms.ValidationError(
-    #             "Фильм с таким ID кинопоиска уже существует в базе."
-    #             "Пожалуйста, введите другой ID."
-    #         )
-    #     return id_kp
+        # # Устанавливаем виджет для поля poster
+        # self.fields['poster'].widget = ImageWidget()
+        # # Убираем подсказку для поля poster
+        # self.fields['name'].help_text += '111111'

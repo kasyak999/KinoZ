@@ -3,6 +3,8 @@
       {% with request.resolver_match.view_name as view_name %}  
       <li><a href="{% url 'films:index' %}" class="{% if view_name == 'films:index' %}a-active{% endif %}">Главная</a></li>
       <li><a href="{% url 'films:search' %}" class="{% if view_name == 'films:search' %}a-active{% endif %}">Поиск</a></li>
+      <li><a href="{% url 'films:add_film' %}" class="{% if view_name == 'films:add_film' %}a-active{% endif %}">Добавить фильм</a></li>
+      
       <br>
       {% if user.is_authenticated %}
         <!-- Это блок ссылок для авторизованного пользователя -->
@@ -17,8 +19,9 @@
 						{% csrf_token %}
 					</form>
 				</li> 
-        <br>
-        <li><a href="{% url 'admin:index' %}" class="{% if view_name == '' %}a-active{% endif %}">Admin меню</a></li>
+        {% if user.is_superuser%}
+          <li><a href="{% url 'admin:index' %}" class="{% if view_name == '' %}a-active{% endif %}">Admin меню</a></li>
+        {% endif %}
         <!-- Конец блока ссылок для авторизованного пользователя -->
       {% else %}
         <!-- А здесь блок ссылок для неавторизованного пользователя -->

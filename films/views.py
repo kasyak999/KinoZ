@@ -124,27 +124,12 @@ class CreateFilm(CreateView):
         return initial
 
     def form_valid(self, form):
-        # print(form)
         initial = self._result_api
         if initial:
-            form.instance.poster = initial['poster']
-            form.instance.scrinshot = initial['scrinshot']
             form.instance.rating = initial['rating']
             form.instance.votecount = initial['votecount']
-
         form.instance.id_kp = self.kwargs[self.pk_url_kwarg]
-        result = FilmsdModel.objects.filter(
-            id_kp=self.kwargs[self.pk_url_kwarg]
-        )
-        if result.count() > 0:
-            print('уже есть')
-            form.add_error(
-                None,
-                "Фильм с таким ID кинопоиска уже находится в базе на проверке."
-            )
-            return render(self.request, self.template_name, {'form': form})
-        else:
-            return super().form_valid(form)
+        return super().form_valid(form)
 
 
 class AddComment(LoginRequiredMixin, CreateView):
@@ -183,3 +168,22 @@ class personal_account(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['user_profile'] = self.get_object()
         return context
+
+
+def add_film(request):
+    """Работа со сылкой кинопоиска"""
+    template_name = 'films/add_kinopoisk.html'
+    context = {}
+    if request.method == 'POST':
+        film_id = request.POST.get('film_id')
+        result = film_id.split('/')
+        if 'https:' in result:
+            try:
+                id_film = int(result[4])
+            except (ValueError, TypeError):
+                context['error'] = 'Неверный формат cсылки'
+            else:  # если все ок
+                return redirect('films:add_film_id', id_film)
+        else:
+            context['error'] = 'Ссылка на фильма не соответствует формату'
+    return render(request, template_name, context)
