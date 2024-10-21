@@ -1,22 +1,36 @@
+{% if object.year %}
 <p><b>Год выпуска</b> {{ object.year }}</p>
-<p><b>Жанр:</b> 
-{% for genres in object.genres.all %}
-    {% if forloop.last %}
-    {{ genres }}
-    {% else %}
-    {{ genres }}, 
-    {% endif %}
-{% endfor %}</p></p>
-<p><b>Страна:</b>
-{% for country in object.country.all %}
-    {% if forloop.last %}
-    {{ country }}
-    {% else %}
-    {{ country }}, 
-    {% endif %}
-{% endfor %}</p>
-<p><b>Рейтинг кинопоиска</b> {{ object.rating }} (оценок {{ object.votecount }})</p>
-<p><b>Категория</b> {{ object.cat }}</p>
+{% endif %}
+
+{% if object.genres.all %}
+	<p><b>Жанр:</b> 
+	{% for genres in object.genres.all %}
+		{% if forloop.last %}
+		{{ genres }}
+		{% else %}
+		{{ genres }}, 
+		{% endif %}
+	{% endfor %}</p></p>
+{% endif %}
+
+{% if object.country.all %}
+	<p><b>Страна:</b>
+	{% for country in object.country.all %}
+		{% if forloop.last %}
+		{{ country }}
+		{% else %}
+		{{ country }}, 
+		{% endif %}
+	{% endfor %}</p>
+{% endif %}
+
+{% if object.rating %}
+	<p><b>Рейтинг кинопоиска</b> {{ object.rating }} (оценок {{ object.votecount }})</p>
+{% endif %}
+
+{% if object.cat %}
+	<p><b>Категория</b> {{ object.cat }}</p>
+{% endif %}
 <!-- <p><b>Режиссер</b> Роб Коэн</p>
 <p><b>Актеры</b> Пол Уокер, Вин Дизель, Мишель Родригес, Джордана Брюстер, Мэтт Шульце</p>
 -->

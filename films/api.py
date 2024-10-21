@@ -1,28 +1,40 @@
 from django.http import Http404
-# Http404
 import requests
-import films.key_name as key_name  # Импорт переменых и токенов для подключения к Api
-import sqlite3
-import json
-from django.utils import timezone
+from .models import FilmsdModel
+
+
+KINOPOISK_URL = 'https://kinopoiskapiunofficial.tech'
+# Апи кинопоиска
+KINOPOISK_URL_MAIN = '/api/v2.2/films/'
+# Добавочный адрес
+DATA_KP = {  # Параметры запроса к кинопоиску
+    'X-API-KEY': "2c84e19c-996a-4c40-a8bd-9375dfa4678b",
+    'Content-Type': 'application/json'
+}
 
 
 def add_scrinshot_film(data_kp):
     """Добавление кадров из фильма с кинопоиска"""
     data_kp += '/images'
-    response_kp = requests.get(data_kp, headers=key_name.DATA_KP)
+    response_kp = requests.get(data_kp, headers=DATA_KP)
     if response_kp.status_code == 200:
         scrinshot = response_kp.json()['items']
         # print('--------------------------------------')
         # print(scrinshot)
-        print('--------------------------------------')
+        # print('--------------------------------------')
         return scrinshot
 
 
 def information_film(kp: int):
+    result = FilmsdModel.objects.filter(id_kp=kp).exists()
+    if not result:
+        return connection_api(kp)
+
+
+def connection_api(kp: int):
     """Собираем информацию о фильме из кинопоиска"""
-    data_kp = key_name.KINOPOISK_URL + key_name.KINOPOISK_URL_MAIN + str(kp)
-    response_kp = requests.get(data_kp, headers=key_name.DATA_KP)
+    data_kp = KINOPOISK_URL + KINOPOISK_URL_MAIN + str(kp)
+    response_kp = requests.get(data_kp, headers=DATA_KP)
     # print(response_kp)
     if response_kp.status_code == 200:
         scrinshot = add_scrinshot_film(data_kp)
@@ -38,7 +50,6 @@ def information_film(kp: int):
         genres = [list(i.values())[0] for i in response_kp['genres']]
         # print(genres)
         genres = ', '.join(genres)
-
         country = [list(dict.values(i))[0] for i in response_kp['countries']]
         country = ', '.join(country)
         result = {
@@ -58,4 +69,4 @@ def information_film(kp: int):
         return result
     # raise Http404
     else:
-        return False
+        raise Http404

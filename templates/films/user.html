@@ -3,7 +3,7 @@
 {% block content %}
 	{% if user.is_authenticated %}
 		<h3>Учетная запись {{ username }}</h3>
-		<p><b>Email:</b> {{ user_profile.email }}</p>
+		<p><b>Email:</b> {{ user_profile.email }} <a href='{% url "email_update" %}'>изменить</a></p>
 	{% endif %}
 {% endblock %}
 

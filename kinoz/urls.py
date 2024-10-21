@@ -4,7 +4,7 @@ from django.conf import settings
 # Добавьте новые строчки с импортами классов.
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView
-from films.views import personal_account
+from films.views import personal_account, EmailUpdateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -15,11 +15,12 @@ urlpatterns = [
         CreateView.as_view(
             template_name='registration/registration_form.html',
             form_class=UserCreationForm,
-            success_url=reverse_lazy('films:index'),
+            success_url=reverse_lazy('login'),
         ),
         name='registration',
     ),
-    path('user/<str:username>', personal_account.as_view(), name='user')
+    path('user/<str:username>', personal_account.as_view(), name='user'),
+    path('user/email/', EmailUpdateView.as_view(), name='email_update'),
 ]
 
 # Если проект запущен в режиме разработки...

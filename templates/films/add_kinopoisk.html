@@ -7,10 +7,19 @@
 
 {% block content %}  
 <h3>Добавить фильм</h3>
+
+{% if messages %}
+    <ul>
+    {% for message in messages %}
+        <li><font color='red'>{{ message }}</font></li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
+
 <p>Введите ссылку фильма на кинопоиске.</p>
 <p>Пример: <b>https://www.kinopoisk.ru/film/594554/</b></p>
 <br>
-<p><font color='red'>{{ error }}</font></p>
 <form method="post">
 	{% csrf_token %}
 	<label for="film_title">Ссылка на кинопоск:</label>

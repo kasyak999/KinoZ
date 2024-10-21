@@ -5,7 +5,7 @@ from django.views.generic import (
 from films.models import FilmsdModel, Coment
 from django.shortcuts import get_object_or_404, redirect, render
 from .api import information_film
-from .form import AddFilmBaza, ComentForm
+from .form import AddFilmBaza, ComentForm, EmailUpdateForm
 from django.http import HttpResponse, HttpRequest, Http404
 from django.urls import reverse, reverse_lazy
 from pprint import pprint
@@ -13,6 +13,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
+from django.contrib import messages
 
 
 User = get_user_model()
@@ -117,19 +119,19 @@ class CreateFilm(CreateView):
 
     def get_initial(self):
         initial = self._result_api
-        # pprint(initial['poster'])
-        if not initial:
-            initial = super().get_initial()
-            initial['id_kp'] = self.kwargs[self.pk_url_kwarg]
-        return initial
-
-    def form_valid(self, form):
-        initial = self._result_api
         if initial:
-            form.instance.rating = initial['rating']
-            form.instance.votecount = initial['votecount']
-        form.instance.id_kp = self.kwargs[self.pk_url_kwarg]
-        return super().form_valid(form)
+            return initial
+        return super().get_initial()
+
+    def get(self, request, *args, **kwargs):
+        # Проверяем, существует ли фильм
+        if self._result_api is None:
+            messages.error(request, 'Такой фильм уже есть в базе')
+            return redirect('films:add_film')
+            # context = {'error': 'Такой фильм уже есть в базе'}
+            # return render(
+            #     request, 'films/add_kinopoisk.html', context)
+        return super().get(request, *args, **kwargs)
 
 
 class AddComment(LoginRequiredMixin, CreateView):
@@ -173,17 +175,33 @@ class personal_account(LoginRequiredMixin, TemplateView):
 def add_film(request):
     """Работа со сылкой кинопоиска"""
     template_name = 'films/add_kinopoisk.html'
-    context = {}
     if request.method == 'POST':
         film_id = request.POST.get('film_id')
         result = film_id.split('/')
         if 'https:' in result:
             try:
                 id_film = int(result[4])
-            except (ValueError, TypeError):
-                context['error'] = 'Неверный формат cсылки'
+            except (ValueError, TypeError, IndexError):
+                messages.error(request, 'Неверный формат cсылки')
             else:  # если все ок
-                return redirect('films:add_film_id', id_film)
+                bd = FilmsdModel.objects.filter(id_kp=id_film)
+                if not bd:
+                    return redirect('films:add_film_id', id_film)
+                messages.error(request, 'Такой фильм уже есть в базе')
         else:
-            context['error'] = 'Ссылка на фильма не соответствует формату'
-    return render(request, template_name, context)
+            messages.error(
+                request, 'Ссылка на фильма не соответствует формату')
+    return render(request, template_name)
+
+
+class EmailUpdateView(LoginRequiredMixin, UpdateView):
+    """Изменение email пользователя"""
+    model = User
+    form_class = EmailUpdateForm
+    template_name = 'registration/email_update.html'
+
+    def get_success_url(self):
+        return reverse('user', kwargs={'username': self.request.user})
+
+    def get_object(self):
+        return self.request.user  # Получаем текущего пользователя

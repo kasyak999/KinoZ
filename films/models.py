@@ -45,25 +45,25 @@ class FilmsdModel(MainModel):
         max_length=256, verbose_name='Оригинальное название',
         blank=True, null=True
     )
-    year = models.IntegerField(verbose_name='Год')
+    year = models.IntegerField(verbose_name='Год', null=True, blank=True)
     poster = models.TextField(
-        verbose_name='Постер', blank=True,
+        verbose_name='Постер', blank=True, null=True,
         help_text=('Пример: http://оригинал, http://превью'),
     )
-    country = models.ManyToManyField(
-        'Country', verbose_name='Страна', blank=True,
-        help_text='Зажмите Ctrl и выберите'
-    )
-    genres = models.ManyToManyField(
-        'Genres', verbose_name='Жанр', blank=True,
-        help_text='Зажмите Ctrl и выберите'
-    )
-    rating = models.FloatField(default=0, null=True, verbose_name='Рейтинг', blank=True)
+    rating = models.FloatField(
+        default=0, null=True, verbose_name='Рейтинг', blank=True)
     votecount = models.IntegerField(
         default=0, verbose_name='Голосов', blank=True, null=True,
     )
     description = models.TextField(
-        default='Нет описания', verbose_name='Описание', null=True,
+        default='Нет описания', verbose_name='Описание', null=True, blank=True
+    )
+    scrinshot = models.JSONField(
+        null=True, verbose_name='Скриншоты', blank=True,
+        help_text=(
+            'imageUrl - оригинал, "previewUrl - превью'
+            '[{"imageUrl": "ссылка", "previewUrl": "ссылка"}, ]'
+        )
     )
     cat = models.ForeignKey(
         'Category',
@@ -73,12 +73,13 @@ class FilmsdModel(MainModel):
         null=True,
         blank=True
     )
-    scrinshot = models.JSONField(
-        null=True, verbose_name='Скриншоты', blank=True,
-        help_text=(
-            'imageUrl - оригинал, "previewUrl - превью'
-            '[{"imageUrl": "ссылка", "previewUrl": "ссылка"}, ]'
-        )
+    country = models.ManyToManyField(
+        'Country', verbose_name='Страна', blank=True,
+        help_text='Зажмите Ctrl и выберите'
+    )
+    genres = models.ManyToManyField(
+        'Genres', verbose_name='Жанр', blank=True,
+        help_text='Зажмите Ctrl и выберите'
     )
 
     class Meta(MainModel.Meta):

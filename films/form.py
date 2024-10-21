@@ -1,5 +1,6 @@
 from films.models import FilmsdModel, Coment
-from django.forms import ModelForm, HiddenInput
+# from django.forms import ModelForm, HiddenInput
+from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 
@@ -12,45 +13,45 @@ BAD_WORDS = (
 WARNING = 'Не ругайтесь!'
 
 
-class ComentForm(ModelForm):
+class EmailUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['email']
+
+
+class ComentForm(forms.ModelForm):
     class Meta:
         model = Coment
         fields = ('text',)
 
 
-class AddFilmBaza(ModelForm):
+class AddFilmBaza(forms.ModelForm):
+
     class Meta:
         model = FilmsdModel
-        # fields = '__all__'
-        # exclude = (
-        #     'verified', 'is_published', 'rating',
-        #     'votecount'
-        # )
-        fields = [
-            'id_kp',
-            'name',
-            'name_orig',
-            'year',
-            'description',
-            'poster',
-            'scrinshot',
-            'genres',
-            'country'
-        ]
-
+        fields = '__all__'
+        exclude = (
+            'verified', 'is_published'
+        )
+        # fields = [
+        #     'id_kp',
+        #     'name',
+        #     'name_orig',
+        #     'year',
+        #     'description',
+        #     'poster',
+        #     'scrinshot',
+        #     'genres',
+        #     'country'
+        # ]
+        
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Устанавливаем скрытое поле
-        self.fields['poster'].widget = HiddenInput()
-        self.fields['scrinshot'].widget = HiddenInput()
+        for value in ['poster', 'scrinshot', 'rating', 'votecount']:
+            self.fields[value].widget = forms.HiddenInput()
         # Устанавливаем поле id_kp как доступное только для чтения
-        self.fields['id_kp'].widget.attrs['readonly'] = True
-        self.fields['name'].widget.attrs['readonly'] = True
-        self.fields['name_orig'].widget.attrs['readonly'] = True
-        self.fields['year'].widget.attrs['readonly'] = True
-        self.fields['description'].widget.attrs['readonly'] = True
-
-        # # Устанавливаем виджет для поля poster
-        # self.fields['poster'].widget = ImageWidget()
+        for value in ['id_kp', 'name', 'name_orig', 'year', 'description']:
+            self.fields[value].widget.attrs['readonly'] = True
         # # Убираем подсказку для поля poster
         # self.fields['name'].help_text += '111111'
