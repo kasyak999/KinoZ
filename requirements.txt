@@ -9,6 +9,7 @@ packaging==24.1
 pluggy==1.5.0
 pytest==8.3.2
 pytest-django==4.8.0
+python-dotenv==1.0.1
 requests==2.32.3
 sqlparse==0.5.1
 urllib3==2.2.2
