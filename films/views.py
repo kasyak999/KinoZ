@@ -117,7 +117,10 @@ class CreateFilm(CreateView):
         return rez
 
     def get_success_url(self):
-        return reverse('films:index')
+        messages.success(
+            self.request,
+            'Фильм успешно добавлен в базу, после проверки он будет доступен')
+        return reverse('films:add_film')
 
     def get_initial(self):
         initial = self._result_api

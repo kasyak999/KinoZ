@@ -11,7 +11,12 @@
 {% if messages %}
     <ul>
     {% for message in messages %}
-        <li><font color='red'>{{ message }}</font></li>
+		<li>{% if message.tags == 'error' %}
+      <font color='red'>
+		{% else %}
+			<font color='green'>
+		{% endif %}
+		{{ message }}</font></li>
     {% endfor %}
     </ul>
 {% endif %}

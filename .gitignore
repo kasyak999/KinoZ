@@ -5,3 +5,4 @@ db.sqlite3
 .mypy_cache
 sent_emails
 static_backend
+.env

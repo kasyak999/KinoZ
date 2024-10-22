@@ -6,6 +6,7 @@ from films.form import CustomUserCreationForm
 from django.views.generic.edit import CreateView
 from films.views import personal_account, EmailUpdateView
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('films.urls')),
