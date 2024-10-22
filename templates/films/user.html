@@ -1,9 +1,14 @@
 {% extends "base.html" %}
 
+{% block title %}
+Личный кабинет
+{% endblock %}
+
 {% block content %}
-	{% if user.is_authenticated %}
-		<h3>Учетная запись {{ username }}</h3>
-		<p><b>Email:</b> {{ user_profile.email }} <a href='{% url "email_update" %}'>изменить</a></p>
-	{% endif %}
+{% if user.is_authenticated %}
+	<h3>Учетная запись {{ username }}</h3>
+	<p><b>Email:</b> {{ user_profile.email }} <a href='{% url "email_update" %}'>изменить</a></p>
+	<p><b>Пароль:</b> *** <a href='{% url "password_change" %}'>изменить</a></p>
+{% endif %}
 {% endblock %}
 

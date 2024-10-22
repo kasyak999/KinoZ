@@ -3,6 +3,7 @@ from films.models import FilmsdModel, Coment
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
 
 
 User = get_user_model()
@@ -55,3 +56,12 @@ class AddFilmBaza(forms.ModelForm):
             self.fields[value].widget.attrs['readonly'] = True
         # # Убираем подсказку для поля poster
         # self.fields['name'].help_text += '111111'
+
+
+class CustomUserCreationForm(UserCreationForm):
+    """Форма для регистрации"""
+    email = forms.EmailField(required=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']

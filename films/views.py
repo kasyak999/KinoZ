@@ -46,6 +46,7 @@ class SearchView(ListView):
             context['search'] = self.object_list.count()
         else:
             context['html_name'] = 'Поиск'
+        context['html_title'] = context['html_name']
         return context
 
 
@@ -64,6 +65,7 @@ class IndexListView(ListView):
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context['html_name'] = 'Главная страница'
+        context['html_title'] = context['html_name']
         return context
 
 

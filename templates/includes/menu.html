@@ -9,8 +9,6 @@
       {% if user.is_authenticated %}
         <!-- Это блок ссылок для авторизованного пользователя -->
 				<li><a href="{% url 'user' username=user %}" class="{% if view_name == 'user' %}a-active{% endif %}">Личный кабинет</a></li>
-        
-        <li><a href="{% url 'password_change' %}" class="{% if view_name == 'password_change' %}a-active{% endif %}">Изменить пароль</a></li>
         <li>
 					<a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
 						Выйти

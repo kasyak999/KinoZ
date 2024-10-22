@@ -120,6 +120,13 @@ p {
   font-size: 17px;/**/
 }
 
+table {
+  border-spacing: 0 15px; 
+  tr {
+    vertical-align: top;
+  }
+}
+
 @media (max-width: 876px) {
   main .menu li{
     display: inline;
