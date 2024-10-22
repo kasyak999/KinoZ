@@ -163,6 +163,7 @@ class personal_account(LoginRequiredMixin, TemplateView):
     model = User
     template_name = 'films/user.html'
     pk_url_kwarg = 'username'
+    paginate_by = OBJECTS_PER_PAGE
 
     def get_object(self):
         return get_object_or_404(
@@ -170,7 +171,15 @@ class personal_account(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context['user_profile'] = self.get_object()
+        user_profile = self.get_object()
+        context['user_profile'] = user_profile
+        comment_all = Coment.objects.filter(
+            author=user_profile).select_related('author', 'film')
+        paginator = Paginator(comment_all, self.paginate_by)
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context['page_obj'] = page_obj
+
         return context
 
 

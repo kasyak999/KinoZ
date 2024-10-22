@@ -51,7 +51,8 @@ main {
   .menu {
     position: sticky; /* двигается вместе с браузером */
     top: 0;/**/
-    max-height: 260px;
+    max-height: 200px; /**/
+    /* height: 260px; /**/
     border: 1px solid #006600;  /*рамка*/
     border-radius: 10px; /*закругление*/
     box-shadow: -5px 5px 7px #003300; /* тень элемента: x y размытие цвет*/
@@ -134,6 +135,7 @@ table {
   }
   main .menu {
     position: relative;
+    /*height: 260px;*/
   }
 }
 

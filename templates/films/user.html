@@ -7,8 +7,26 @@
 {% block content %}
 {% if user.is_authenticated %}
 	<h3>Учетная запись {{ username }}</h3>
-	<p><b>Email:</b> {{ user_profile.email }} <a href='{% url "email_update" %}'>изменить</a></p>
+	<p><b>Email:</b> {{ user_profile.email }}
+		{% if user.username == username %}
+			<a href='{% url "email_update" %}'>изменить</a>
+		{% endif %}
+	</p>
+	{% if user.username == username %}
 	<p><b>Пароль:</b> *** <a href='{% url "password_change" %}'>изменить</a></p>
+	{% endif %}
+	{% if page_obj.paginator.count > 0 %}
+		<br><p>Все отзывы пользователя: {{ page_obj.paginator.count }}</p><br>
+		{% for comment in page_obj %}
+			<p><a href="{% url "films:film" comment.film.id_kp %}"><b>{{ comment.film.name }} / {{ comment.film.name_orig }} ({{ comment.film.year }})</b></a></p>
+			<p><a href="{% url 'user' username=comment.author.username %}">{{ comment.author.username }}</a>: {{ comment.text }}<br>
+			{{ comment.created_at|date:"d M Y H:i" }}</p>
+			{% if not forloop.last %}
+					<br>
+			{% endif %}
+		{% endfor %}
+		<p align="center">{% include "includes/paginator.html" %}</p>
+	{% endif %}
 {% endif %}
 {% endblock %}
 

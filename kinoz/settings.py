@@ -125,7 +125,7 @@ INTERNAL_IPS = [
 # Директории, где собраны статические файлы проекта (список):
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    BASE_DIR / 'media/static_dev',
+    BASE_DIR / 'static_dev',
 ]
 STATIC_ROOT = BASE_DIR / 'static_backend'
 
