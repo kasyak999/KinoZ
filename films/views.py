@@ -177,7 +177,8 @@ class personal_account(LoginRequiredMixin, TemplateView):
         user_profile = self.get_object()
         context['user_profile'] = user_profile
         comment_all = Coment.objects.filter(
-            author=user_profile).select_related('author', 'film')
+            author=user_profile, film__verified=True, film__is_published=True
+        ).select_related('author', 'film')
         paginator = Paginator(comment_all, self.paginate_by)
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)

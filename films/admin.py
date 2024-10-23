@@ -2,6 +2,7 @@ from django.contrib import admin
 from . models import FilmsdModel, Category, Genres, Country, Coment
 from django.utils.html import format_html
 from django import forms
+from django.db.models import Count
 
 
 class FilmsdModelForm(forms.ModelForm):
@@ -44,9 +45,14 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display_links = ('name',)
     search_fields = ['name']
 
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        # Аннотируем количество связанных фильмов для каждой категории
+        return queryset.annotate(films_count=Count('posts'))
+
     def films_count(self, obj):
         """Выводит количество записей в FilmsdModel, связанных с категорией."""
-        return obj.posts.count()  # Используйте filmsdmodel_set для связи
+        return obj.films_count
 
     films_count.short_description = ('Количество фильмов')
 
@@ -54,7 +60,17 @@ class CategoryAdmin(admin.ModelAdmin):
 class ComentAdmin(admin.ModelAdmin):
     list_display = (
         'text',
+        'get_film_name'
     )
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        return queryset.select_related('film')
+
+    def get_film_name(self, obj):
+        return obj.film.name
+
+    get_film_name.short_description = 'Название фильма'  # Переопределяем verbose_name для столбца
 
 
 admin.site.register(FilmsdModel, FilmsAdmin)
