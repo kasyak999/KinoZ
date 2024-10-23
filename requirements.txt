@@ -3,6 +3,7 @@ certifi==2024.7.4
 charset-normalizer==3.3.2
 Django==5.1.2
 django-debug-toolbar==4.4.6
+gunicorn==23.0.0
 idna==3.7
 iniconfig==2.0.0
 packaging==24.1
