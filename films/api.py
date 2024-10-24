@@ -1,6 +1,8 @@
 from django.http import Http404
 import requests
 from .models import FilmsdModel
+from pprint import pprint
+from django.db.models import Q
 
 
 KINOPOISK_URL = 'https://kinopoiskapiunofficial.tech'
@@ -11,6 +13,23 @@ DATA_KP = {  # Параметры запроса к кинопоиску
     'X-API-KEY': "2c84e19c-996a-4c40-a8bd-9375dfa4678b",
     'Content-Type': 'application/json'
 }
+
+
+def search_film(value, id_kp):
+    """Поиск фильма"""
+    data_kp = KINOPOISK_URL + '/api/v2.1/films/search-by-keyword'
+    response_kp = requests.get(
+        data_kp, headers=DATA_KP, params={'keyword': value})
+    # print(response_kp)
+    if response_kp.status_code == 200:
+        response_kp = response_kp.json()
+        result = []
+        for i in response_kp['films']:
+            if not i['filmId'] in id_kp:
+                result.append(i)
+        return result
+    else:
+        print('Ошибка в базе кинопоиска')
 
 
 def add_scrinshot_film(data_kp):

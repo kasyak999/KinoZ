@@ -74,6 +74,10 @@ main {
   .content {
     /* border: 1px solid #0e12f0;  /*рамка*/
     width: 700px;
+    a:hover {
+      text-decoration: underline; /*показать подчеркивание*/
+      font-weight: 1; /*жирность текста (400 стандарт, 900 максимум)*/
+    }
   }
 }
 

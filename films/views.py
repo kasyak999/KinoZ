@@ -4,7 +4,7 @@ from django.views.generic import (
 )
 from films.models import FilmsdModel, Coment
 from django.shortcuts import get_object_or_404, redirect, render
-from .api import information_film
+from .api import information_film, search_film
 from .form import AddFilmBaza, ComentForm, EmailUpdateForm
 from django.http import HttpResponse, HttpRequest, Http404
 from django.urls import reverse, reverse_lazy
@@ -18,7 +18,7 @@ from django.contrib import messages
 
 
 User = get_user_model()
-OBJECTS_PER_PAGE = 10
+OBJECTS_PER_PAGE = 1
 
 
 class SearchView(ListView):
@@ -43,7 +43,11 @@ class SearchView(ListView):
         context = super().get_context_data(**kwargs)
         if self.request.GET.get('search'):
             context['html_name'] = f'Поиск «{self.request.GET.get('search')}»'
-            context['search'] = self.object_list.count()
+            context['search'] = len(context['object_list'])
+            # Ищем найденые id фильмов в базе и отправляем в поиск в kp
+            films_id = [i.id_kp for i in context['object_list']]
+            # context['search_kp'] = search_film(
+            #     self.request.GET.get('search'), films_id)
         else:
             context['html_name'] = 'Поиск'
         context['html_title'] = context['html_name']

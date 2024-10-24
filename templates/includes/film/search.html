@@ -4,7 +4,7 @@
 
 {% if not search and request.resolver_match.view_name == 'films:search' %}
   {% if search is not None %}
-    <p>По вашему запросу ничего не найдено.</p>
+    <p>По вашему запросу ничего не найдено.</p><br>
   {% else %}
   <form action="/search/" method="get">
     <label>Поиск по названию фильма: </label>

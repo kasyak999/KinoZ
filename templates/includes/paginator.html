@@ -15,3 +15,18 @@
     {% endif %}
   {% endif %}
 {% endif %}
+
+<br>{{ page_obj.paginator}}<br>
+
+{% comment %} {% if request.GET.page %}{{ request.GET.urlencode }}&{% endif %}page=1 {% endcomment %}
+{% if request.GET.page %}
+{{ request.GET }} -{{ request.GET.urlencode|slice:':-6' }}&page=1
+{% else %}
+?page=1
+{% endif %}
+<hr>
+
+<hr>
+
+
+
