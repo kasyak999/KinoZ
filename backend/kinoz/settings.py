@@ -4,25 +4,14 @@ from pathlib import Path
 
 
 load_dotenv()
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = BASE_DIR / 'templates'
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#ALLOWED_HOSTS = ['127.0.0.1']
-ALLOWED_HOSTS = ['89.110.75.220', '127.0.0.1', 'kinoz.ddns.net']
-
-
-# Application definition
+ALLOWED_HOSTS = ['89.110.75.220', '127.0.0.1', 'kinoz.ddns.net', 'localhost']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -67,21 +56,38 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'kinoz.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.getenv('MYSQL_DB', 'django'),
+        'USER': os.getenv('MYSQL_USER', 'user'),
+        'PASSWORD': os.getenv('MYSQL_PASSWORD', 'user_password'),
+        'HOST': os.getenv('MYSQL_HOST', 'db_mysql'),
+        'PORT': os.getenv('MYSQL_PORT', 3306),
     }
 }
+# 'NAME': 'my_database',  # Имя базы данных
+# 'USER': 'user',         # Пользователь базы данных
+# 'PASSWORD': 'user_password',  # Пароль пользователя
+# 'HOST': 'db_mysql',     # Имя контейнера базы данных (должно совпадать с db_mysql в Docker Compose)
+# 'PORT': '3306',         # Порт, который проброшен в Docker Compose
 
-
-# Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.getenv('POSTGRES_DB', 'django'),
+#         'USER': os.getenv('POSTGRES_USER', 'django'),
+#         'PASSWORD': os.getenv('POSTGRES_PASSWORD', ''),
+#         'HOST': os.getenv('POSTGRES_HOST', ''),
+#         'PORT': os.getenv('POSTGRES_PORT', 5432),
+#     }
+# }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -98,27 +104,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
-
 LANGUAGE_CODE = 'ru-RU'
-
 TIME_ZONE = 'Europe/Moscow'  # 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
-
-STATIC_URL = 'static/'
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Добавьте в settings.py эту константу, чтобы DjDT знал,
@@ -144,5 +133,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://kinoz.ddns.net'
+    'http://localhost:8000'
 ]  # для пост запросов на домене

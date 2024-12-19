@@ -1,0 +1,5 @@
+создать образ
+docker build -t test .
+
+
+docker run --name test_contaner --rm -p 8000:8000 test
