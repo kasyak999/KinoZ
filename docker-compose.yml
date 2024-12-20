@@ -1,26 +1,16 @@
 volumes:
   static:
-  media:
   mysql_data:
 
 services:
   db_mysql:
-    image: mysql  # или другая версия, например, mysql:5.7
+    image: mysql
     container_name: mysql_container
-    environment:
-      MYSQL_ROOT_PASSWORD: root_password  # Задайте пароль для root
-      MYSQL_DATABASE: my_database         # Имя базы данных, которую хотите создать
-      MYSQL_USER: user                    # Пользователь базы данных
-      MYSQL_PASSWORD: user_password       # Пароль пользователя
+    env_file: .env
     volumes:
-      - mysql_data:/var/lib/mysql  # Хранение данных в volume
+      - mysql_data:/var/lib/mysql
     ports:
-      - "3306:3306"                # Проброс порта для доступа к базе данных
-  # db:
-  #   image: postgres:13
-  #   env_file: .env
-  #   volumes:
-  #     - pg_data:/var/lib/postgresql/data
+      - "${MYSQL_PORT}:3306"
   backend:
     build: ./backend/
     depends_on:
@@ -28,7 +18,6 @@ services:
     env_file: .env
     volumes:
       - static:/backend_static
-      - media:/app/media
     command: >
       sh -c "python manage.py makemigrations &&
       python manage.py migrate &&
@@ -43,4 +32,3 @@ services:
       - 8000:80
     volumes:
       - static:/static
-      - media:/media

@@ -59,19 +59,13 @@ WSGI_APPLICATION = 'kinoz.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('MYSQL_DB', 'django'),
+        'NAME': os.getenv('MYSQL_DATABASE', 'django'),
         'USER': os.getenv('MYSQL_USER', 'user'),
         'PASSWORD': os.getenv('MYSQL_PASSWORD', 'user_password'),
         'HOST': os.getenv('MYSQL_HOST', 'db_mysql'),
         'PORT': os.getenv('MYSQL_PORT', 3306),
     }
 }
-# 'NAME': 'my_database',  # Имя базы данных
-# 'USER': 'user',         # Пользователь базы данных
-# 'PASSWORD': 'user_password',  # Пароль пользователя
-# 'HOST': 'db_mysql',     # Имя контейнера базы данных (должно совпадать с db_mysql в Docker Compose)
-# 'PORT': '3306',         # Порт, который проброшен в Docker Compose
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
