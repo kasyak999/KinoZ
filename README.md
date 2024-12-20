@@ -16,38 +16,36 @@
 - добавить рейтинг фильма, который будет изначально браться с кинопоиска и суммироваться с оценками пользователей проекта.
 - Исправить шаблон сайта.
 - оптимизировать работу проекта
-- сделать авторизацию через телеграмм бота
-- перейти на БД MySQL после полной готовности проекта.
+- оптимизировать код
+- подготовить docker-compose.production.yml
+- настроить CI/CD на GitHub Actions
 
-
+## Технологии проекта
+- Python 3.13
+- MySQL
+- Ngnix
+- Django 5.1.2
 
 ## Необходимые условия
 
-- Версия Python: 3.13
+- Docker
 - ОС: Linux
-- Менеджер пакетов: pip
-- БД: SQLite
 
-## Установка
+## Установка и запуск
 
-1. создать виртуальное окружение
-    ```bash 
-    python -m venv venv
-    ```
-    ```bash 
-    source venv/bin/activate
-    ```
-2. Установить зависимости
-    ``` bash
-    pip install -r requirements.txt
-    ```
-3. Установить миграции
-    ```bash
-    python manage.py migrate
-    ```
-4.  Создать статику 
-    ```bash
-    python manage.py collectstatic
-    ```
+1. Создать файл **.env** с содержимым:
+```bash
+SECRET_KEY=ключ_джанго_проекта
+MYSQL_DATABASE=my_database
+MYSQL_USER=user
+MYSQL_PASSWORD=user_password   
+MYSQL_ROOT_PASSWORD=root_password
+MYSQL_PORT=3306
+MYSQL_HOST=db_mysql
+```
+2. Запустить docker compose
+```bash 
+docker compose up --build 
+```
 
 [Ссылка на описание](#описание)

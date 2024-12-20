@@ -56,32 +56,23 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'kinoz.wsgi.application'
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': os.getenv('MYSQL_DATABASE', 'django'),
+#         'USER': os.getenv('MYSQL_USER', 'user'),
+#         'PASSWORD': os.getenv('MYSQL_PASSWORD', 'user_password'),
+#         'HOST': os.getenv('MYSQL_HOST', 'db_mysql'),
+#         'PORT': os.getenv('MYSQL_PORT', 3306),
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('MYSQL_DATABASE', 'django'),
-        'USER': os.getenv('MYSQL_USER', 'user'),
-        'PASSWORD': os.getenv('MYSQL_PASSWORD', 'user_password'),
-        'HOST': os.getenv('MYSQL_HOST', 'db_mysql'),
-        'PORT': os.getenv('MYSQL_PORT', 3306),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.getenv('POSTGRES_DB', 'django'),
-#         'USER': os.getenv('POSTGRES_USER', 'django'),
-#         'PASSWORD': os.getenv('POSTGRES_PASSWORD', ''),
-#         'HOST': os.getenv('POSTGRES_HOST', ''),
-#         'PORT': os.getenv('POSTGRES_PORT', 5432),
-#     }
-# }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
 AUTH_PASSWORD_VALIDATORS = [
     {

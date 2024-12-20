@@ -3,6 +3,7 @@ from . models import FilmsdModel, Category, Genres, Country, Coment
 from django.utils.html import format_html
 from django import forms
 from django.db.models import Count
+from django.utils.safestring import mark_safe
 
 
 class FilmsdModelForm(forms.ModelForm):
@@ -14,19 +15,21 @@ class FilmsdModelForm(forms.ModelForm):
         super(FilmsdModelForm, self).__init__(*args, **kwargs)
         if self.instance and self.instance.id_kp:
             self.fields['id_kp'].help_text = format_html(
-                f'''ссылка кинопоиска:
+                f'''Ссылка кинопоиска:
                 <a href="https://www.kinopoisk.ru/film/{self.instance.id_kp}"
                 target="_blank">https://www.kinopoisk.ru/film/{self.instance.id_kp}</a>
-                <br>ссылка на фильм:
+                <br>Ссылка на фильм:
                 <a href="/film/{self.instance.id_kp}/"
                 target="_blank">{self.instance.id_kp}</a>
                 '''
             )
 
 
+@admin.register(FilmsdModel)
 class FilmsAdmin(admin.ModelAdmin):
     form = FilmsdModelForm
     list_display = (
+        'image_preview',
         'id_kp',
         'name',
         'is_published',
@@ -36,7 +39,20 @@ class FilmsAdmin(admin.ModelAdmin):
     search_fields = ['name', 'id_kp']
     list_filter = ('is_published', 'verified')
 
+    @admin.display(description='Постер')
+    def image_preview(self, obj):
+        """Показывать миниатюру изображения"""
+        image = obj.poster.split(',')
+        print(image)
+        if obj.poster:
+            return mark_safe(
+                f'<img src="{image[1]}" alt="Image" '
+                f'style="max-height: 100px; max-width: 100px;"/>'
+            )
+        return 'Нет изображения'
 
+
+@admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = (
         'name',
@@ -57,6 +73,7 @@ class CategoryAdmin(admin.ModelAdmin):
     films_count.short_description = ('Количество фильмов')
 
 
+@admin.register(Coment)
 class ComentAdmin(admin.ModelAdmin):
     list_display = (
         'text',
@@ -73,8 +90,7 @@ class ComentAdmin(admin.ModelAdmin):
     get_film_name.short_description = 'Название фильма'  # Переопределяем verbose_name для столбца
 
 
-admin.site.register(FilmsdModel, FilmsAdmin)
-admin.site.register(Category, CategoryAdmin)
+# admin.site.register(Category, CategoryAdmin)
 admin.site.register(Genres, admin.ModelAdmin)
 admin.site.register(Country, admin.ModelAdmin)
-admin.site.register(Coment, ComentAdmin)
+# admin.site.register(Coment, ComentAdmin)

@@ -44,10 +44,6 @@ class SearchView(ListView):
         if self.request.GET.get('search'):
             context['html_name'] = f'Поиск «{self.request.GET.get('search')}»'
             context['search'] = len(context['object_list'])
-            # Ищем найденые id фильмов в базе и отправляем в поиск в kp
-            films_id = [i.id_kp for i in context['object_list']]
-            # context['search_kp'] = search_film(
-            #     self.request.GET.get('search'), films_id)
         else:
             context['html_name'] = 'Поиск'
         context['html_title'] = context['html_name']
@@ -131,16 +127,6 @@ class CreateFilm(CreateView):
         if initial:
             return initial
         return super().get_initial()
-
-    def get(self, request, *args, **kwargs):
-        # Проверяем, существует ли фильм
-        if self._result_api is None:
-            messages.error(request, 'Такой фильм уже есть в базе')
-            return redirect('films:add_film')
-            # context = {'error': 'Такой фильм уже есть в базе'}
-            # return render(
-            #     request, 'films/add_kinopoisk.html', context)
-        return super().get(request, *args, **kwargs)
 
 
 class AddComment(LoginRequiredMixin, CreateView):

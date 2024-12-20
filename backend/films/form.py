@@ -1,5 +1,4 @@
 from films.models import FilmsdModel, Coment
-# from django.forms import ModelForm, HiddenInput
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
@@ -7,11 +6,6 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 User = get_user_model()
-BAD_WORDS = (
-    '666',
-    # Дополните список на своё усмотрение.
-)
-WARNING = 'Не ругайтесь!'
 
 
 class EmailUpdateForm(forms.ModelForm):
@@ -45,7 +39,7 @@ class AddFilmBaza(forms.ModelForm):
         #     'genres',
         #     'country'
         # ]
-        
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Устанавливаем скрытое поле

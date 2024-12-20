@@ -1,32 +1,19 @@
-{% if page_obj.has_other_pages %}
-  {% if page_obj.has_previous %}
-    {% if page_obj.previous_page_number != 1 %}
-      <a href="?page=1">1</a>
+{% with request.GET.search as search %}
+  {% if page_obj.has_other_pages %}
+    {% if page_obj.has_previous %}
+      {% if page_obj.previous_page_number != 1 %}
+        <a href="?{% if search%}search={{ search }}&{% endif %}page=1">1</a>
+      {% endif %}
+      <a href="?{% if search%}search={{ search }}&{% endif %}page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
     {% endif %}
-    <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
-  {% endif %}
 
-  {{ page_obj.number }}
+    {{ page_obj.number }}
 
-  {% if page_obj.has_next %}
-    <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
-    {% if page_obj.next_page_number != page_obj.paginator.num_pages %}
-      <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+    {% if page_obj.has_next %}
+      <a href="?{% if search%}search={{ search }}&{% endif %}page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+      {% if page_obj.next_page_number != page_obj.paginator.num_pages %}
+        <a href="?{% if search%}search={{ search }}&{% endif %}page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+      {% endif %}
     {% endif %}
   {% endif %}
-{% endif %}
-
-<br>{{ page_obj.paginator}}<br>
-
-{% comment %} {% if request.GET.page %}{{ request.GET.urlencode }}&{% endif %}page=1 {% endcomment %}
-{% if request.GET.page %}
-  {{ request.GET }} -{{ request.GET.urlencode|slice:':-6' }}&page=1
-{% else %}
-?page=1
-{% endif %}
-<hr>
-
-<hr>
-
-
-
+{% endwith %}
