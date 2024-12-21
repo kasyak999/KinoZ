@@ -2,8 +2,8 @@ from django.contrib import admin
 from . models import FilmsdModel, Category, Genres, Country, Coment
 from django.utils.html import format_html
 from django import forms
-from django.db.models import Count
 from django.utils.safestring import mark_safe
+from django.urls import reverse
 
 
 class FilmsdModelForm(forms.ModelForm):
@@ -43,8 +43,33 @@ class FilmsAdmin(admin.ModelAdmin):
     def image_preview(self, obj):
         """Показывать миниатюру изображения"""
         image = obj.poster.split(',')
-        print(image)
         if obj.poster:
+            return mark_safe(
+                f'<img src="{image[1]}" alt="Image" '
+                f'style="max-height: 100px; max-width: 100px;"/>'
+            )
+        return 'Нет изображения'
+
+
+@admin.register(Coment)
+class ComentAdmin(admin.ModelAdmin):
+    list_display = (
+        'image_preview',
+        'text',
+        'film_name',
+    )
+    list_display_links = ('text',)
+
+    @admin.display(description='Название фильма')
+    def film_name(self, obj):
+        url = reverse('admin:films_filmsdmodel_change', args=[obj.film.id])
+        return format_html(f'<a href="{url}">{obj.film.name}</a>')
+
+    @admin.display(description='Постер')
+    def image_preview(self, obj):
+        """Показывать миниатюру изображения"""
+        image = obj.film.poster.split(',')
+        if obj.film.poster:
             return mark_safe(
                 f'<img src="{image[1]}" alt="Image" '
                 f'style="max-height: 100px; max-width: 100px;"/>'
@@ -56,41 +81,35 @@ class FilmsAdmin(admin.ModelAdmin):
 class CategoryAdmin(admin.ModelAdmin):
     list_display = (
         'name',
-        'films_count',  # Добавьте поле product_count
+        'films_count'
     )
     list_display_links = ('name',)
     search_fields = ['name']
 
-    def get_queryset(self, request):
-        queryset = super().get_queryset(request)
-        # Аннотируем количество связанных фильмов для каждой категории
-        return queryset.annotate(films_count=Count('posts'))
-
+    @admin.display(description='Количество фильмов')
     def films_count(self, obj):
-        """Выводит количество записей в FilmsdModel, связанных с категорией."""
-        return obj.films_count
-
-    films_count.short_description = ('Количество фильмов')
+        return obj.posts.count()
 
 
-@admin.register(Coment)
-class ComentAdmin(admin.ModelAdmin):
+@admin.register(Genres)
+class GenresAdmin(admin.ModelAdmin):
     list_display = (
-        'text',
-        'get_film_name'
+        'name',
+        'films_count'
     )
 
-    def get_queryset(self, request):
-        queryset = super().get_queryset(request)
-        return queryset.select_related('film')
-
-    def get_film_name(self, obj):
-        return obj.film.name
-
-    get_film_name.short_description = 'Название фильма'  # Переопределяем verbose_name для столбца
+    @admin.display(description='Количество фильмов')
+    def films_count(self, obj):
+        return obj.posts.count()
 
 
-# admin.site.register(Category, CategoryAdmin)
-admin.site.register(Genres, admin.ModelAdmin)
-admin.site.register(Country, admin.ModelAdmin)
-# admin.site.register(Coment, ComentAdmin)
+@admin.register(Country)
+class CountryAdmin(admin.ModelAdmin):
+    list_display = (
+        'name',
+        'films_count'
+    )
+
+    @admin.display(description='Количество фильмов')
+    def films_count(self, obj):
+        return obj.posts.count()
