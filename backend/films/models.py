@@ -1,9 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
-# from django.utils import timezone
-# from django.contrib.postgres.fields import JSONField
-# django.db.models.JSONField
+from django.utils.html import format_html
+
 
 User = get_user_model()
 
@@ -29,7 +27,6 @@ class MainModel(models.Model):
 
 class FilmsdModel(MainModel):
     """Фильмы модель"""
-    # image = models.URLField(max_length=200)
     verified = models.BooleanField(
         default=False, verbose_name='Проверено',
         help_text='Снимите галочку, если все проверено.'
@@ -87,9 +84,6 @@ class FilmsdModel(MainModel):
         verbose_name_plural = 'Фильмы'
         default_related_name = 'posts'
 
-    # def __str__(self) -> str:
-    #     return self.name
-
 
 class Category(MainModel):
     """Катагории фильмов"""
@@ -109,7 +103,6 @@ class Genres(MainModel):
 
 class Country(MainModel):
     """Страны фильмов"""
-
     name = models.CharField(max_length=256, verbose_name='Название')
 
     class Meta(MainModel.Meta):
@@ -118,6 +111,7 @@ class Country(MainModel):
 
 
 class Coment(models.Model):
+    """Комментарии к фильму"""
     text = models.TextField(verbose_name='Текст', blank=True)
     created_at = models.DateTimeField(
         auto_now_add=True, verbose_name='Добавлен'

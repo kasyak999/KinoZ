@@ -1,3 +1,6 @@
 venv/
 db.sqlite3
 .git
+sent_emails/
+__pycache__/
+test/
