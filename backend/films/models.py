@@ -136,3 +136,10 @@ class Coment(models.Model):
         verbose_name = 'комментарии'
         verbose_name_plural = 'Комментарии'
         ordering = ('-created_at',)
+
+    def __str__(self) -> str:
+        if len(self.text) > 50:
+            result = self.text[:50] + '...'
+        else:
+            result = self.text
+        return result
