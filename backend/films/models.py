@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.utils.html import format_html
 
 
 User = get_user_model()
@@ -112,14 +111,14 @@ class Country(MainModel):
 
 class Coment(models.Model):
     """Комментарии к фильму"""
-    text = models.TextField(verbose_name='Текст', blank=True)
+    text = models.TextField(verbose_name='Текст')
     created_at = models.DateTimeField(
         auto_now_add=True, verbose_name='Добавлен'
     )
     film = models.ForeignKey(
         FilmsdModel,
         on_delete=models.CASCADE,
-        related_name='coment',
+        related_name='coments',
         verbose_name='Фильм'
     )
     author = models.ForeignKey(

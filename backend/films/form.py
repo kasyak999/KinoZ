@@ -1,20 +1,22 @@
-from films.models import FilmsdModel, Coment
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
+from films.models import FilmsdModel, Coment
 
 
 User = get_user_model()
 
 
 class EmailUpdateForm(forms.ModelForm):
+
     class Meta:
         model = User
         fields = ['email']
 
 
 class ComentForm(forms.ModelForm):
+
     class Meta:
         model = Coment
         fields = ('text',)

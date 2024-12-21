@@ -1,9 +1,10 @@
 from django.contrib import admin
-from . models import FilmsdModel, Category, Genres, Country, Coment
 from django.utils.html import format_html
 from django import forms
 from django.utils.safestring import mark_safe
 from django.urls import reverse
+from django.conf import settings
+from . models import FilmsdModel, Category, Genres, Country, Coment
 
 
 class FilmsdModelForm(forms.ModelForm):
@@ -35,9 +36,11 @@ class FilmsCountMixin(admin.ModelAdmin):
 
     list_display = (
         'name',
-        'films_count'
+        'films_count',
+        'created_at',
     )
     search_fields = ['name',]
+    list_per_page = settings.OBJECTS_PER_PAGE
 
     @admin.display(description='Количество фильмов')
     def films_count(self, obj):
@@ -51,12 +54,14 @@ class FilmsAdmin(admin.ModelAdmin):
         'image_preview',
         'id_kp',
         'name',
+        'created_at',
         'is_published',
         'verified'
     )
     list_display_links = ('name',)
     search_fields = ['name', 'id_kp']
     list_filter = ('is_published', 'verified')
+    list_per_page = settings.OBJECTS_PER_PAGE
 
     @admin.display(description='Постер')
     def image_preview(self, obj):
@@ -76,8 +81,10 @@ class ComentAdmin(admin.ModelAdmin):
         'image_preview',
         'text',
         'film_name',
+        'created_at',
     )
     list_display_links = ('text',)
+    list_per_page = settings.OBJECTS_PER_PAGE
 
     @admin.display(description='Название фильма')
     def film_name(self, obj):

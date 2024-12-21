@@ -1,10 +1,9 @@
 from django.contrib import admin
 from django.urls import path, include, reverse_lazy
 from django.conf import settings
-# Добавьте новые строчки с импортами классов.
-from films.form import CustomUserCreationForm
 from django.views.generic.edit import CreateView
-from films.views import personal_account, EmailUpdateView
+from films.views import PersonalAccount, EmailUpdateView
+from films.form import CustomUserCreationForm
 
 
 urlpatterns = [
@@ -20,7 +19,7 @@ urlpatterns = [
         ),
         name='registration',
     ),
-    path('user/<str:username>', personal_account.as_view(), name='user'),
+    path('user/<str:username>', PersonalAccount.as_view(), name='user'),
     path('user/email/', EmailUpdateView.as_view(), name='email_update'),
 ]
 
