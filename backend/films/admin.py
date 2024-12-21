@@ -37,6 +37,7 @@ class FilmsCountMixin(admin.ModelAdmin):
         'name',
         'films_count'
     )
+    search_fields = ['name',]
 
     @admin.display(description='Количество фильмов')
     def films_count(self, obj):

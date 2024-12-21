@@ -18,7 +18,7 @@ from django.contrib import messages
 
 
 User = get_user_model()
-OBJECTS_PER_PAGE = 10
+OBJECTS_PER_PAGE = 5
 
 
 class SearchView(ListView):
