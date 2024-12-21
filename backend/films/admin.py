@@ -25,6 +25,12 @@ class FilmsdModelForm(forms.ModelForm):
             )
 
 
+class FilmsCountMixin:
+    @admin.display(description='Количество фильмов')
+    def films_count(self, obj):
+        return obj.posts.count()
+
+
 @admin.register(FilmsdModel)
 class FilmsAdmin(admin.ModelAdmin):
     form = FilmsdModelForm
@@ -78,7 +84,7 @@ class ComentAdmin(admin.ModelAdmin):
 
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(admin.ModelAdmin, FilmsCountMixin):
     list_display = (
         'name',
         'films_count'
@@ -86,30 +92,18 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display_links = ('name',)
     search_fields = ['name']
 
-    @admin.display(description='Количество фильмов')
-    def films_count(self, obj):
-        return obj.posts.count()
-
 
 @admin.register(Genres)
-class GenresAdmin(admin.ModelAdmin):
+class GenresAdmin(admin.ModelAdmin, FilmsCountMixin):
     list_display = (
         'name',
         'films_count'
     )
-
-    @admin.display(description='Количество фильмов')
-    def films_count(self, obj):
-        return obj.posts.count()
 
 
 @admin.register(Country)
-class CountryAdmin(admin.ModelAdmin):
+class CountryAdmin(admin.ModelAdmin, FilmsCountMixin):
     list_display = (
         'name',
         'films_count'
     )
-
-    @admin.display(description='Количество фильмов')
-    def films_count(self, obj):
-        return obj.posts.count()
