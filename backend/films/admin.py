@@ -18,10 +18,11 @@ class FilmsdModelForm(forms.ModelForm):
         if self.instance and self.instance.id_kp:
             if 'id_kp' in self.fields:
                 text_h = (
-                    f'Ссылка кинопоиска: '
+                    'Ссылка кинопоиска: '
                     f'<a href="https://www.kinopoisk.ru/film/{self.instance.id_kp}"'
-                    f'target="_blank">https://www.kinopoisk.ru/film/{self.instance.id_kp}</a>'
-                    f'<br>Ссылка на фильм: '
+                    'target="_blank">'
+                    f'https://www.kinopoisk.ru/film/{self.instance.id_kp}</a>'
+                    '<br>Ссылка на фильм: '
                     f'<a href="/film/{self.instance.id_kp}/"'
                     f'target="_blank">{self.instance.id_kp}</a>'
                 )
