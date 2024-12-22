@@ -25,8 +25,7 @@ services:
     volumes:
       - static:/backend_static
     command: >
-      sh -c "./wait-for-it.sh db_mysql:${MYSQL_PORT} --strict --timeout=10 &&
-      python manage.py makemigrations &&
+      sh -c "python manage.py makemigrations &&
       python manage.py migrate &&
       python manage.py loaddata db.json &&
       python manage.py collectstatic --noinput &&
