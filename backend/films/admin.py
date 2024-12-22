@@ -18,7 +18,8 @@ class FilmsdModelForm(forms.ModelForm):
         if self.instance and self.instance.id_kp:
             if 'id_kp' in self.fields:
                 self.fields['id_kp'].help_text = format_html(
-                    f'''Ссылка кинопоиска:
+                    f'''
+                    Ссылка кинопоиска:
                     <a href="https://www.kinopoisk.ru/film/{self.instance.id_kp}"
                     target="_blank">https://www.kinopoisk.ru/film/{self.instance.id_kp}</a>
                     <br>Ссылка на фильм:
