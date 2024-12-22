@@ -7,3 +7,12 @@ docker run --name test_contaner --rm -p 8000:8000 test
 
 python manage.py loaddata db.json
 python manage.py dumpdata films auth.User --indent 2 -o db.json
+
+docker compose up --build 
+docker compose down
+
+docker build -t kasyak999/kinoz_backend backend/
+docker build -t kasyak999/kinoz_nginx nginx/
+
+sudo docker push kasyak999/kinoz_backend
+sudo docker push kasyak999/kinoz_nginx

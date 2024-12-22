@@ -35,6 +35,7 @@
 
 1. Создать файл **.env** с содержимым:
 ```bash
+DOMEN=https://kinoz.ddns.net,http://kinoz.ddns.net
 ALLOWED_HOSTS=127.0.0.1,localhost
 SECRET_KEY=ключ_джанго_проекта
 MYSQL_DATABASE=my_database
