@@ -24,7 +24,7 @@ services:
     env_file: .env
     volumes:
       - static:/backend_static
-    command: >
+    entrypoint: >
       sh -c "python manage.py makemigrations &&
       python manage.py migrate &&
       python manage.py loaddata db.json &&
@@ -35,6 +35,8 @@ services:
   gateway:
     image: kasyak999/kinoz_nginx
     env_file: .env
+    depends_on:
+      - backend
     ports:
       - 8000:80
     volumes:
