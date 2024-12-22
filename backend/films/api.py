@@ -17,7 +17,7 @@ DATA_KP = {  # Параметры запроса к кинопоиску
 
 
 def search_film(value, id_kp):
-    """Поиск фильма"""
+    """Поиск фильма, пока не используется"""
     data_kp = KINOPOISK_URL + '/api/v2.1/films/search-by-keyword'
     response_kp = requests.get(
         data_kp, headers=DATA_KP, params={'keyword': value})

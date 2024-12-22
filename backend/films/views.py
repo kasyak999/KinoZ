@@ -3,14 +3,14 @@ from django.views.generic import (
     DetailView, UpdateView, ListView, CreateView, TemplateView
 )
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.conf import settings
-from .api import information_film, search_film
+from .api import information_film
 from .form import AddFilmBaza, ComentForm, EmailUpdateForm
 from .models import FilmsdModel, Coment
 
@@ -30,8 +30,8 @@ class SearchView(ListView):
             return result.filter(
                 verified=True, is_published=True
             ).filter(
-                Q(name__iregex=self.request.GET.get('search')) |
-                Q(name_orig__iregex=self.request.GET.get('search'))
+                Q(name__iregex=self.request.GET.get('search'))
+                | Q(name_orig__iregex=self.request.GET.get('search'))
             ).select_related('cat').prefetch_related('genres', 'country')
         else:
             return result.none()
@@ -87,9 +87,9 @@ class DetailFilm(DetailView):
 
     def get_object(self):
         return self.model.objects.prefetch_related('genres', 'country').get(
-                id_kp=self.kwargs[self.pk_url_kwarg], verified=True,
-                is_published=True
-            )
+            id_kp=self.kwargs[self.pk_url_kwarg], verified=True,
+            is_published=True
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
