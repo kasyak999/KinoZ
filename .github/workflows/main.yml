@@ -61,6 +61,22 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         source: "docker-compose.production.yml"
         target: "kinoz"
+    - name: Выполнение удаленных команд ssh для развертывания
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USER }}
+        key: ${{ secrets.SSH_KEY }}
+        script: |
+          cd kinoz
+          echo "--- Обновляем compose"
+          sudo docker compose -f docker-compose.production.yml pull
+          echo "--- Остановить compose"
+          sudo docker compose -f docker-compose.production.yml down
+          echo "--- Запуск compose в фоне"
+          sudo docker compose -f docker-compose.production.yml up -d
+          echo "--- Очищаем мусор в докерах"
+          sudo docker system prune -af
   send_message:
     name: Отправка сообщения в телеграмм
     runs-on: ubuntu-latest
