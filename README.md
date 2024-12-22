@@ -44,6 +44,7 @@ MYSQL_PASSWORD=user_password
 MYSQL_ROOT_PASSWORD=root_password
 MYSQL_PORT=3306
 MYSQL_HOST=db_mysql
+KINOPOISK_API_KEY=ключ_кинопоиска
 ```
 2. Запустить docker compose
 ```bash 

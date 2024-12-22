@@ -1,16 +1,17 @@
+import os
 from django.http import Http404
+from dotenv import load_dotenv
 import requests
 from .models import FilmsdModel
-from pprint import pprint
-from django.db.models import Q
 
 
+load_dotenv()
 KINOPOISK_URL = 'https://kinopoiskapiunofficial.tech'
 # Апи кинопоиска
 KINOPOISK_URL_MAIN = '/api/v2.2/films/'
 # Добавочный адрес
 DATA_KP = {  # Параметры запроса к кинопоиску
-    'X-API-KEY': "2c84e19c-996a-4c40-a8bd-9375dfa4678b",
+    'X-API-KEY': os.getenv('KINOPOISK_API_KEY'),
     'Content-Type': 'application/json'
 }
 
@@ -76,7 +77,10 @@ def connection_api(kp: int):
             'name': response_kp['nameRu'],
             'name_orig': response_kp['nameOriginal'],
             'year': response_kp['year'],
-            'poster': f"{response_kp['posterUrl']}, {response_kp['posterUrlPreview']}",
+            'poster': (
+                f"{response_kp['posterUrl']}, "
+                f"{response_kp['posterUrlPreview']}"
+            ),
             'country': country,
             'genres': genres,
             'rating': response_kp['ratingKinopoisk'],

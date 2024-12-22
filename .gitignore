@@ -6,3 +6,4 @@ db.sqlite3
 sent_emails
 static_backend
 .env
+key_name.py
