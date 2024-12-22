@@ -22,6 +22,8 @@ jobs:
       - name: Проверяем flake8
         run: python -m flake8 backend/
       - name: Проверяем pytest
+        env:
+          ALLOWED_HOSTS: "localhost,127.0.0.1"
         run: pytest backend
   push_to_dockerhub_backend:
     name: Отправка образа backend
