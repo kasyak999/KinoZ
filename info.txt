@@ -16,3 +16,6 @@ docker build -t kasyak999/kinoz_nginx nginx/
 
 sudo docker push kasyak999/kinoz_backend
 sudo docker push kasyak999/kinoz_nginx
+
+sudo docker compose -f docker-compose.production.yml logs -f
+sudo docker compose -f docker-compose.production.yml up -d
