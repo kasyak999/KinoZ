@@ -5,7 +5,7 @@ on:
     - main
 jobs:
   push_to_dockerhub_backend:
-    name: Отправка образа backend на DockerHub
+    name: Отправка образа backend
     runs-on: ubuntu-latest
     # needs: backend_tests
     steps:
@@ -25,7 +25,7 @@ jobs:
           push: true
           tags: kasyak999/kinoz_backend:latest
   push_to_dockerhub_nginx:
-    name: Отправка образа backend на DockerHub
+    name: Отправка образа nginx
     runs-on: ubuntu-latest
     # needs: backend_tests
     steps:
@@ -44,3 +44,20 @@ jobs:
           context: ./nginx/
           push: true
           tags: kasyak999/kinoz_nginx:latest
+  deploy:
+    name: Загрузка на удаленный сервер
+    runs-on: ubuntu-latest
+    needs: 
+      - push_to_dockerhub_backend
+      - push_to_dockerhub_nginx
+    steps:
+    - name: Получение исходного кода из репозитория
+      uses: actions/checkout@v3
+    - name: Копируем docker-compose.production.yml на сервер
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USER }}
+        key: ${{ secrets.SSH_KEY }}
+        source: "docker-compose.production.yml"
+        target: "kinoz"
