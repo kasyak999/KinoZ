@@ -15,21 +15,23 @@ class FilmsdModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(FilmsdModelForm, self).__init__(*args, **kwargs)
         if self.instance and self.instance.id_kp:
-            self.fields['id_kp'].help_text = format_html(
-                f'''Ссылка кинопоиска:
-                <a href="https://www.kinopoisk.ru/film/{self.instance.id_kp}"
-                target="_blank">https://www.kinopoisk.ru/film/{self.instance.id_kp}</a>
-                <br>Ссылка на фильм:
-                <a href="/film/{self.instance.id_kp}/"
-                target="_blank">{self.instance.id_kp}</a>
-                '''
-            )
-            image = self.instance.poster.split(',')
-            self.fields['poster'].help_text = format_html(
-                f'<a href="{image[0]}" target="_blank">'
-                f'<img src="{image[1]}" alt="Image" '
-                f'style="max-height: 100px; max-width: 100px;"/>'
-            )
+            if 'id_kp' in self.fields:
+                self.instance.id_kp.help_text = format_html(
+                    f'''Ссылка кинопоиска:
+                    <a href="https://www.kinopoisk.ru/film/{self.instance.id_kp}"
+                    target="_blank">https://www.kinopoisk.ru/film/{self.instance.id_kp}</a>
+                    <br>Ссылка на фильм:
+                    <a href="/film/{self.instance.id_kp}/"
+                    target="_blank">{self.instance.id_kp}</a>
+                    '''
+                )
+            if 'poster' in self.fields:
+                image = self.instance.poster.split(',')
+                self.fields['poster'].help_text = format_html(
+                    f'<a href="{image[0]}" target="_blank">'
+                    f'<img src="{image[1]}" alt="Image" '
+                    f'style="max-height: 100px; max-width: 100px;"/>'
+                )
 
 
 class FilmsCountMixin(admin.ModelAdmin):
