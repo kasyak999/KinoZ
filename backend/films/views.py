@@ -204,3 +204,8 @@ class EmailUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self):
         return self.request.user  # Получаем текущего пользователя
+
+
+def page_not_found(request, exception):
+    """страницы 404"""
+    return render(request, 'films/404.html', status=404)

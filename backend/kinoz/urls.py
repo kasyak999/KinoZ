@@ -6,6 +6,7 @@ from films.views import PersonalAccount, EmailUpdateView
 from films.form import CustomUserCreationForm
 
 
+handler404 = 'films.views.page_not_found'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('films.urls')),
