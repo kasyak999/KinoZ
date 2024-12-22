@@ -3,3 +3,7 @@ docker build -t test .
 
 
 docker run --name test_contaner --rm -p 8000:8000 test
+
+
+python manage.py loaddata db.json
+python manage.py dumpdata films auth.User --indent 2 -o db.json

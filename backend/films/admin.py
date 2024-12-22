@@ -80,11 +80,13 @@ class ComentAdmin(admin.ModelAdmin):
     list_display = (
         'image_preview',
         'text',
+        'author',
         'film_name',
         'created_at',
     )
     list_display_links = ('text',)
     list_per_page = settings.OBJECTS_PER_PAGE
+    list_filter = ('author',)
 
     @admin.display(description='Название фильма')
     def film_name(self, obj):
