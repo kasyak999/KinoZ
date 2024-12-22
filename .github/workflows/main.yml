@@ -70,7 +70,7 @@ jobs:
         script: |
           cd kinoz
           echo "--- Обновляем compose"
-          echo ${{ secrets.SUDO_PASSWORD }} | docker compose -f docker-compose.production.yml pull
+          echo ${{ secrets.SUDO_PASSWORD }} | sudo -S docker compose -f docker-compose.production.yml pull
           echo "--- Остановить compose"
           sudo docker compose -f docker-compose.production.yml down
           echo "--- Запуск compose в фоне"
