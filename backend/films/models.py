@@ -14,7 +14,7 @@ class MainModel(models.Model):
 
     class Meta:
         abstract = True
-        ordering = ('-name',)
+        ordering = ('name',)
 
     def __str__(self):
         if len(self.name) > 50:
