@@ -5,6 +5,7 @@ from django.utils.safestring import mark_safe
 from django.urls import reverse
 from django.conf import settings
 from . models import FilmsdModel, Category, Genres, Country, Coment
+from django.contrib.admin.models import LogEntry
 
 
 class FilmsdModelForm(forms.ModelForm):
@@ -35,7 +36,6 @@ class FilmsdModelForm(forms.ModelForm):
 
 
 class FilmsCountMixin(admin.ModelAdmin):
-
     list_display = (
         'name',
         'films_count',
@@ -47,6 +47,16 @@ class FilmsCountMixin(admin.ModelAdmin):
     @admin.display(description='Количество фильмов')
     def films_count(self, obj):
         return obj.posts.count()
+
+
+@admin.register(LogEntry)
+class LogEntryAdmin(admin.ModelAdmin):
+    """Записи в журнале"""
+    list_display = (
+        'action_time', 'user', 'content_type', 'object_repr', 'action_flag')
+    list_filter = ('action_flag', 'user', 'content_type')
+    search_fields = ('object_repr', 'change_message')
+    list_per_page = settings.OBJECTS_PER_PAGE
 
 
 @admin.register(FilmsdModel)
