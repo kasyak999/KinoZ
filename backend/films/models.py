@@ -14,7 +14,7 @@ class MainModel(models.Model):
 
     class Meta:
         abstract = True
-        ordering = ('-created_at',)
+        ordering = ('-name',)
 
     def __str__(self):
         if len(self.name) > 50:
@@ -82,6 +82,7 @@ class FilmsdModel(MainModel):
         verbose_name = 'фильм'
         verbose_name_plural = 'Фильмы'
         default_related_name = 'posts'
+        ordering = ('-created_at',)
 
 
 class Category(MainModel):
