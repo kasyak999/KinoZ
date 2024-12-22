@@ -17,7 +17,7 @@ class FilmsdModelForm(forms.ModelForm):
         super(FilmsdModelForm, self).__init__(*args, **kwargs)
         if self.instance and self.instance.id_kp:
             if 'id_kp' in self.fields:
-                self.instance.id_kp.help_text = format_html(
+                self.fields['id_kp'].help_text = format_html(
                     f'''Ссылка кинопоиска:
                     <a href="https://www.kinopoisk.ru/film/{self.instance.id_kp}"
                     target="_blank">https://www.kinopoisk.ru/film/{self.instance.id_kp}</a>

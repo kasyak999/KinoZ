@@ -4,10 +4,26 @@ on:
     branches:
     - main
 jobs:
+  backend_tests:
+    name: Тестирование backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Получения исходного кода
+        uses: actions/checkout@v3
+      - name: Установка пайтон
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.13
+      - name: Установка зависимостей
+        run: |
+          python -m pip install --upgrade pip 
+          pip install flake8==6.0.0
+      - name: Проверяем flake8
+        run: python -m flake8 backend/
   push_to_dockerhub_backend:
     name: Отправка образа backend
     runs-on: ubuntu-latest
-    # needs: backend_tests
+    needs: backend_tests
     steps:
       - name: Получение исходного кода из репозитория
         uses: actions/checkout@v3
@@ -27,7 +43,7 @@ jobs:
   push_to_dockerhub_nginx:
     name: Отправка образа nginx
     runs-on: ubuntu-latest
-    # needs: backend_tests
+    needs: backend_tests
     steps:
       - name: Получение исходного кода из репозитория
         uses: actions/checkout@v3
