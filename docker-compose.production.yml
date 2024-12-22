@@ -1,0 +1,35 @@
+volumes:
+  static:
+  mysql_data:
+
+services:
+  db_mysql:
+    image: mysql
+    container_name: mysql_container
+    env_file: .env
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "${MYSQL_PORT}:3306"
+  backend:
+    image: kasyak999/kinoz_backend
+    depends_on:
+      - db_mysql
+    env_file: .env
+    volumes:
+      - static:/backend_static
+    command: >
+      sh -c "python manage.py makemigrations &&
+      python manage.py migrate &&
+      python manage.py loaddata db.json &&
+      python manage.py collectstatic --noinput &&
+      cp -r /app/static_backend/. /backend_static/ &&
+      cp -r /app/static_dev/. /backend_static/ &&
+      gunicorn --bind 0.0.0.0:8000 kinoz.wsgi"
+  gateway:
+    image: kasyak999/kinoz_nginx
+    env_file: .env
+    ports:
+      - 8000:80
+    volumes:
+      - static:/static

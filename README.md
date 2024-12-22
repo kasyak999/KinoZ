@@ -52,5 +52,9 @@ docker compose up
 ```bash
 docker compose up --build 
 ```
+или
+```bash
+docker compose -f docker-compose.production.yml up
+```
 
 [Ссылка на описание](#описание)

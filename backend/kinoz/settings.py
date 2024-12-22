@@ -120,6 +120,4 @@ EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 # Указываем директорию, в которую будут сохраняться файлы писем:
 EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
 
-CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:8000'
-]  # для пост запросов на домене
+CSRF_TRUSTED_ORIGINS = [os.getenv('DOMEN')]  # для пост запросов на домене
