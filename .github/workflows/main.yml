@@ -4,37 +4,43 @@ on:
     branches:
     - main
 jobs:
-  backend_tests:
-    name: Тестирование backend
-    runs-on: ubuntu-latest
-    steps:
-    - name: Получения исходного кода
-      uses: actions/checkout@v3
-    - name: Установка пайтон
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.13
-    - name: Установка зависимостей
-      run: |
-        python -m pip install --upgrade pip 
-        pip install -r ./backend/requirements.txt 
   push_to_dockerhub_backend:
-      name: Отправка образа backend на DockerHub
-      runs-on: ubuntu-latest
-      needs: backend_tests
-      steps:
-        - name: Получение исходного кода из репозитория
-          uses: actions/checkout@v3
-        - name: Установка сборщика контейнеров Docker
-          uses: docker/setup-buildx-action@v2
-        - name: Авторизация на Docker Hub
-          uses: docker/login-action@v2
-          with:
-            username: ${{ secrets.DOCKER_USERNAME }} 
-            password: ${{ secrets.DOCKER_PASSWORD }}
-        - name: Одновременный билд и пуш образа в Docker Hub
-          uses: docker/build-push-action@v4
-          with:
-            context: ./backend/
-            push: true
-            tags: kasyak999/kinoz_backend:latest
+    name: Отправка образа backend на DockerHub
+    runs-on: ubuntu-latest
+    # needs: backend_tests
+    steps:
+      - name: Получение исходного кода из репозитория
+        uses: actions/checkout@v3
+      - name: Установка сборщика контейнеров Docker
+        uses: docker/setup-buildx-action@v2
+      - name: Авторизация на Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }} 
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Одновременный билд и пуш образа в Docker Hub
+        uses: docker/build-push-action@v4
+        with:
+          context: ./backend/
+          push: true
+          tags: kasyak999/kinoz_backend:latest
+  push_to_dockerhub_nginx:
+    name: Отправка образа backend на DockerHub
+    runs-on: ubuntu-latest
+    # needs: backend_tests
+    steps:
+      - name: Получение исходного кода из репозитория
+        uses: actions/checkout@v3
+      - name: Установка сборщика контейнеров Docker
+        uses: docker/setup-buildx-action@v2
+      - name: Авторизация на Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }} 
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Одновременный билд и пуш образа в Docker Hub
+        uses: docker/build-push-action@v4
+        with:
+          context: ./nginx/
+          push: true
+          tags: kasyak999/kinoz_nginx:latest
