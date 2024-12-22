@@ -17,14 +17,15 @@ class FilmsdModelForm(forms.ModelForm):
         super(FilmsdModelForm, self).__init__(*args, **kwargs)
         if self.instance and self.instance.id_kp:
             if 'id_kp' in self.fields:
-                self.fields['id_kp'].help_text = format_html(
+                text_h = (
                     f'Ссылка кинопоиска: '
                     f'<a href="https://www.kinopoisk.ru/film/{self.instance.id_kp}"'
                     f'target="_blank">https://www.kinopoisk.ru/film/{self.instance.id_kp}</a>'
-                    f'<br>Ссылка на фильм:'
+                    f'<br>Ссылка на фильм: '
                     f'<a href="/film/{self.instance.id_kp}/"'
                     f'target="_blank">{self.instance.id_kp}</a>'
                 )
+                self.fields['id_kp'].help_text = format_html(text_h)
             if 'poster' in self.fields:
                 image = self.instance.poster.split(',')
                 self.fields['poster'].help_text = format_html(
