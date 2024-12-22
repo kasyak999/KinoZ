@@ -11,10 +11,16 @@ services:
       - mysql_data:/var/lib/mysql
     ports:
       - "${MYSQL_PORT}:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
   backend:
     image: kasyak999/kinoz_backend
     depends_on:
-      - db_mysql
+      db_mysql:
+        condition: service_healthy
     env_file: .env
     volumes:
       - static:/backend_static
