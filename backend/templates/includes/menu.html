@@ -17,7 +17,7 @@
 						{% csrf_token %}
 					</form>
 				</li> 
-        {% if user.is_superuser%}
+        {% if user.is_staff %}
           <li><a href="{% url 'admin:index' %}" class="{% if view_name == '' %}a-active{% endif %}">Admin меню</a></li>
         {% endif %}
         <!-- Конец блока ссылок для авторизованного пользователя -->
