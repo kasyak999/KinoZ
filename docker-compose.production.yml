@@ -27,7 +27,6 @@ services:
     entrypoint: >
       sh -c "python manage.py makemigrations &&
       python manage.py migrate &&
-      python manage.py loaddata db.json &&
       python manage.py collectstatic --noinput &&
       cp -r /app/static_backend/. /backend_static/ &&
       cp -r /app/static_dev/. /backend_static/ &&
