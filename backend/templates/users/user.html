@@ -11,7 +11,7 @@
 	<p>{% if user_profile.avatar %}
 		<img src="{{ user_profile.avatar.url }}" alt="Аватар {{ username }}" class="avatar">
 	{% else %}
-		<img src="{% static 'images/no_foto.jpg.jpg' %}" alt="Аватар по умолчанию" class="avatar">
+		<img src="{% static 'images/no_foto.jpg' %}" alt="Аватар по умолчанию" class="avatar">
 	{% endif %}
 	</p>
 	<p><b>Email:</b> {{ user_profile.email }}
