@@ -1,7 +1,7 @@
 volumes:
   static:
   mysql_data:
-
+  media:
 services:
   db_mysql:
     image: mysql
@@ -41,3 +41,4 @@ services:
       - 8000:80
     volumes:
       - static:/static
+      - media:/media

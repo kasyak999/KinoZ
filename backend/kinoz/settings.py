@@ -11,7 +11,8 @@ TEMPLATES_DIR = BASE_DIR / 'templates'
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-DEBUG = False
+DEBUG = True
+AUTH_USER_MODEL = 'users.UserProfile'
 
 # ALLOWED_HOSTS = ['89.110.75.220', '127.0.0.1', 'kinoz.ddns.net', 'localhost']
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
@@ -26,6 +27,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
 
     'films.apps.FilmsConfig',
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
@@ -121,3 +123,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
 
 CSRF_TRUSTED_ORIGINS = os.getenv('DOMEN').split(',')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
