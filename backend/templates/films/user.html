@@ -9,7 +9,7 @@
 	<h3>Учетная запись {{ username }}</h3>
 	<p><b>Email:</b> {{ user_profile.email }}
 		{% if user.username == username %}
-			<a href='{% url "email_update" %}'>изменить</a>
+			<a href='{% url "users:email_update" %}'>изменить</a>
 		{% endif %}
 	</p>
 	{% if user.username == username %}
@@ -19,7 +19,7 @@
 		<br><p>Все отзывы пользователя: {{ page_obj.paginator.count }}</p><br>
 		{% for comment in page_obj %}
 			<p><a href="{% url "films:film" comment.film.id_kp %}"><b>{{ comment.film.name }} / {{ comment.film.name_orig }} ({{ comment.film.year }})</b></a></p>
-			<p><a href="{% url 'user' username=comment.author.username %}">{{ comment.author.username }}</a>: {{ comment.text }}<br>
+			<p><a href="{% url 'users:user' username=comment.author.username %}">{{ comment.author.username }}</a>: {{ comment.text }}<br>
 			{{ comment.created_at|date:"d M Y H:i" }}</p>
 			{% if not forloop.last %}
 					<br>

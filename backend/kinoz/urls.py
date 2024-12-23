@@ -2,14 +2,14 @@ from django.contrib import admin
 from django.urls import path, include, reverse_lazy
 from django.conf import settings
 from django.views.generic.edit import CreateView
-from films.views import PersonalAccount, EmailUpdateView
-from films.form import CustomUserCreationForm
+from users.form import CustomUserCreationForm
 
 
-handler404 = 'films.views.page_not_found'
+handler404 = 'users.views.page_not_found'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('films.urls')),
+    path('', include('users.urls')),
     path('user/', include('django.contrib.auth.urls')),
     path(
         'user/registration/',
@@ -20,8 +20,6 @@ urlpatterns = [
         ),
         name='registration',
     ),
-    path('user/<str:username>', PersonalAccount.as_view(), name='user'),
-    path('user/email/', EmailUpdateView.as_view(), name='email_update'),
 ]
 
 # Если проект запущен в режиме разработки...
