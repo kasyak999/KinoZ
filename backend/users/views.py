@@ -16,7 +16,7 @@ User = get_user_model()
 class PersonalAccount(LoginRequiredMixin, TemplateView):
     """Личный кабинет"""
     model = User
-    template_name = 'films/user.html'
+    template_name = 'users/user.html'
     pk_url_kwarg = 'username'
     paginate_by = settings.OBJECTS_PER_PAGE
 
@@ -54,4 +54,4 @@ class EmailUpdateView(LoginRequiredMixin, UpdateView):
 
 def page_not_found(request, exception):
     """страницы 404"""
-    return render(request, 'films/404.html', status=404)
+    return render(request, 'users/404.html', status=404)

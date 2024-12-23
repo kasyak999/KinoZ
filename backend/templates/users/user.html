@@ -7,6 +7,7 @@
 {% block content %}
 {% if user.is_authenticated %}
 	<h3>Учетная запись {{ username }}</h3>
+	<p><img src="{{ user_profile.avatar.url }}" alt="Аватар {{ username }}" style="width: 150px; height: 150px; border-radius: 50%;"></p>
 	<p><b>Email:</b> {{ user_profile.email }}
 		{% if user.username == username %}
 			<a href='{% url "users:email_update" %}'>изменить</a>

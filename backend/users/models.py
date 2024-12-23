@@ -9,7 +9,7 @@ class UserProfile(AbstractUser):
     class Meta:
         """Перевод модели"""
 
-        verbose_name = 'пользователь'
+        verbose_name = 'пользователя'
         verbose_name_plural = 'Пользователи'
         ordering = ('username',)
 
