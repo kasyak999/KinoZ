@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block title %}
 Личный кабинет
 {% endblock %}
@@ -7,10 +7,13 @@
 {% block content %}
 {% if user.is_authenticated %}
 	<h3>Учетная запись {{ username }}</h3>
-	<p><img src="{{ user_profile.avatar.url }}" alt="Аватар {{ username }}" class="avatar"></p>
-	
 	{% comment %} <p><img src="{% static 'images/123.jpg' %}" alt="Аватар {{ username }}" class="avatar"></p> {% endcomment %}
-	
+	<p>{% if user_profile.avatar %}
+		<img src="{{ user_profile.avatar.url }}" alt="Аватар {{ username }}" class="avatar">
+	{% else %}
+		<img src="{% static 'images/no_foto.jpg.jpg' %}" alt="Аватар по умолчанию" class="avatar">
+	{% endif %}
+	</p>
 	<p><b>Email:</b> {{ user_profile.email }}
 		{% if user.username == username %}
 			<a href='{% url "users:email_update" %}'>изменить</a>
