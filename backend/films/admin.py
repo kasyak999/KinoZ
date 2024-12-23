@@ -6,6 +6,35 @@ from django.urls import reverse
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from . models import FilmsdModel, Category, Genres, Country, Coment
+from django.contrib import messages
+
+
+@admin.action(description='Проверено')
+def verified(modeladmin, request, queryset):
+    queryset.update(verified=True)
+    messages.success(
+        request, "Выбранные записи были успешно отмечены как проверено.")
+
+
+@admin.action(description='Не проверено')
+def not_verified(modeladmin, request, queryset):
+    queryset.update(verified=False)
+    messages.success(
+        request, "Выбранные записи были успешно отмечены как не проверено.")
+
+
+@admin.action(description='Опубликовано')
+def is_published(modeladmin, request, queryset):
+    queryset.update(is_published=True)
+    messages.success(
+        request, "Выбранные записи были успешно отмечены как опубликовано.")
+
+
+@admin.action(description='Не опубликовано')
+def not_is_published(modeladmin, request, queryset):
+    queryset.update(is_published=False)
+    messages.success(
+        request, "Выбранные записи были успешно отмечены как не опубликовано.")
 
 
 class FilmsdModelForm(forms.ModelForm):
@@ -74,6 +103,7 @@ class FilmsAdmin(admin.ModelAdmin):
     search_fields = ['name', 'id_kp']
     list_filter = ('is_published', 'verified')
     list_per_page = settings.OBJECTS_PER_PAGE
+    actions = [is_published, not_is_published, verified, not_verified]
 
     @admin.display(description='Постер')
     def image_preview(self, obj):
