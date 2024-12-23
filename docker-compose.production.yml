@@ -24,6 +24,7 @@ services:
     env_file: .env
     volumes:
       - static:/backend_static
+      - media:/app/media
     entrypoint: >
       sh -c "python manage.py makemigrations &&
       python manage.py migrate &&
