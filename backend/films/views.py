@@ -201,22 +201,3 @@ class FavoriteListView(LoginRequiredMixin, ListView):
         context['html_name'] = 'Мое избранное'
         context['html_title'] = context['html_name']
         return context
-
-
-@login_required
-def add_to_favorites(request, film_id):
-    """Добавление фильма в избранное"""
-    film = get_object_or_404(FilmsdModel, id_kp=film_id)
-    if not film.favorites.filter(user=request.user).exists():
-        film.favorites.create(user=request.user, recipe=film)
-    return redirect('films:film', id_kp=film.id_kp)
-
-
-@login_required
-def delete_to_favorites(request, film_id):
-    """удаление фильма в избранное"""
-    film = get_object_or_404(FilmsdModel, id_kp=film_id)
-    result = film.favorites.filter(user=request.user)
-    if result.exists():
-        result.delete()
-    return redirect('films:film', id_kp=film.id_kp)
