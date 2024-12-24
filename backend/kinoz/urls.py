@@ -1,8 +1,9 @@
 from django.contrib import admin
 from django.urls import path, include, reverse_lazy
-# from django.conf import settings
+from django.conf import settings
 from django.views.generic.edit import CreateView
 from users.form import CustomUserCreationForm
+from django.conf.urls.static import static
 
 
 handler404 = 'users.views.page_not_found'
@@ -23,6 +24,8 @@ urlpatterns = [
 ]
 
 # Если проект запущен в режиме разработки...
-# if settings.DEBUG:
-#     import debug_toolbar
-#     urlpatterns += (path('__debug__/', include(debug_toolbar.urls)),)
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += (path('__debug__/', include(debug_toolbar.urls)),)
+    urlpatterns += static(
+        settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
