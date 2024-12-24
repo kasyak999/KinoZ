@@ -39,17 +39,22 @@ class PersonalAccount(LoginRequiredMixin, TemplateView):
         return context
 
 
-class EmailUpdateView(LoginRequiredMixin, UpdateView):
+class UserUpdateBaseView(LoginRequiredMixin, UpdateView):
+    """Базовый класс для обновления данных пользователя"""
+
+    def get_success_url(self):
+        return reverse(
+            'users:user', kwargs={'username': self.request.user.username})
+
+    def get_object(self):
+        return self.request.user
+
+
+class EmailUpdateView(UserUpdateBaseView):
     """Изменение email пользователя"""
     model = User
     form_class = EmailUpdateForm
     template_name = 'registration/email_update.html'
-
-    def get_success_url(self):
-        return reverse('users:user', kwargs={'username': self.request.user})
-
-    def get_object(self):
-        return self.request.user
 
 
 class AvatarUpdateView(LoginRequiredMixin, UpdateView):
@@ -57,12 +62,6 @@ class AvatarUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = AvatarForm
     template_name = 'users/avatar.html'
-
-    def get_success_url(self):
-        return reverse('users:user', kwargs={'username': self.request.user})
-
-    def get_object(self):
-        return self.request.user
 
 
 def page_not_found(request, exception):
