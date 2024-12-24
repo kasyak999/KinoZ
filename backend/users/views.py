@@ -57,7 +57,7 @@ class EmailUpdateView(UserUpdateBaseView):
     template_name = 'registration/email_update.html'
 
 
-class AvatarUpdateView(LoginRequiredMixin, UpdateView):
+class AvatarUpdateView(UserUpdateBaseView):
     """Изменение аватар пользователя"""
     model = User
     form_class = AvatarForm
