@@ -161,3 +161,7 @@ form input, form textarea, form select {
   border-radius: 30%;
   border: 3px solid #006600;  /*рамка*/
 }
+.avatar-ico {
+  width: 40px;
+  height: 40px;
+}

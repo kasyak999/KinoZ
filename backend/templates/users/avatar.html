@@ -1,11 +1,18 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block title %}
 Изменить аватар
 {% endblock %}
 
 {% block content %}
   <h3>Изменить аватар</h3>
+  {% if user.avatar %}
+		<a href="{{ user.avatar.url }}" target="_blank">
+		<img src="{{ user.avatar.url }}" alt="Аватар {{ username }}" class="avatar">
+		</a>
+	{% else %}
+		<img src="{% static 'images/no_foto.jpg' %}" alt="Аватар по умолчанию" class="avatar">
+	{% endif %}
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form }}

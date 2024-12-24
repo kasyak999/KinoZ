@@ -49,8 +49,16 @@
   {% if page_obj.paginator.count > 0 %}
   <br><p>Всего отзывов о фильме: {{ page_obj.paginator.count }}</p><br>
   {% for comment in page_obj %}
-    <p><a href="{% url 'users:user' username=comment.author.username %}"><b>{{ comment.author.username }}</b></a>: {{ comment.text }}<br>
-    {{ comment.created_at|date:"d M Y H:i" }}</p>
+    <p>
+      {% if comment.author.avatar %}
+        <img src="{{ comment.author.avatar.url }}" alt="Аватар {{ username }}" class="avatar avatar-ico">
+      {% else %}
+        <img src="{% static 'images/no_foto.jpg' %}" alt="Аватар по умолчанию" class="avatar avatar-ico">
+      {% endif %}
+      <a href="{% url 'users:user' username=comment.author.username %}"><b>
+      {{ comment.author.username }}</b></a>: {{ comment.text }}<br>
+    {{ comment.created_at|date:"d M Y H:i" }}
+  </p>
   {% endfor %}
   <p align="center">{% include "includes/paginator.html" %}</p>
   {% endif %}
