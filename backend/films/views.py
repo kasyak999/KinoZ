@@ -10,7 +10,10 @@ from django.contrib import messages
 from django.conf import settings
 from .api import information_film
 from .form import AddFilmBaza, ComentForm
-from .models import FilmsdModel, Coment
+from .models import FilmsdModel, Coment, Favorite
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 
 User = get_user_model()
@@ -163,3 +166,32 @@ def add_film(request):
             messages.error(
                 request, 'Ссылка на фильма не соответствует формату')
     return render(request, template_name)
+
+
+class FavoriteListView(LoginRequiredMixin, ListView):
+    """Список избранных фильмов пользователя"""
+    model = FilmsdModel
+    template_name = 'films/index.html'
+    paginate_by = settings.OBJECTS_PER_PAGE
+
+    def get_queryset(self):
+        return FilmsdModel.objects.filter(
+            favorites__user=self.request.user,
+            verified=True,
+            is_published=True
+        ).prefetch_related('favorites', 'genres', 'country')
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['html_name'] = 'Мое избранное'
+        context['html_title'] = context['html_name']
+        return context
+
+
+@login_required
+def add_to_favorites(request, film_id):
+    """Добавление фильма в избранное"""
+    film = get_object_or_404(FilmsdModel, id_kp=film_id)
+    if not Favorite.objects.filter(user=request.user, recipe=film).exists():
+        Favorite.objects.create(user=request.user, recipe=film)
+    return redirect('films:film', id_kp=film.id_kp)

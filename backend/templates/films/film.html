@@ -8,6 +8,7 @@
 {% block content %}  
   <link rel="stylesheet" href="{% static 'css/film-film.css' %}" type="text/css">
   <h1>{{ object.name }}</a> <font color=#676767>/ {{ object.name_orig }}</font> ({{ object.year }})</h1>
+  <p><a href="{% url 'films:add_favorites' film_id=object.id_kp %}">Добавить в избранное</a></p>
   <div class="top">
     <div class="top_right">
       {% with object.poster|split as poster %}

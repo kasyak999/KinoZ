@@ -137,3 +137,27 @@ class Coment(models.Model):
         else:
             result = self.text
         return result
+
+
+class Favorite(models.Model):
+    """Избранные фильмы"""
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    recipe = models.ForeignKey(
+        FilmsdModel, on_delete=models.CASCADE, verbose_name='Фильм')
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name='Добавлен'
+    )
+
+    class Meta:
+        """Перевод модели"""
+        verbose_name = 'избраное'
+        verbose_name_plural = 'Избраное'
+        default_related_name = 'favorites'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'recipe'], name='unique_user_recipe')
+        ]
+
+    def __str__(self):
+        return f'{self.user}'
