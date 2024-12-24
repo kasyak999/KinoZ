@@ -5,3 +5,4 @@ sent_emails/
 __pycache__/
 test/
 key_name.py
+media/

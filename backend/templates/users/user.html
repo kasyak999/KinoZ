@@ -9,10 +9,12 @@
 	<h3>Учетная запись {{ username }}</h3>
 	{% comment %} <p><img src="{% static 'images/123.jpg' %}" alt="Аватар {{ username }}" class="avatar"></p> {% endcomment %}
 	<p>{% if user_profile.avatar %}
+		<a href="{{ user_profile.avatar.url }}" target="_blank">
 		<img src="{{ user_profile.avatar.url }}" alt="Аватар {{ username }}" class="avatar">
+		</a>
 	{% else %}
 		<img src="{% static 'images/no_foto.jpg' %}" alt="Аватар по умолчанию" class="avatar">
-	{% endif %}
+	{% endif %} <a href='{% url "users:avatar_update" %}'>изменить аватар</a>
 	</p>
 	<p><b>Email:</b> {{ user_profile.email }}
 		{% if user.username == username %}

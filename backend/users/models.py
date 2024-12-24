@@ -4,7 +4,8 @@ from django.db import models
 
 class UserProfile(AbstractUser):
     avatar = models.ImageField(
-        upload_to='users/', null=True, blank=True, default=None)
+        upload_to='users/', null=True, blank=True,
+        verbose_name='Аватар')
 
     class Meta:
         """Перевод модели"""

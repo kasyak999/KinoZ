@@ -18,7 +18,7 @@
 					</form>
 				</li> 
         {% if user.is_staff %}
-          <li><a href="{% url 'admin:index' %}" class="{% if view_name == '' %}a-active{% endif %}">Admin меню</a></li>
+          <li><a href="{% url 'admin:index' %}" class="{% if view_name == '' %}a-active{% endif %}" target="_blank">Admin меню</a></li>
         {% endif %}
         <!-- Конец блока ссылок для авторизованного пользователя -->
       {% else %}

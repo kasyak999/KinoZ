@@ -7,3 +7,4 @@ sent_emails
 static_backend
 .env
 key_name.py
+media/

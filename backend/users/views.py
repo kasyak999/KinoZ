@@ -7,7 +7,7 @@ from django.core.paginator import Paginator
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from films.models import Coment
-from .form import EmailUpdateForm
+from .form import EmailUpdateForm, AvatarForm
 
 
 User = get_user_model()
@@ -49,7 +49,20 @@ class EmailUpdateView(LoginRequiredMixin, UpdateView):
         return reverse('users:user', kwargs={'username': self.request.user})
 
     def get_object(self):
-        return self.request.user  # Получаем текущего пользователя
+        return self.request.user
+
+
+class AvatarUpdateView(LoginRequiredMixin, UpdateView):
+    """Изменение аватар пользователя"""
+    model = User
+    form_class = AvatarForm
+    template_name = 'users/avatar.html'
+
+    def get_success_url(self):
+        return reverse('users:user', kwargs={'username': self.request.user})
+
+    def get_object(self):
+        return self.request.user
 
 
 def page_not_found(request, exception):

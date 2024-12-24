@@ -13,6 +13,13 @@ class EmailUpdateForm(forms.ModelForm):
         fields = ['email']
 
 
+class AvatarForm(forms.ModelForm):
+    """Форма для изменения email"""
+    class Meta:
+        model = User
+        fields = ['avatar']
+
+
 class CustomUserCreationForm(UserCreationForm):
     """Форма для регистрации"""
     email = forms.EmailField(required=True)
