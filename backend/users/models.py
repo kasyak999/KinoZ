@@ -39,7 +39,6 @@ class Follow(models.Model):
                 name='unique_name_owner'
             )
         ]
-        default_related_name = 'follows'
 
     def clean(self):
         if self.user == self.following:

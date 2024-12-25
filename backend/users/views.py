@@ -8,6 +8,7 @@ from django.contrib.auth import get_user_model
 from django.conf import settings
 from films.models import Coment
 from .form import EmailUpdateForm, AvatarForm
+from .models import Follow
 
 
 User = get_user_model()
@@ -35,6 +36,10 @@ class PersonalAccount(LoginRequiredMixin, TemplateView):
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         context['page_obj'] = page_obj
+        context['following'] = user_profile.follower.all()
+        print(type(user_profile))
+        print('подписчик', user_profile.following.all())
+        print(user_profile.follower.all())
 
         return context
 
