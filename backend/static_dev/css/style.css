@@ -143,11 +143,18 @@ table {
   }
 }
 
-form input, form textarea, form select {
+form input[type="file"],
+form input,
+form textarea,
+form select {
   border: 3px solid #006600;  /*рамка*/
   border-radius: 10px; /*закругление*/
   padding: 3px;
-  /*max-width: 200px;/**/
+  cursor: pointer;/**/
+}
+
+form input[type="text"] , form textarea {
+  cursor: text;
 }
 
 /*.errorlist.nonfield { /*Ошибки форм*/
