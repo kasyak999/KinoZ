@@ -7,14 +7,16 @@
 {% block content %}
 {% if user.is_authenticated %}
 	<h3>Учетная запись {{ username }}</h3>
-	{% comment %} <p><img src="{% static 'images/123.jpg' %}" alt="Аватар {{ username }}" class="avatar"></p> {% endcomment %}
 	<p>{% if user_profile.avatar %}
 		<a href="{{ user_profile.avatar.url }}" target="_blank">
 		<img src="{{ user_profile.avatar.url }}" alt="Аватар {{ username }}" class="avatar">
 		</a>
 	{% else %}
 		<img src="{% static 'images/no_foto.jpg' %}" alt="Аватар по умолчанию" class="avatar">
-	{% endif %} <a href='{% url "users:avatar_update" %}'>изменить аватар</a>
+	{% endif %}
+	{% if user.username == username %}
+		<a href='{% url "users:avatar_update" %}'>изменить аватар</a>
+	{% endif %}
 	</p>
 	<p><b>Email:</b> {{ user_profile.email }}
 		{% if user.username == username %}
@@ -24,13 +26,19 @@
 	{% if user.username == username %}
 	<p><b>Пароль:</b> *** <a href='{% url "password_change" %}'>изменить</a></p>
 	{% endif %}
-	{% if page_obj.paginator.count > 0 %}
-	
-	<p>Подписан: {{ following }}</p>
-	{% for i in following %}
-	{{ i.following }}<br>
-	{% endfor %}
 
+	<p>
+		Подписок: <a href="{% url 'users:follow' user_profile.id %}">{{ following }}</a>
+		Подписчики: {{ follower }}</p>
+	{% comment %} {% for i in following %}
+		{{ i.following }}<br>
+	{% endfor %}
+	<hr>
+	{% for i in follower %}
+		{{ i.user }}<br>
+	{% endfor %} {% endcomment %}
+
+	{% if page_obj.paginator.count > 0 %}
 		<br><p>Все отзывы пользователя: {{ page_obj.paginator.count }}</p><br>
 		{% for comment in page_obj %}
 			<p><a href="{% url "films:film" comment.film.id_kp %}"><b>{{ comment.film.name }} / {{ comment.film.name_orig }} ({{ comment.film.year }})</b></a></p>

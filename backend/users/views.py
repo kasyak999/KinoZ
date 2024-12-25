@@ -1,5 +1,5 @@
 from typing import Any
-from django.views.generic import UpdateView, TemplateView
+from django.views.generic import UpdateView, TemplateView, ListView
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -9,6 +9,7 @@ from django.conf import settings
 from films.models import Coment
 from .form import EmailUpdateForm, AvatarForm
 from .models import Follow
+from django.db.models import Prefetch
 
 
 User = get_user_model()
@@ -22,25 +23,43 @@ class PersonalAccount(LoginRequiredMixin, TemplateView):
     paginate_by = settings.OBJECTS_PER_PAGE
 
     def get_object(self):
-        return get_object_or_404(
+        user_profile = get_object_or_404(
             self.model, username=self.kwargs[self.pk_url_kwarg])
+        return user_profile
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         user_profile = self.get_object()
         context['user_profile'] = user_profile
         comment_all = Coment.objects.filter(
-            author=user_profile, film__verified=True, film__is_published=True
-        ).select_related('author', 'film')
+            author=context['user_profile'], film__verified=True,
+            film__is_published=True).select_related('author', 'film')
         paginator = Paginator(comment_all, self.paginate_by)
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         context['page_obj'] = page_obj
-        context['following'] = user_profile.follower.all()
-        print(type(user_profile))
-        print('подписчик', user_profile.following.all())
-        print(user_profile.follower.all())
+        context['following'] = user_profile.follower.all().select_related(
+            'following').count()
+        context['follower'] = user_profile.following.all().select_related(
+            'user').count()
+        return context
 
+
+class FollowUserListView(LoginRequiredMixin, ListView):
+    """Подписан пользователь"""
+    model = Follow
+    template_name = 'users/follow.html'
+    pk_url_kwarg = 'pk'
+    paginate_by = settings.OBJECTS_PER_PAGE
+
+    def get_queryset(self):
+        return super().get_queryset().filter(
+            user=self.kwargs[self.pk_url_kwarg]).select_related(
+            'following', 'user')
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        # context['html_name'] = f'Подписки {self.user.username}'
         return context
 
 

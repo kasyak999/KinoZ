@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+{{ html_name }}
+{% endblock %}
+
+{% block content %}
+  {% if user.is_authenticated %}
+
+    <h3>{{ html_name }}</h3>
+    {% for object in object_list %}
+      {{ object.following }}<br>
+    {% endfor %}
+
+  {% endif %}
+{% endblock %}
