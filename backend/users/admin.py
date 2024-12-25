@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 # from django.contrib.auth.admin import UserAdmin
 from django.utils.safestring import mark_safe
+from .models import Follow
 
 
 User = get_user_model()
@@ -22,3 +23,10 @@ class UserProfileAdmin(admin.ModelAdmin):
                 f'style="max-height: 100px; max-width: 100px;"/>'
             )
         return 'Нет изображения'
+
+
+@admin.register(Follow)
+class FollowAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'user', 'following')
+    search_fields = ('username',)
+    list_display_links = ('user',)
