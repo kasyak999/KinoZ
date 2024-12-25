@@ -10,9 +10,7 @@ from django.contrib import messages
 from django.conf import settings
 from .api import information_film
 from .form import AddFilmBaza, ComentForm
-from .models import FilmsdModel, Coment, Favorite
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect, get_object_or_404
+from .models import FilmsdModel, Coment
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
