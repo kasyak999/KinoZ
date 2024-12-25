@@ -9,6 +9,7 @@
       {% if user.is_authenticated %}
         <!-- Это блок ссылок для авторизованного пользователя -->
 				<li><a href="{% url 'users:user' username=user %}" class="{% if view_name == 'users:user' %}a-active{% endif %}">Личный кабинет</a></li>
+        <li><a href="{% url 'films:favorite' %}" class="{% if view_name == 'films:favorite' %}a-active{% endif %}">Избранное</a></li>
         <li>
 					<a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
 						Выйти

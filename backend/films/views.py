@@ -10,7 +10,11 @@ from django.contrib import messages
 from django.conf import settings
 from .api import information_film
 from .form import AddFilmBaza, ComentForm
-from .models import FilmsdModel, Coment
+from .models import FilmsdModel, Coment, Favorite
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 
 User = get_user_model()
@@ -97,7 +101,21 @@ class DetailFilm(DetailView):
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         context['page_obj'] = page_obj
+
+        if self.request.user.is_authenticated:
+            context['is_favorite'] = context['object'].favorites.filter(
+                user=self.request.user).exists()
         return context
+
+    @method_decorator(login_required())
+    def post(self, request, *args, **kwargs):
+        """Добавление или удаление фильма из избранного"""
+        film = self.get_object()
+        if film.favorites.filter(user=request.user).exists():
+            film.favorites.filter(user=request.user).delete()
+        else:
+            film.favorites.create(user=request.user, recipe=film)
+        return redirect('films:film', id_kp=film.id_kp)
 
 
 class CreateFilm(CreateView):
@@ -163,3 +181,23 @@ def add_film(request):
             messages.error(
                 request, 'Ссылка на фильма не соответствует формату')
     return render(request, template_name)
+
+
+class FavoriteListView(LoginRequiredMixin, ListView):
+    """Список избранных фильмов пользователя"""
+    model = FilmsdModel
+    template_name = 'films/index.html'
+    paginate_by = settings.OBJECTS_PER_PAGE
+
+    def get_queryset(self):
+        return FilmsdModel.objects.filter(
+            favorites__user=self.request.user,
+            verified=True,
+            is_published=True
+        ).prefetch_related('favorites', 'genres', 'country')
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['html_name'] = 'Мое избранное'
+        context['html_title'] = context['html_name']
+        return context

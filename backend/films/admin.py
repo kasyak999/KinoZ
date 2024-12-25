@@ -5,7 +5,7 @@ from django.utils.safestring import mark_safe
 from django.urls import reverse
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
-from . models import FilmsdModel, Category, Genres, Country, Coment
+from . models import FilmsdModel, Category, Genres, Country, Coment, Favorite
 from django.contrib import messages
 
 
@@ -161,3 +161,9 @@ class GenresAdmin(FilmsCountMixin):
 @admin.register(Country)
 class CountryAdmin(FilmsCountMixin):
     pass
+
+
+@admin.register(Favorite)
+class FavoriteAdmin(admin.ModelAdmin):
+    list_display = ('user', 'recipe', 'created_at')
+    list_per_page = settings.OBJECTS_PER_PAGE
