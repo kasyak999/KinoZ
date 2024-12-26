@@ -5,19 +5,17 @@
 {% endblock %}
 
 {% block content %}
+{{ list_type }}
   {% if user.is_authenticated %}
     {% for object in object_list %}
-      {% if list_type == following %}
         {% if forloop.first %}
-          <h3>{{ html_name }} {{ object.user.username }}</h3>
+          <h3>{{ html_name }} {{ user_p }}</h3>
         {% endif %}
-        {{ object.following.username }} - {{ object.following.id }}<br>
-      {% else %}
-        {% if forloop.first %}
-          <h3>{{ html_name }} {{ object.following.username }}</h3>
+        {% if list_type == 'following' %}
+          {{ object.following.username }} - {{ object.following.id }}<br>
+        {% else %}
+          {{ object.user.username }} - {{ object.user.id }}<br>
         {% endif %}
-        {{ object.user.username }} - {{ object.user.id }}<br>
-      {% endif %}
     {% endfor %}
   {% endif %}
 {% endblock %}
