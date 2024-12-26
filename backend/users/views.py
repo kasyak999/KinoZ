@@ -10,6 +10,7 @@ from films.models import Coment
 from .form import EmailUpdateForm, AvatarForm
 from .models import Follow
 from django.db.models import Prefetch
+from django.db.models import F
 
 
 User = get_user_model()
@@ -51,15 +52,29 @@ class FollowUserListView(LoginRequiredMixin, ListView):
     template_name = 'users/follow.html'
     pk_url_kwarg = 'pk'
     paginate_by = settings.OBJECTS_PER_PAGE
+    list_type_kwarg = 'list_type'
 
     def get_queryset(self):
-        return super().get_queryset().filter(
-            user=self.kwargs[self.pk_url_kwarg]).select_related(
-            'following', 'user')
+        list_type = self.kwargs.get(self.list_type_kwarg)
+        if list_type == 'following':
+            return super().get_queryset().filter(
+                user=self.kwargs[self.pk_url_kwarg]).select_related(
+                'following', 'user')
+        else:
+            return super().get_queryset().filter(
+                following=self.kwargs[self.pk_url_kwarg]).select_related(
+                'following', 'user')
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        # context['html_name'] = f'Подписки {self.user.username}'
+        list_type = self.kwargs.get(self.list_type_kwarg)
+        if list_type == 'following':
+            # context['object_list'] = self.get_followings_queryset()
+            context['html_name'] = 'Подписки'
+        else:
+            # context['object_list'] = self.get_followers_queryset()
+            context['html_name'] = 'Подписчики'
+        context['list_type'] = list_type
         return context
 
 

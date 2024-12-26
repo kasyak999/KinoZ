@@ -6,11 +6,18 @@
 
 {% block content %}
   {% if user.is_authenticated %}
-
-    <h3>{{ html_name }}</h3>
     {% for object in object_list %}
-      {{ object.following }}<br>
+      {% if list_type == following %}
+        {% if forloop.first %}
+          <h3>{{ html_name }} {{ object.user.username }}</h3>
+        {% endif %}
+        {{ object.following.username }} - {{ object.following.id }}<br>
+      {% else %}
+        {% if forloop.first %}
+          <h3>{{ html_name }} {{ object.following.username }}</h3>
+        {% endif %}
+        {{ object.user.username }} - {{ object.user.id }}<br>
+      {% endif %}
     {% endfor %}
-
   {% endif %}
 {% endblock %}

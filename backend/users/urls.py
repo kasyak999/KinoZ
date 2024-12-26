@@ -9,7 +9,13 @@ urlpatterns = [
     path(
         'user/avatar/', views.AvatarUpdateView.as_view(),
         name='avatar_update'),
+    # path(
+    #     'user/follow/<int:pk>', views.FollowUserListView.as_view(),
+    #     name='follow'),
     path(
-        'user/follow/<int:pk>', views.FollowUserListView.as_view(),
-        name='follow'),
+        'users/<int:pk>/following/', views.FollowUserListView.as_view(),
+        {'list_type': 'following'}, name='user_following'),
+    path(
+        'users/<int:pk>/followers/', views.FollowUserListView.as_view(),
+        {'list_type': 'followers'}, name='user_followers'),
 ]

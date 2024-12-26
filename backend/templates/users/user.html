@@ -28,8 +28,9 @@
 	{% endif %}
 
 	<p>
-		Подписок: <a href="{% url 'users:follow' user_profile.id %}">{{ following }}</a>
-		Подписчики: {{ follower }}</p>
+		Подписок: <a href="{% url 'users:user_following' user_profile.id %}">{{ following }}</a>
+		Подписчики: <a href="{% url 'users:user_followers' user_profile.id %}">{{ follower }}</a>
+	</p>
 	{% comment %} {% for i in following %}
 		{{ i.following }}<br>
 	{% endfor %}
