@@ -13,6 +13,7 @@ from .form import AddFilmBaza, ComentForm
 from .models import FilmsdModel, Coment
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.db.models import Count
 
 
 User = get_user_model()
@@ -66,7 +67,7 @@ class IndexListView(ListView):
         return context
 
 
-class DetailFilm(DetailView):
+class DetailFilm(ListView):
     """Пост подробнее"""
     model = FilmsdModel
     template_name = 'films/film.html'
@@ -85,35 +86,87 @@ class DetailFilm(DetailView):
                 )
             )
 
-    def get_object(self):
-        return self.model.objects.prefetch_related('genres', 'country').get(
+    def get_queryset(self):
+        self.result = FilmsdModel.objects.annotate(
+            comments_count=Count('coments', distinct=True)
+        ).prefetch_related(
+            'genres', 'country').select_related('cat').get(
             id_kp=self.kwargs[self.pk_url_kwarg], verified=True,
             is_published=True
         )
+        return self.result.coments.all().select_related('author', 'film')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = ComentForm()
-        comment_all = self.object.coments.select_related('author', 'film')
-        paginator = Paginator(comment_all, self.paginate_by)
-        page_number = self.request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        context['page_obj'] = page_obj
+        context['object'] = self.result
+        context['len_coments'] = self.result.comments_count
 
         if self.request.user.is_authenticated:
             context['is_favorite'] = context['object'].favorites.filter(
                 user=self.request.user).exists()
         return context
-
+    
     @method_decorator(login_required())
     def post(self, request, *args, **kwargs):
         """Добавление или удаление фильма из избранного"""
-        film = self.get_object()
+        film = self.result
+        print('-----------------------------', film)
         if film.favorites.filter(user=request.user).exists():
             film.favorites.filter(user=request.user).delete()
         else:
             film.favorites.create(user=request.user, recipe=film)
         return redirect('films:film', id_kp=film.id_kp)
+
+
+# class DetailFilm(DetailView):
+#     """Пост подробнее"""
+#     model = FilmsdModel
+#     template_name = 'films/film.html'
+#     pk_url_kwarg = 'id_kp'
+#     paginate_by = settings.OBJECTS_PER_PAGE
+
+#     def dispatch(self, request, *args, **kwargs):
+#         try:
+#             return super().dispatch(request, *args, **kwargs)
+#         except self.model.DoesNotExist:
+#             return redirect(
+#                 reverse(
+#                     'films:add_film_id', kwargs={
+#                         'pk': self.kwargs[self.pk_url_kwarg]
+#                     }
+#                 )
+#             )
+
+#     def get_object(self):
+#         return self.model.objects.prefetch_related('genres', 'country').get(
+#             id_kp=self.kwargs[self.pk_url_kwarg], verified=True,
+#             is_published=True
+#         )
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['form'] = ComentForm()
+#         comment_all = self.object.coments.select_related('author', 'film')
+#         paginator = Paginator(comment_all, self.paginate_by)
+#         page_number = self.request.GET.get('page')
+#         page_obj = paginator.get_page(page_number)
+#         context['page_obj'] = page_obj
+
+#         if self.request.user.is_authenticated:
+#             context['is_favorite'] = context['object'].favorites.filter(
+#                 user=self.request.user).exists()
+#         return context
+
+#     @method_decorator(login_required())
+#     def post(self, request, *args, **kwargs):
+#         """Добавление или удаление фильма из избранного"""
+#         film = self.get_object()
+#         if film.favorites.filter(user=request.user).exists():
+#             film.favorites.filter(user=request.user).delete()
+#         else:
+#             film.favorites.create(user=request.user, recipe=film)
+#         return redirect('films:film', id_kp=film.id_kp)
 
 
 class CreateFilm(CreateView):

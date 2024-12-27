@@ -91,6 +91,7 @@ class Category(MainModel):
     class Meta(MainModel.Meta):
         verbose_name = 'категория'
         verbose_name_plural = 'Категории'
+        default_related_name = 'categories'
 
 
 class Genres(MainModel):
@@ -119,7 +120,6 @@ class Coment(models.Model):
     film = models.ForeignKey(
         FilmsdModel,
         on_delete=models.CASCADE,
-        related_name='coments',
         verbose_name='Фильм'
     )
     author = models.ForeignKey(
