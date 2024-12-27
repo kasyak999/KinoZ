@@ -22,10 +22,10 @@ class UserProfile(AbstractUser):
 class Follow(models.Model):
     """Подписки пользователей"""
     following = models.ForeignKey(
-        UserProfile, on_delete=models.CASCADE, related_name='following',
+        UserProfile, on_delete=models.CASCADE, related_name='followings',
         verbose_name='на кого подписан')
     user = models.ForeignKey(
-        UserProfile, on_delete=models.CASCADE, related_name='follower',
+        UserProfile, on_delete=models.CASCADE, related_name='followers',
         verbose_name='Подписчик')
 
     class Meta:

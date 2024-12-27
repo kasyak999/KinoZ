@@ -5,17 +5,41 @@
 {% endblock %}
 
 {% block content %}
-{{ list_type }}
-  {% if user.is_authenticated %}
-    {% for object in object_list %}
-        {% if forloop.first %}
-          <h3>{{ html_name }} {{ user_p }}</h3>
+  {% with request.resolver_match.view_name as view_name %}
+    {% if user.is_authenticated %}
+      {% for object in object_list %}
+        {% if view_name == 'users:user_following' %}
+          {% if forloop.first %}
+            <h3>{{ user_profile }} подписался: {{ follower }}</h3>
+          {% endif %}
+          {{ object.following.username}} - {{ object.following.id}}<br>
+        {% else  %}
+          {% if forloop.first %}
+            <h3>Подписчики {{ user_profile }}: {{ following }}</h3>
+          {% endif %}
+          {{ object.user.username}} - {{ object.user.id}}<br>
         {% endif %}
-        {% if list_type == 'following' %}
-          {{ object.following.username }} - {{ object.following.id }}<br>
-        {% else %}
-          {{ object.user.username }} - {{ object.user.id }}<br>
-        {% endif %}
-    {% endfor %}
-  {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
 {% endblock %}
+
+{% comment %} {% block content %}
+  {% with request.resolver_match.view_name as view_name %}
+    {% if user.is_authenticated %}
+      {% for object in object_list %}
+          {% if view_name == 'users:user_following' %}
+            {% if forloop.first %}
+              <h3>Подписки {{ user_p }}</h3>
+            {% endif %}
+            {{ object.following.username }} - {{ object.following.id }}<br>
+          {% else %}
+            {% if forloop.first %}
+              <h3>Подписчики {{ user_p }}</h3>
+            {% endif %}
+            {{ object.user.username }} - {{ object.user.id }}<br>
+          {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+{% endblock %} {% endcomment %}

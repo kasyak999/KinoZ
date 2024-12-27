@@ -130,6 +130,7 @@ class Coment(models.Model):
         verbose_name = 'комментарии'
         verbose_name_plural = 'Комментарии'
         ordering = ('-created_at',)
+        default_related_name = 'coments'
 
     def __str__(self) -> str:
         if len(self.text) > 50:
