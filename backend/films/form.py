@@ -1,5 +1,5 @@
 from django import forms
-from films.models import FilmsdModel, Coment
+from films.models import FilmsdModel, Coment, Favorite
 
 
 class ComentForm(forms.ModelForm):
@@ -39,3 +39,24 @@ class AddFilmBaza(forms.ModelForm):
             self.fields[value].widget.attrs['readonly'] = True
         # # Убираем подсказку для поля poster
         # self.fields['name'].help_text += '111111'
+
+
+class AddFilmFavorites(forms.ModelForm):
+    class Meta:
+        model = Favorite
+        fields = []
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        if self.user:
+            instance.user = self.user  # Задаём текущего пользователя
+        if self.film:
+            instance.film = self.film  # Задаём выбранный фильм
+        if commit:
+            instance.save()
+        return instance
+
+    def __init__(self, *args, user=None, film=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user = user
+        self.film = film

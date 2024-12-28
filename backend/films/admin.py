@@ -165,5 +165,5 @@ class CountryAdmin(FilmsCountMixin):
 
 @admin.register(Favorite)
 class FavoriteAdmin(admin.ModelAdmin):
-    list_display = ('user', 'recipe', 'created_at')
+    list_display = ('user', 'film', 'created_at')
     list_per_page = settings.OBJECTS_PER_PAGE

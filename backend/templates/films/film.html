@@ -52,7 +52,7 @@
       display: none;
     }
   </style>
-  
+
   {% if user.is_authenticated %}
     <!-- Указываем, на какой адрес нужно отправить POST-запрос -->
     <center><form action="{% url 'films:add_comment' object.pk %}" method="post">
