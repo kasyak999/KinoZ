@@ -68,9 +68,29 @@ class IndexListView(ListView):
         return context
 
 
+class FavoriteListView(LoginRequiredMixin, ListView):
+    """Список избранных фильмов пользователя"""
+    model = FilmsdModel
+    template_name = 'films/index.html'
+    paginate_by = settings.OBJECTS_PER_PAGE
+
+    def get_queryset(self):
+        return FilmsdModel.objects.filter(
+            favorites__user=self.request.user,
+            verified=True,
+            is_published=True
+        ).prefetch_related('favorites', 'genres', 'country')
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['html_name'] = 'Мое избранное'
+        context['html_title'] = context['html_name']
+        return context
+
+
 class DetailFilm(ListView):
     """Пост подробнее"""
-    model = FilmsdModel
+    # model = FilmsdModel
     template_name = 'films/film.html'
     pk_url_kwarg = 'id_kp'
     paginate_by = settings.OBJECTS_PER_PAGE
@@ -118,14 +138,23 @@ class DetailFilm(ListView):
         """Добавление или удаление фильма из избранного"""
         film_id = self.kwargs[self.pk_url_kwarg]
         film = self.get_film
-        result = request.user.favorites.filter(film=film)
-        if result.exists():
-            result.delete()
-        else:
-            form = AddFilmFavorites(
-                data=request.POST, user=request.user, film=film)
+
+        # Обработка добавления/удаления фильма из избранного
+        if 'favorite' in request.POST:
+            result = request.user.favorites.filter(film=film)
+            if result.exists():
+                result.delete()
+            else:
+                form = AddFilmFavorites(data=request.POST)
+                if form.is_valid():
+                    form.save(user=request.user, film=film)
+
+        # Обработка добавления комментария
+        elif 'comment' in request.POST:
+            form = ComentForm(data=request.POST)
             if form.is_valid():
-                form.save()
+                form.save(author=request.user, film=film)
+
         return redirect('films:film', id_kp=film_id)
 
 
@@ -153,25 +182,6 @@ class CreateFilm(CreateView):
         return super().get_initial()
 
 
-class AddComment(LoginRequiredMixin, CreateView):
-    """Новый комментарий"""
-    model = Coment
-    template_name = 'films/add_coment.html'
-    form_class = ComentForm
-
-    @property
-    def _id_kp(self):
-        return FilmsdModel.objects.get(id=self.kwargs[self.pk_url_kwarg])
-
-    def get_success_url(self):
-        return reverse('films:film', kwargs={'id_kp': self._id_kp.id_kp})
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        form.instance.film = self._id_kp
-        return super().form_valid(form)
-
-
 def add_film(request):
     """Работа с сылкой кинопоиска"""
     template_name = 'films/add_kinopoisk.html'
@@ -192,23 +202,3 @@ def add_film(request):
             messages.error(
                 request, 'Ссылка на фильма не соответствует формату')
     return render(request, template_name)
-
-
-class FavoriteListView(LoginRequiredMixin, ListView):
-    """Список избранных фильмов пользователя"""
-    model = FilmsdModel
-    template_name = 'films/index.html'
-    paginate_by = settings.OBJECTS_PER_PAGE
-
-    def get_queryset(self):
-        return FilmsdModel.objects.filter(
-            favorites__user=self.request.user,
-            verified=True,
-            is_published=True
-        ).prefetch_related('favorites', 'genres', 'country')
-
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        context['html_name'] = 'Мое избранное'
-        context['html_title'] = context['html_name']
-        return context

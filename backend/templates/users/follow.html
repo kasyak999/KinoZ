@@ -7,8 +7,10 @@
 {% block content %}
   {% with request.resolver_match.view_name as view_name %}
     {% if user.is_authenticated %}
+    {{ view_name }}
       {% for object in object_list %}
         {% if view_name == 'users:user_following' %}
+        11
           {% if forloop.first %}
             <h3>{{ user_profile }} подписался: {{ follower }}</h3>
           {% endif %}

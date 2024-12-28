@@ -8,6 +8,13 @@ class ComentForm(forms.ModelForm):
         model = Coment
         fields = ('text',)
 
+    def save(self, commit=True, author=None, film=None):
+        instance = super().save(commit=False)
+        instance.author = author
+        instance.film = film
+        instance.save()
+        return instance
+
 
 class AddFilmBaza(forms.ModelForm):
 
@@ -46,17 +53,9 @@ class AddFilmFavorites(forms.ModelForm):
         model = Favorite
         fields = []
 
-    def save(self, commit=True):
+    def save(self, commit=True, user=None, film=None):
         instance = super().save(commit=False)
-        if self.user:
-            instance.user = self.user  # Задаём текущего пользователя
-        if self.film:
-            instance.film = self.film  # Задаём выбранный фильм
-        if commit:
-            instance.save()
+        instance.user = user  # Задаём текущего пользователя
+        instance.film = film  # Задаём выбранный фильм
+        instance.save()
         return instance
-
-    def __init__(self, *args, user=None, film=None, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.user = user
-        self.film = film

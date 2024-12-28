@@ -10,17 +10,15 @@
   <h1>{{ object.name }}</a> <font color=#676767>/ {{ object.name_orig }}</font> ({{ object.year }})</h1>
   
   <div style="display: flex; justify-content: flex-end;">
-  {% if is_favorite %}
     <form method="post">
-        {% csrf_token %}
-        <input type="submit" value="Удалить из избранного">
+      {% csrf_token %}
+      {% if is_favorite %}
+        <input type="submit" value="Удалить из избранного" name="favorite">
+      {% else %}
+        <input type="submit" value="Добавить в избранное" name="favorite">
+      {% endif %} 
     </form>
-  {% else %}
-      <form method="post">
-          {% csrf_token %}
-          <input type="submit" value="Добавить в избранное">
-      </form>
-  {% endif %}</div>
+  </div>
 
   <div class="top">
     <div class="top_right">
@@ -55,11 +53,20 @@
 
   {% if user.is_authenticated %}
     <!-- Указываем, на какой адрес нужно отправить POST-запрос -->
-    <center><form action="{% url 'films:add_comment' object.pk %}" method="post">
+    <center>
+      <form method="post">
+        <table>
+        {% csrf_token %}
+        {{ form.as_p }}
+        </table>
+        <input type="submit" value="Добавить отзыв" name="comment">
+      </form>
+    {% comment %} <form action="{% url 'films:add_comment' object.pk %}" method="post">
       {% csrf_token %}
       {{ form.as_p }}
       <input type="submit" value="Добавить отзыв">
-    </form> </center>
+    </form> {% endcomment %}
+    </center>
   {% endif %}
   {% include "includes/film/comment.html" %}
 {% endblock %}
