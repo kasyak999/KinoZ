@@ -2,20 +2,6 @@ from django import forms
 from films.models import FilmsdModel, Coment, Favorite
 
 
-class ComentForm(forms.ModelForm):
-
-    class Meta:
-        model = Coment
-        fields = ('text',)
-
-    def save(self, commit=True, author=None, film=None):
-        instance = super().save(commit=False)
-        instance.author = author
-        instance.film = film
-        instance.save()
-        return instance
-
-
 class AddFilmBaza(forms.ModelForm):
 
     class Meta:
@@ -36,6 +22,13 @@ class AddFilmBaza(forms.ModelForm):
         #     'country'
         # ]
 
+    # def save(self, commit=True):
+    #     instance = super().save(commit=False)
+    #     # Добавьте нужную логику перед сохранением
+    #     if commit:
+    #         instance.save()
+    #     return instance
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Устанавливаем скрытое поле
@@ -46,6 +39,20 @@ class AddFilmBaza(forms.ModelForm):
             self.fields[value].widget.attrs['readonly'] = True
         # # Убираем подсказку для поля poster
         # self.fields['name'].help_text += '111111'
+
+
+class ComentForm(forms.ModelForm):
+
+    class Meta:
+        model = Coment
+        fields = ('text',)
+
+    def save(self, commit=True, author=None, film=None):
+        instance = super().save(commit=False)
+        instance.author = author
+        instance.film = film
+        instance.save()
+        return instance
 
 
 class AddFilmFavorites(forms.ModelForm):

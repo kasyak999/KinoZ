@@ -94,12 +94,27 @@ class DetailFilm(ListView):
     template_name = 'films/film.html'
     pk_url_kwarg = 'id_kp'
     paginate_by = settings.OBJECTS_PER_PAGE
-    # form_class = ComentForm
 
     def dispatch(self, request, *args, **kwargs):
-        try:
-            return super().dispatch(request, *args, **kwargs)
-        except self.model.DoesNotExist:
+        # try:
+        #     return super().dispatch(request, *args, **kwargs)
+        # except self.model.DoesNotExist:
+        #     messages.error(request, (
+        #         'Фильма нет в базе. Нажмите «Отправить на проверку» '
+        #         'и после проверки его добавим.'))
+        #     return redirect(
+        #         reverse(
+        #             'films:add_film_id', kwargs={
+        #                 'pk': self.kwargs[self.pk_url_kwarg]
+        #             }
+        #         )
+        #     )
+        result = FilmsdModel.objects.filter(
+            id_kp=self.kwargs[self.pk_url_kwarg]).first()
+        if not result:
+            messages.error(request, (
+                'Фильма нет в базе. Нажмите «Отправить на проверку» '
+                'и после проверки его добавим.'))
             return redirect(
                 reverse(
                     'films:add_film_id', kwargs={
@@ -107,6 +122,18 @@ class DetailFilm(ListView):
                     }
                 )
             )
+        if not result.verified and not result.is_published:
+            # Если фильм есть, но не опубликован, выводим сообщение о том, что он уже в базе
+            messages.info(request, (
+                'Фильм уже существует в базе, но еще не опубликован. '
+                'После проверки его сделаем доступным.'))
+            return redirect('films:add_film')
+        return super().dispatch(request, *args, **kwargs)
+
+    @property
+    def _result_api(self):
+        rez = information_film(self.kwargs[self.pk_url_kwarg])
+        return rez
 
     @property
     def get_film(self):
@@ -164,6 +191,14 @@ class CreateFilm(CreateView):
     template_name = 'films/add.html'
     form_class = AddFilmBaza
 
+    def dispatch(self, request, *args, **kwargs):
+        """Автоматически добавляем фильм в базу, если он ещё не существует"""
+        film_id = self.kwargs[self.pk_url_kwarg]
+        if self.model.objects.filter(id_kp=film_id).exists():
+            messages.error(request, 'Фильм уже существует в базе.')
+            return redirect('films:film', id_kp=film_id)
+        return super().dispatch(request, *args, **kwargs)
+
     @property
     def _result_api(self):
         rez = information_film(self.kwargs[self.pk_url_kwarg])
@@ -173,7 +208,7 @@ class CreateFilm(CreateView):
         messages.success(
             self.request,
             'Фильм успешно добавлен в базу, после проверки он будет доступен')
-        return reverse(':filmsadd_film')
+        return reverse('films:add_film')
 
     def get_initial(self):
         initial = self._result_api
@@ -196,6 +231,9 @@ def add_film(request):
             else:  # если все ок
                 bd = FilmsdModel.objects.filter(id_kp=id_film)
                 if not bd:
+                    messages.error(request, (
+                        'Фильма нет в базе. Нажмите «Отправить на проверку» '
+                        'и после проверки его добавим.'))
                     return redirect('films:add_film_id', id_film)
                 messages.error(request, 'Такой фильм уже есть в базе')
         else:

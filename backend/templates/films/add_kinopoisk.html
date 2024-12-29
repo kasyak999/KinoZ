@@ -7,21 +7,6 @@
 
 {% block content %}  
 <h3>Добавить фильм</h3>
-
-{% if messages %}
-    <ul>
-    {% for message in messages %}
-		<li>{% if message.tags == 'error' %}
-      <font color='red'>
-		{% else %}
-			<font color='green'>
-		{% endif %}
-		{{ message }}</font></li>
-    {% endfor %}
-    </ul>
-{% endif %}
-
-
 <p>Введите ссылку фильма на кинопоиске.</p>
 <p>Пример: <b>https://www.kinopoisk.ru/film/594554/</b></p>
 <br>
