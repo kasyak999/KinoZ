@@ -6,36 +6,33 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-	<h3>Учетная запись {{ username }}</h3>
-	{% comment %} <p><img src="{% static 'images/123.jpg' %}" alt="Аватар {{ username }}" class="avatar"></p> {% endcomment %}
+	<h3>Учетная запись {{ user_profile.avatar.username }}</h3>
 	<p>{% if user_profile.avatar %}
 		<a href="{{ user_profile.avatar.url }}" target="_blank">
 		<img src="{{ user_profile.avatar.url }}" alt="Аватар {{ username }}" class="avatar">
 		</a>
 	{% else %}
 		<img src="{% static 'images/no_foto.jpg' %}" alt="Аватар по умолчанию" class="avatar">
-	{% endif %} <a href='{% url "users:avatar_update" %}'>изменить аватар</a>
+	{% endif %}
+	{% if user.username == user_profile.username %}
+		<a href='{% url "users:avatar_update" %}'>изменить аватар</a>
+	{% endif %}
 	</p>
 	<p><b>Email:</b> {{ user_profile.email }}
-		{% if user.username == username %}
+		{% if user.username == user_profile.username %}
 			<a href='{% url "users:email_update" %}'>изменить</a>
 		{% endif %}
 	</p>
-	{% if user.username == username %}
+	{% if user.username == user_profile.username %}
 	<p><b>Пароль:</b> *** <a href='{% url "password_change" %}'>изменить</a></p>
 	{% endif %}
-	{% if page_obj.paginator.count > 0 %}
-		<br><p>Все отзывы пользователя: {{ page_obj.paginator.count }}</p><br>
-		{% for comment in page_obj %}
-			<p><a href="{% url "films:film" comment.film.id_kp %}"><b>{{ comment.film.name }} / {{ comment.film.name_orig }} ({{ comment.film.year }})</b></a></p>
-			<p><a href="{% url 'users:user' username=comment.author.username %}">{{ comment.author.username }}</a>: {{ comment.text }}<br>
-			{{ comment.created_at|date:"d M Y H:i" }}</p>
-			{% if not forloop.last %}
-					<br>
-			{% endif %}
-		{% endfor %}
-		<p align="center">{% include "includes/paginator.html" %}</p>
-	{% endif %}
+
+	<p>
+		Подписок: <a href="{% url 'users:user_following' user_profile.username %}">{{ following }}</a>
+		Подписчики: <a href="{% url 'users:user_followers' user_profile.username %}">{{ follower }}</a>
+	</p>
+	{% include "includes/film/comment.html" %}
 {% endif %}
 {% endblock %}
+
 

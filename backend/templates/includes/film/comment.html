@@ -1,0 +1,25 @@
+{% load static %}
+{% with request.resolver_match.view_name as view_name %}
+  {% if page_obj.paginator.count > 0 %}
+    <br><p>Всего отзывов о фильме: {{ len_coments }}</p><br>
+    {% for comment in page_obj %}
+      {% if view_name == 'users:user' %}
+        <p>
+          <a href="{% url "films:film" comment.film.id_kp %}">
+          <b>{{ comment.film.name }} / {{ comment.film.name_orig }} ({{ comment.film.year }})</b></a>
+        </p>
+      {% endif %}
+      <p>
+        {% if comment.author.avatar %}
+          <img src="{{ comment.author.avatar.url }}" alt="Аватар {{ username }}" class="avatar avatar-ico">
+        {% else %}
+          <img src="{% static 'images/no_foto.jpg' %}" alt="Аватар по умолчанию" class="avatar avatar-ico">
+        {% endif %}
+        <a href="{% url 'users:user' username=comment.author.username %}"><b>
+        {{ comment.author.username }}</b></a>: {{ comment.text }}<br>
+      {{ comment.created_at|date:"d M Y H:i" }}
+    </p>
+    {% endfor %}
+    <p align="center">{% include "includes/paginator.html" %}</p>
+  {% endif %}
+{% endwith %}

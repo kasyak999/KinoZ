@@ -91,6 +91,7 @@ class Category(MainModel):
     class Meta(MainModel.Meta):
         verbose_name = 'категория'
         verbose_name_plural = 'Категории'
+        default_related_name = 'categories'
 
 
 class Genres(MainModel):
@@ -119,7 +120,6 @@ class Coment(models.Model):
     film = models.ForeignKey(
         FilmsdModel,
         on_delete=models.CASCADE,
-        related_name='coments',
         verbose_name='Фильм'
     )
     author = models.ForeignKey(
@@ -130,6 +130,7 @@ class Coment(models.Model):
         verbose_name = 'комментарии'
         verbose_name_plural = 'Комментарии'
         ordering = ('-created_at',)
+        default_related_name = 'coments'
 
     def __str__(self) -> str:
         if len(self.text) > 50:
@@ -143,7 +144,7 @@ class Favorite(models.Model):
     """Избранные фильмы"""
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, verbose_name='Пользователь')
-    recipe = models.ForeignKey(
+    film = models.ForeignKey(
         FilmsdModel, on_delete=models.CASCADE, verbose_name='Фильм')
     created_at = models.DateTimeField(
         auto_now_add=True, verbose_name='Добавлен'
@@ -156,7 +157,7 @@ class Favorite(models.Model):
         default_related_name = 'favorites'
         constraints = [
             models.UniqueConstraint(
-                fields=['user', 'recipe'], name='unique_user_recipe')
+                fields=['user', 'film'], name='unique_user_film')
         ]
 
     def __str__(self):

@@ -9,4 +9,10 @@ urlpatterns = [
     path(
         'user/avatar/', views.AvatarUpdateView.as_view(),
         name='avatar_update'),
+    path(
+        'users/<str:username>/following/', views.FollowUserListView.as_view(),
+        {'list_type': 'following'}, name='user_following'),
+    path(
+        'users/<str:username>/followers/', views.FollowUserListView.as_view(),
+        {'list_type': 'followers'}, name='user_followers'),
 ]
