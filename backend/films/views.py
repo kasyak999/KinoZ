@@ -90,7 +90,7 @@ class FavoriteListView(LoginRequiredMixin, ListView):
 
 class DetailFilm(ListView):
     """Пост подробнее"""
-    # model = FilmsdModel
+    model = FilmsdModel
     template_name = 'films/film.html'
     pk_url_kwarg = 'id_kp'
     paginate_by = settings.OBJECTS_PER_PAGE
