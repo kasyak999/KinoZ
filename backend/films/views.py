@@ -188,16 +188,7 @@ class AddFilmView(FormView):
     def form_valid(self, form):
         """Обработка валидной первой формы"""
         film_id = form.cleaned_data['film_id']
-        film_data = information_film(film_id, self.request)
-        if film_data is None:
-            return self.render_to_response(
-                self.get_context_data(is_second_form=False))
-
-        second_form = self.second_form_class(initial=film_data)
-        return self.render_to_response(
-            self.get_context_data(
-                form=second_form, is_second_form=True)
-        )
+        return self.load_film_data(film_id, self.request)
 
     def post(self, request, *args, **kwargs):
         """Обработка отправки форм"""
@@ -210,23 +201,23 @@ class AddFilmView(FormView):
                     request, 'Фильм успешно добавлен в базу, '
                     'после проверки он будет доступен')
                 return redirect(reverse_lazy('films:add_film'))
-            return self.render_to_response(
-                self.get_context_data(form=second_form, is_second_form=True)
-            )
         return super().post(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         """Обработка GET-запроса для получения id фильма и загрузки данных"""
-        film_id = request.GET.get('id', None)
+        film_id = request.GET.get('id')
         if film_id:
-            # Загружаем данные фильма, если id передан
-            film_data = information_film(film_id, request)
-            if film_data:
-                # Если данные успешно загружены, создаём форму с этими данными
-                second_form = self.second_form_class(initial=film_data)
-                return self.render_to_response(
-                    self.get_context_data(
-                        form=second_form, is_second_form=True)
+            return self.load_film_data(film_id, request)
+        return self.render_to_response(self.get_context_data())
+
+    def load_film_data(self, film_id, request):
+        """Загрузка данных фильма"""
+        film_data = information_film(film_id, request)
+        if film_data:
+            return self.render_to_response(
+                self.get_context_data(
+                    form=self.second_form_class(initial=film_data),
+                    is_second_form=True
                 )
-        form = self.form_class()
-        return self.render_to_response(self.get_context_data(form=form))
+            )
+        return self.render_to_response(self.get_context_data())
