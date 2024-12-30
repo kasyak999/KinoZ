@@ -46,7 +46,6 @@ class SearchView(ListView):
             context['search'] = self.get_queryset().count()
         else:
             context['html_name'] = 'Поиск'
-        context['html_title'] = context['html_name']
         return context
 
 
@@ -57,35 +56,23 @@ class IndexListView(ListView):
     paginate_by = settings.OBJECTS_PER_PAGE
 
     def get_queryset(self):
-        return super().get_queryset().filter(
+        result = super().get_queryset().filter(
             verified=True,
             is_published=True
         ).select_related('cat').prefetch_related('genres', 'country')
 
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        context['html_name'] = 'Главная страница'
-        context['html_title'] = context['html_name']
-        return context
-
-
-class FavoriteListView(LoginRequiredMixin, ListView):
-    """Список избранных фильмов пользователя"""
-    model = FilmsdModel
-    template_name = 'films/index.html'
-    paginate_by = settings.OBJECTS_PER_PAGE
-
-    def get_queryset(self):
-        return FilmsdModel.objects.filter(
-            favorites__user=self.request.user,
-            verified=True,
-            is_published=True
-        ).prefetch_related('favorites', 'genres', 'country')
+        if self.kwargs.get('list_type') == 'favorite':
+            return result.filter(
+                favorites__user=self.request.user
+            ).prefetch_related('favorites')
+        return result
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context['html_name'] = 'Мое избранное'
-        context['html_title'] = context['html_name']
+        if self.kwargs.get('list_type') == 'favorite':
+            context['html_name'] = 'Мое избранное'
+        else:
+            context['html_name'] = 'Главная страница'
         return context
 
 
