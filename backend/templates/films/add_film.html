@@ -31,6 +31,7 @@
         {% csrf_token %}
         {{ form.as_table }}
       </table>
+      <p>Выберите жанр и страну фильма из списков, если нет такой то оставьте без изменений.</p>
       <input type="submit" value="Отправить на проверку" name="is_second_form">
     </form>
   {% else %}
