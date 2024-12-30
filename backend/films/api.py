@@ -3,6 +3,8 @@ from django.http import Http404
 from dotenv import load_dotenv
 import requests
 from .models import FilmsdModel
+from django.contrib import messages
+from django.shortcuts import redirect
 
 
 load_dotenv()
@@ -45,17 +47,18 @@ def add_scrinshot_film(data_kp):
         return scrinshot
 
 
-def information_film(kp: int):
+def information_film(kp: int, request=None):
     result = FilmsdModel.objects.filter(id_kp=kp).exists()
     if not result:
         return connection_api(kp)
+    return messages.error(request, 'Фильм уже существует в базе.')
 
 
 def connection_api(kp: int):
     """Собираем информацию о фильме из кинопоиска"""
     data_kp = KINOPOISK_URL + KINOPOISK_URL_MAIN + str(kp)
     response_kp = requests.get(data_kp, headers=DATA_KP)
-    # print(response_kp)
+    print(response_kp)
     if response_kp.status_code == 200:
         scrinshot = add_scrinshot_film(data_kp)
         response_kp = response_kp.json()

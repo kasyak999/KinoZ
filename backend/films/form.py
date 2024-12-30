@@ -1,5 +1,6 @@
 from django import forms
 from films.models import FilmsdModel, Coment, Favorite
+from django.core.exceptions import ValidationError
 
 
 class AddFilmBaza(forms.ModelForm):
@@ -22,13 +23,6 @@ class AddFilmBaza(forms.ModelForm):
         #     'country'
         # ]
 
-    # def save(self, commit=True):
-    #     instance = super().save(commit=False)
-    #     # Добавьте нужную логику перед сохранением
-    #     if commit:
-    #         instance.save()
-    #     return instance
-    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Устанавливаем скрытое поле
@@ -66,3 +60,26 @@ class AddFilmFavorites(forms.ModelForm):
         instance.film = film  # Задаём выбранный фильм
         instance.save()
         return instance
+
+
+class FilmLinkForm(forms.Form):
+    """Форма для ввода ссылки на фильм"""
+    film_id = forms.CharField(label='Ссылка на кинопоск', max_length=255)
+
+    def clean_film_id(self):
+        """Валидация и обработка ссылки на фильм"""
+        film_id = self.cleaned_data['film_id']
+        result = film_id.split('/')
+        if 'https:' not in result:
+            raise ValidationError('Ссылка на фильм не соответствует формату')
+
+        try:
+            id_film = int(result[4])
+        except (ValueError, TypeError, IndexError):
+            raise ValidationError('Неверный формат ссылки')
+
+        # # Проверка наличия фильма в базе
+        # if FilmsdModel.objects.filter(id_kp=id_film).exists():
+        #     raise ValidationError('Фильм уже есть в базе')
+
+        return id_film  # Возвращаем `id_film` для использования

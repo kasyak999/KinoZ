@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+{% load my_filters %}
+{% block title %}
+Добавить фильм
+{% endblock %}
+
+{% block content %}
+  <link rel="stylesheet" href="{% static 'css/film-film.css' %}" type="text/css">
+  <h3>Добавить фильм</h3><br>
+  {% if is_second_form %}
+    {% if form.poster.value%}
+      <div class="top">
+        <div class="top_right">
+          {% with form.poster.value|split as poster %}
+            <a href='{{ poster.0 }}' target="_blank">
+            {% include "includes/film/poster.html" %}</a>
+          {% endwith %}
+        </div>
+        {% if form.scrinshot.value %}
+          <div class="top_left">
+            {% for i in form.scrinshot.value|json_to_list %}
+              <a href='{{ i.imageUrl }}' target="_blank"><img src="{{ i.previewUrl }}"></a>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+    <form method="post">
+      <table>
+        {% csrf_token %}
+        {{ form.as_table }}
+      </table>
+      <input type="submit" value="Отправить на проверку" name="is_second_form">
+    </form>
+  {% else %}
+    <p>Введите ссылку фильма на кинопоиске.</p>
+    <p>Пример: <b>https://www.kinopoisk.ru/film/594554/</b></p><br>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="Отправить на проверку">
+    </form>
+  {% endif %}
+{% endblock %}
