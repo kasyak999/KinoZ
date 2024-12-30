@@ -15,6 +15,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.db.models import Count, Exists, OuterRef
 from django.http import HttpResponse
+from django.urls import reverse_lazy
 
 
 User = get_user_model()
@@ -94,40 +95,24 @@ class DetailFilm(ListView):
     template_name = 'films/film.html'
     pk_url_kwarg = 'id_kp'
     paginate_by = settings.OBJECTS_PER_PAGE
+    # success_url = reverse_lazy('birthday:list') 
 
     def dispatch(self, request, *args, **kwargs):
-        # try:
-        #     return super().dispatch(request, *args, **kwargs)
-        # except self.model.DoesNotExist:
-        #     messages.error(request, (
-        #         'Фильма нет в базе. Нажмите «Отправить на проверку» '
-        #         'и после проверки его добавим.'))
-        #     return redirect(
-        #         reverse(
-        #             'films:add_film_id', kwargs={
-        #                 'pk': self.kwargs[self.pk_url_kwarg]
-        #             }
-        #         )
-        #     )
         result = FilmsdModel.objects.filter(
             id_kp=self.kwargs[self.pk_url_kwarg]).first()
         if not result:
             messages.error(request, (
                 'Фильма нет в базе. Нажмите «Отправить на проверку» '
                 'и после проверки его добавим.'))
-            return redirect(
-                reverse(
-                    'films:add_film_id', kwargs={
-                        'pk': self.kwargs[self.pk_url_kwarg]
-                    }
-                )
+            return redirect(reverse_lazy(
+                'films:add_film_id',
+                kwargs={'pk': self.kwargs[self.pk_url_kwarg]})
             )
         if not result.verified and not result.is_published:
-            # Если фильм есть, но не опубликован, выводим сообщение о том, что он уже в базе
             messages.info(request, (
                 'Фильм уже существует в базе, но еще не опубликован. '
                 'После проверки его сделаем доступным.'))
-            return redirect('films:add_film')
+            return redirect(reverse_lazy('films:add_film'))
         return super().dispatch(request, *args, **kwargs)
 
     @property
@@ -195,7 +180,6 @@ class CreateFilm(CreateView):
         """Автоматически добавляем фильм в базу, если он ещё не существует"""
         film_id = self.kwargs[self.pk_url_kwarg]
         if self.model.objects.filter(id_kp=film_id).exists():
-            messages.error(request, 'Фильм уже существует в базе.')
             return redirect('films:film', id_kp=film_id)
         return super().dispatch(request, *args, **kwargs)
 
