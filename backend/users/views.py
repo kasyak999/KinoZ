@@ -1,15 +1,12 @@
 from typing import Any
-from django.views.generic import UpdateView, TemplateView, ListView
+from django.views.generic import UpdateView, ListView
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 from django.conf import settings
-from films.models import Coment
-from .form import EmailUpdateForm, AvatarForm
-from .models import Follow
 from django.db.models import Count
-
+from .form import EmailUpdateForm, AvatarForm
 
 User = get_user_model()
 

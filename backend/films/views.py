@@ -1,21 +1,16 @@
 from typing import Any
-from django.views.generic import DetailView, ListView, CreateView, FormView
-from django.shortcuts import redirect, render
-from django.urls import reverse
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.paginator import Paginator
-from django.db.models import Q
+from django.views.generic import ListView, FormView
+from django.shortcuts import redirect
+from django.db.models import Q, Count
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.conf import settings
-from .api import information_film
-from .form import AddFilmBaza, ComentForm, AddFilmFavorites, FilmLinkForm
-from .models import FilmsdModel, Coment, Favorite
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.db.models import Count, Exists, OuterRef
-from django.http import HttpResponse
 from django.urls import reverse_lazy
+from .api import information_film
+from .form import AddFilmBaza, ComentForm, AddFilmFavorites, FilmLinkForm
+from .models import FilmsdModel
 
 
 User = get_user_model()

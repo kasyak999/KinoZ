@@ -1,10 +1,9 @@
 import os
 from django.http import Http404
+from django.contrib import messages
 from dotenv import load_dotenv
 import requests
 from .models import FilmsdModel
-from django.contrib import messages
-from django.shortcuts import redirect
 
 
 load_dotenv()
