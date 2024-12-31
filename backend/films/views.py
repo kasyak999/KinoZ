@@ -1,5 +1,5 @@
 from typing import Any
-from django.views.generic import DetailView, ListView, CreateView
+from django.views.generic import DetailView, ListView, CreateView, FormView
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -9,12 +9,13 @@ from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.conf import settings
 from .api import information_film
-from .form import AddFilmBaza, ComentForm, AddFilmFavorites
+from .form import AddFilmBaza, ComentForm, AddFilmFavorites, FilmLinkForm
 from .models import FilmsdModel, Coment, Favorite
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.db.models import Count, Exists, OuterRef
 from django.http import HttpResponse
+from django.urls import reverse_lazy
 
 
 User = get_user_model()
@@ -45,7 +46,6 @@ class SearchView(ListView):
             context['search'] = self.get_queryset().count()
         else:
             context['html_name'] = 'Поиск'
-        context['html_title'] = context['html_name']
         return context
 
 
@@ -56,35 +56,23 @@ class IndexListView(ListView):
     paginate_by = settings.OBJECTS_PER_PAGE
 
     def get_queryset(self):
-        return super().get_queryset().filter(
+        result = super().get_queryset().filter(
             verified=True,
             is_published=True
         ).select_related('cat').prefetch_related('genres', 'country')
 
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        context['html_name'] = 'Главная страница'
-        context['html_title'] = context['html_name']
-        return context
-
-
-class FavoriteListView(LoginRequiredMixin, ListView):
-    """Список избранных фильмов пользователя"""
-    model = FilmsdModel
-    template_name = 'films/index.html'
-    paginate_by = settings.OBJECTS_PER_PAGE
-
-    def get_queryset(self):
-        return FilmsdModel.objects.filter(
-            favorites__user=self.request.user,
-            verified=True,
-            is_published=True
-        ).prefetch_related('favorites', 'genres', 'country')
+        if self.kwargs.get('list_type') == 'favorite':
+            return result.filter(
+                favorites__user=self.request.user
+            ).prefetch_related('favorites')
+        return result
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context['html_name'] = 'Мое избранное'
-        context['html_title'] = context['html_name']
+        if self.kwargs.get('list_type') == 'favorite':
+            context['html_name'] = 'Мое избранное'
+        else:
+            context['html_name'] = 'Главная страница'
         return context
 
 
@@ -94,19 +82,33 @@ class DetailFilm(ListView):
     template_name = 'films/film.html'
     pk_url_kwarg = 'id_kp'
     paginate_by = settings.OBJECTS_PER_PAGE
-    # form_class = ComentForm
+    # success_url = reverse_lazy('birthday:list') 
 
     def dispatch(self, request, *args, **kwargs):
-        try:
-            return super().dispatch(request, *args, **kwargs)
-        except self.model.DoesNotExist:
+        result = FilmsdModel.objects.filter(
+            id_kp=self.kwargs[self.pk_url_kwarg]).first()
+        if not result:
+            messages.error(request, (
+                'Фильма нет в базе. Нажмите «Отправить на проверку» '
+                'и после проверки его добавим.'))
+            # return redirect(reverse_lazy(
+            #     'films:add_film',
+            #     kwargs={'id': self.kwargs[self.pk_url_kwarg]})
+            # )
             return redirect(
-                reverse(
-                    'films:add_film_id', kwargs={
-                        'pk': self.kwargs[self.pk_url_kwarg]
-                    }
-                )
-            )
+                reverse_lazy('films:add_film') + f'?id={self.kwargs[self.pk_url_kwarg]}')
+
+        if not result.verified and not result.is_published:
+            messages.info(request, (
+                'Фильм уже существует в базе, но еще не опубликован. '
+                'После проверки его сделаем доступным.'))
+            return redirect(reverse_lazy('films:add_film'))
+        return super().dispatch(request, *args, **kwargs)
+
+    @property
+    def _result_api(self):
+        rez = information_film(self.kwargs[self.pk_url_kwarg])
+        return rez
 
     @property
     def get_film(self):
@@ -158,47 +160,51 @@ class DetailFilm(ListView):
         return redirect('films:film', id_kp=film_id)
 
 
-class CreateFilm(CreateView):
-    """Добавление нового фильма"""
-    model = FilmsdModel
-    template_name = 'films/add.html'
-    form_class = AddFilmBaza
+class AddFilmView(FormView):
+    """Добавление фильма с двумя этапами"""
+    template_name = 'films/add_film.html'
+    form_class = FilmLinkForm  # Форма для проверки ссылки
+    second_form_class = AddFilmBaza  # Основная форма для добавления фильма
 
-    @property
-    def _result_api(self):
-        rez = information_film(self.kwargs[self.pk_url_kwarg])
-        return rez
+    def get_context_data(self, **kwargs):
+        """Контекст для отображения формы"""
+        context = super().get_context_data(**kwargs)
+        context['is_second_form'] = kwargs.get('is_second_form', False)
+        return context
 
-    def get_success_url(self):
-        messages.success(
-            self.request,
-            'Фильм успешно добавлен в базу, после проверки он будет доступен')
-        return reverse(':filmsadd_film')
+    def form_valid(self, form):
+        """Обработка валидной первой формы"""
+        film_id = form.cleaned_data['film_id']
+        return self.load_film_data(film_id, self.request)
 
-    def get_initial(self):
-        initial = self._result_api
-        if initial:
-            return initial
-        return super().get_initial()
+    def post(self, request, *args, **kwargs):
+        """Обработка отправки форм"""
+        # Если пришёл POST-запрос на основную форму
+        if 'is_second_form' in request.POST:
+            second_form = self.second_form_class(request.POST)
+            if second_form.is_valid():
+                second_form.save()
+                messages.success(
+                    request, 'Фильм успешно добавлен в базу, '
+                    'после проверки он будет доступен')
+                return redirect(reverse_lazy('films:add_film'))
+        return super().post(request, *args, **kwargs)
 
+    def get(self, request, *args, **kwargs):
+        """Обработка GET-запроса для получения id фильма и загрузки данных"""
+        film_id = request.GET.get('id')
+        if film_id:
+            return self.load_film_data(film_id, request)
+        return self.render_to_response(self.get_context_data())
 
-def add_film(request):
-    """Работа с сылкой кинопоиска"""
-    template_name = 'films/add_kinopoisk.html'
-    if request.method == 'POST':
-        film_id = request.POST.get('film_id')
-        result = film_id.split('/')
-        if 'https:' in result:
-            try:
-                id_film = int(result[4])
-            except (ValueError, TypeError, IndexError):
-                messages.error(request, 'Неверный формат cсылки')
-            else:  # если все ок
-                bd = FilmsdModel.objects.filter(id_kp=id_film)
-                if not bd:
-                    return redirect('films:add_film_id', id_film)
-                messages.error(request, 'Такой фильм уже есть в базе')
-        else:
-            messages.error(
-                request, 'Ссылка на фильма не соответствует формату')
-    return render(request, template_name)
+    def load_film_data(self, film_id, request):
+        """Загрузка данных фильма"""
+        film_data = information_film(film_id, request)
+        if film_data:
+            return self.render_to_response(
+                self.get_context_data(
+                    form=self.second_form_class(initial=film_data),
+                    is_second_form=True
+                )
+            )
+        return self.render_to_response(self.get_context_data())

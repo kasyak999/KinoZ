@@ -15,6 +15,17 @@
     <main>
       {% include "includes/menu.html" %}
       <div class="content">
+        {% if messages %}
+          <ul>{% for message in messages %}
+            <li>
+              {% if message.tags == 'error' %}
+                <font color='red'>
+              {% else %}
+                <font color='green'>
+              {% endif %}
+              {{ message }}</font></li>
+            {% endfor %}</ul>
+        {% endif %}
         {% block content %}{% endblock%}
       </div>
     </main>

@@ -60,17 +60,26 @@ class FollowUserListView(LoginRequiredMixin, ListView):
             ), username=self.kwargs[self.pk_url_kwarg]
         )
         list_type = self.kwargs.get(self.list_type)
-        related_name = (
-            'followers' if list_type == 'following' else 'followings')
-        return getattr(self.user_profile, related_name).select_related(
-            'following', 'user'
-        )
+        # related_name = (
+        #     'followers' if list_type == 'following' else 'followings')
+        # print(related_name)
+        # return getattr(self.user_profile, related_name).select_related(
+        #     'following', 'user'
+        # )
+        if list_type == 'following':
+            return self.user_profile.followers.all().select_related(
+                'following', 'user')
+        return self.user_profile.followings.all().select_related(
+            'following', 'user')
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context['user_profile'] = self.user_profile
-        context['following'] = self.user_profile.following_count
-        context['follower'] = self.user_profile.follower_count
+        print(self.kwargs.get(self.list_type))
+        if self.kwargs.get(self.list_type) == 'following':
+            context['follow_count'] = self.user_profile.follower_count
+        else:
+            context['follow_count'] = self.user_profile.following_count
         return context
 
 
