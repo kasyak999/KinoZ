@@ -1,12 +1,13 @@
 from typing import Any
 from django.views.generic import UpdateView, ListView
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.db.models import Count
-from .form import EmailUpdateForm, AvatarForm
+from .form import EmailUpdateForm, AvatarForm, AddFollow
+
 
 User = get_user_model()
 
@@ -16,6 +17,7 @@ class PersonalAccount(LoginRequiredMixin, ListView):
     template_name = 'users/user.html'
     pk_url_kwarg = 'username'
     paginate_by = settings.OBJECTS_PER_PAGE
+    form_class = AddFollow
 
     def get_queryset(self):
         self.user_profile = get_object_or_404(
@@ -34,7 +36,27 @@ class PersonalAccount(LoginRequiredMixin, ListView):
         context['following'] = self.user_profile.following_count
         context['follower'] = self.user_profile.follower_count
         context['len_coments'] = self.user_profile.comments_count
+        if self.request.user.is_authenticated:
+            context['is_follow'] = self.user_profile.followings.filter(
+                user=self.request.user).exists()
         return context
+
+    def post(self, request, *args, **kwargs):
+        """Добавление или удаление фильма из избранного"""
+        username = self.kwargs[self.pk_url_kwarg]
+        self.get_queryset()
+        result = self.user_profile.followings.filter(user=request.user)
+        if not result.exists():
+            form_data = {
+                'user': request.user,
+                'following': self.user_profile
+            }
+            form = self.form_class(data=form_data)
+            if form.is_valid():
+                form.save()
+        else:
+            result.delete()
+        return redirect('users:user', username=username)
 
 
 class FollowUserListView(LoginRequiredMixin, ListView):
@@ -57,12 +79,6 @@ class FollowUserListView(LoginRequiredMixin, ListView):
             ), username=self.kwargs[self.pk_url_kwarg]
         )
         list_type = self.kwargs.get(self.list_type)
-        # related_name = (
-        #     'followers' if list_type == 'following' else 'followings')
-        # print(related_name)
-        # return getattr(self.user_profile, related_name).select_related(
-        #     'following', 'user'
-        # )
         if list_type == 'following':
             return self.user_profile.followers.all().select_related(
                 'following', 'user')
@@ -72,7 +88,6 @@ class FollowUserListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context['user_profile'] = self.user_profile
-        print(self.kwargs.get(self.list_type))
         if self.kwargs.get(self.list_type) == 'following':
             context['follow_count'] = self.user_profile.follower_count
         else:
