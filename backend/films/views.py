@@ -1,5 +1,5 @@
 from typing import Any
-from django.views.generic import ListView, FormView
+from django.views.generic import ListView, FormView, UpdateView
 from django.shortcuts import redirect
 from django.db.models import Q, Count
 from django.contrib.auth import get_user_model
@@ -7,10 +7,13 @@ from django.contrib import messages
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from .api import information_film
-from .form import AddFilmBaza, ComentForm, AddFilmFavorites, FilmLinkForm
-from .models import FilmsdModel
+from .form import (
+    AddFilmBaza, ComentForm, AddFilmFavorites, FilmLinkForm, FormComment)
+from .models import FilmsdModel, Coment
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .mixin import OnlyAuthorMixin, FilmMixin
 
 
 User = get_user_model()
@@ -71,35 +74,13 @@ class IndexListView(ListView):
         return context
 
 
-class DetailFilm(ListView):
+class DetailFilm(FilmMixin, ListView):
     """Пост подробнее"""
     model = FilmsdModel
     template_name = 'films/film.html'
     pk_url_kwarg = 'id_kp'
     paginate_by = settings.OBJECTS_PER_PAGE
     # success_url = reverse_lazy('birthday:list')
-
-    def dispatch(self, request, *args, **kwargs):
-        result = FilmsdModel.objects.filter(
-            id_kp=self.kwargs[self.pk_url_kwarg]).first()
-        if not result:
-            messages.error(request, (
-                'Фильма нет в базе. Нажмите «Отправить на проверку» '
-                'и после проверки его добавим.'))
-            # return redirect(reverse_lazy(
-            #     'films:add_film',
-            #     kwargs={'id': self.kwargs[self.pk_url_kwarg]})
-            # )
-            return redirect(
-                reverse_lazy('films:add_film')
-                + f'?id={self.kwargs[self.pk_url_kwarg]}')
-
-        if not result.verified and not result.is_published:
-            messages.info(request, (
-                'Фильм уже существует в базе, но еще не опубликован. '
-                'После проверки его сделаем доступным.'))
-            return redirect(reverse_lazy('films:add_film'))
-        return super().dispatch(request, *args, **kwargs)
 
     @property
     def _result_api(self):
@@ -204,3 +185,21 @@ class AddFilmView(FormView):
                 )
             )
         return self.render_to_response(self.get_context_data())
+
+
+class ComentUpdateView(LoginRequiredMixin, OnlyAuthorMixin, UpdateView):
+    """Изменение комментария"""
+    model = Coment
+    template_name = 'films/comment.html'
+    form_class = FormComment
+    pk_url_kwarg = 'comment_id'
+
+    def get_queryset(self):
+        return super().get_queryset().filter(
+            pk=self.kwargs['comment_id'],
+        )
+
+    def get_success_url(self):
+        return reverse(
+            'films:film', kwargs={'id_kp': self.kwargs['film_id_kp']}
+        )

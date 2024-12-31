@@ -3,6 +3,15 @@ from films.models import FilmsdModel, Coment, Favorite
 from django.core.exceptions import ValidationError
 
 
+class FormComment(forms.ModelForm):
+    """Форма создания коментария."""
+    class Meta:
+        model = Coment
+        fields = (
+            'text',
+        )
+
+
 class AddFilmBaza(forms.ModelForm):
 
     class Meta:

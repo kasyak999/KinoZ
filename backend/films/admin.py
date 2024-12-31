@@ -120,6 +120,7 @@ class FilmsAdmin(admin.ModelAdmin):
 @admin.register(Coment)
 class ComentAdmin(admin.ModelAdmin):
     list_display = (
+        'id',
         'image_preview',
         'text',
         'author',

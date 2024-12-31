@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+{% load my_filters %}
+{% block title %}
+Изменить комментарий
+{% endblock %}
+
+{% block content %}
+
+<form method="post">
+  <table>
+    {% csrf_token %}
+    {{ form.as_table }}
+  </table>
+  <input type="submit" value="Изменить">
+</form>
+
+{% endblock %}

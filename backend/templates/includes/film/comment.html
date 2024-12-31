@@ -16,8 +16,11 @@
           <img src="{% static 'images/no_foto.jpg' %}" alt="Аватар по умолчанию" class="avatar avatar-ico">
         {% endif %}
         <a href="{% url 'users:user' username=comment.author.username %}"><b>
-        {{ comment.author.username }}</b></a>: {{ comment.text }}<br>
-      {{ comment.created_at|date:"d M Y H:i" }}
+        {{ comment.author.username }}</b></a>: {{ comment.text }}
+        {% if user == comment.author %}
+        <a href="{% url 'films:edit_comment' object.id_kp comment.id %}">изменить</a>
+        {% endif %}
+      <p>{{ comment.created_at|date:"d M Y H:i" }}</p>
     </p>
     {% endfor %}
     <p align="center">{% include "includes/paginator.html" %}</p>
