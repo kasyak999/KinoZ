@@ -6,7 +6,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.db.models import Count
-from .form import EmailUpdateForm, AvatarForm
+from .form import EmailUpdateForm, AvatarForm, AddFollow
+
 
 User = get_user_model()
 
@@ -16,6 +17,7 @@ class PersonalAccount(LoginRequiredMixin, ListView):
     template_name = 'users/user.html'
     pk_url_kwarg = 'username'
     paginate_by = settings.OBJECTS_PER_PAGE
+    form_class = AddFollow
 
     def get_queryset(self):
         self.user_profile = get_object_or_404(
@@ -34,6 +36,9 @@ class PersonalAccount(LoginRequiredMixin, ListView):
         context['following'] = self.user_profile.following_count
         context['follower'] = self.user_profile.follower_count
         context['len_coments'] = self.user_profile.comments_count
+        if self.request.user.is_authenticated:
+            context['is_follow'] = self.user_profile.followings.filter(
+                user=self.request.user).exists()
         return context
 
 

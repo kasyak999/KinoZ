@@ -6,7 +6,17 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-	<h3>Учетная запись {{ user_profile.avatar.username }}</h3>
+	<h3>Учетная запись {{ user_profile.username }}</h3>
+	<div style="display: flex; justify-content: flex-end;">
+		<form method="post">
+			{% csrf_token %}
+			{% if is_follow %}
+			<input type="submit" value="Отписаться" name="favorite">
+			{% else %}
+			<input type="submit" value="Подписаться" name="favorite">
+			{% endif %} 
+		</form>
+	</div>
 	<p>{% if user_profile.avatar %}
 		<a href="{{ user_profile.avatar.url }}" target="_blank">
 		<img src="{{ user_profile.avatar.url }}" alt="Аватар {{ username }}" class="avatar">
