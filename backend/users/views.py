@@ -7,6 +7,7 @@ from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.db.models import Count
 from .form import EmailUpdateForm, AvatarForm, AddFollow
+from django.shortcuts import redirect
 
 
 User = get_user_model()
@@ -41,6 +42,29 @@ class PersonalAccount(LoginRequiredMixin, ListView):
                 user=self.request.user).exists()
         return context
 
+    def post(self, request, *args, **kwargs):
+        """Добавление или удаление фильма из избранного"""
+        username = self.kwargs[self.pk_url_kwarg]
+        self.get_queryset()
+        result = self.user_profile.followings.filter(user=request.user)
+        if not result.exists():
+            form_data = {
+                'user': request.user,
+                'following': self.user_profile
+            }
+            form = self.form_class(data=form_data)
+            if form.is_valid():
+                form.save()
+        else:
+            result.delete()
+        return redirect('users:user', username=username)
+
+    # def get_success_url(self):
+    #     # messages.success(
+    #     #     self.request,
+    #     #     'Фильм успешно добавлен в базу, после проверки он будет доступен')
+    #     return reverse('users:user')
+
 
 class FollowUserListView(LoginRequiredMixin, ListView):
     """Подписан пользователь"""
@@ -62,12 +86,6 @@ class FollowUserListView(LoginRequiredMixin, ListView):
             ), username=self.kwargs[self.pk_url_kwarg]
         )
         list_type = self.kwargs.get(self.list_type)
-        # related_name = (
-        #     'followers' if list_type == 'following' else 'followings')
-        # print(related_name)
-        # return getattr(self.user_profile, related_name).select_related(
-        #     'following', 'user'
-        # )
         if list_type == 'following':
             return self.user_profile.followers.all().select_related(
                 'following', 'user')
@@ -77,7 +95,6 @@ class FollowUserListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context['user_profile'] = self.user_profile
-        print(self.kwargs.get(self.list_type))
         if self.kwargs.get(self.list_type) == 'following':
             context['follow_count'] = self.user_profile.follower_count
         else:

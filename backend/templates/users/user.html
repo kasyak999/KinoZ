@@ -7,16 +7,18 @@
 {% block content %}
 {% if user.is_authenticated %}
 	<h3>Учетная запись {{ user_profile.username }}</h3>
-	<div style="display: flex; justify-content: flex-end;">
-		<form method="post">
-			{% csrf_token %}
-			{% if is_follow %}
-			<input type="submit" value="Отписаться" name="favorite">
-			{% else %}
-			<input type="submit" value="Подписаться" name="favorite">
-			{% endif %} 
-		</form>
-	</div>
+	{% if user.username != user_profile.username %}
+		<div style="display: flex; justify-content: flex-end;">
+			<form method="post">
+				{% csrf_token %}
+				{% if is_follow and user.username != user_profile.username %}
+					<input type="submit" value="Отписаться" name="favorite">
+				{% else %}
+					<input type="submit" value="Подписаться" name="favorite">
+				{% endif %} 
+			</form>
+		</div>
+	{% endif %} 
 	<p>{% if user_profile.avatar %}
 		<a href="{{ user_profile.avatar.url }}" target="_blank">
 		<img src="{{ user_profile.avatar.url }}" alt="Аватар {{ username }}" class="avatar">
