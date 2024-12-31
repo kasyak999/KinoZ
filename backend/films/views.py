@@ -77,7 +77,7 @@ class DetailFilm(ListView):
     template_name = 'films/film.html'
     pk_url_kwarg = 'id_kp'
     paginate_by = settings.OBJECTS_PER_PAGE
-    # success_url = reverse_lazy('birthday:list') 
+    # success_url = reverse_lazy('birthday:list')
 
     def dispatch(self, request, *args, **kwargs):
         result = FilmsdModel.objects.filter(
@@ -91,7 +91,8 @@ class DetailFilm(ListView):
             #     kwargs={'id': self.kwargs[self.pk_url_kwarg]})
             # )
             return redirect(
-                reverse_lazy('films:add_film') + f'?id={self.kwargs[self.pk_url_kwarg]}')
+                reverse_lazy('films:add_film')
+                + f'?id={self.kwargs[self.pk_url_kwarg]}')
 
         if not result.verified and not result.is_published:
             messages.info(request, (
