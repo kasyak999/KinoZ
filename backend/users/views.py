@@ -1,13 +1,12 @@
 from typing import Any
 from django.views.generic import UpdateView, ListView
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.db.models import Count
 from .form import EmailUpdateForm, AvatarForm, AddFollow
-from django.shortcuts import redirect
 
 
 User = get_user_model()
@@ -58,12 +57,6 @@ class PersonalAccount(LoginRequiredMixin, ListView):
         else:
             result.delete()
         return redirect('users:user', username=username)
-
-    # def get_success_url(self):
-    #     # messages.success(
-    #     #     self.request,
-    #     #     'Фильм успешно добавлен в базу, после проверки он будет доступен')
-    #     return reverse('users:user')
 
 
 class FollowUserListView(LoginRequiredMixin, ListView):
