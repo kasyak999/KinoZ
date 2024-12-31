@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+{{ html_name }}
+{% endblock %}
+
+{% block content %}
+  {% with request.resolver_match.view_name as view_name %}
+    {% if user.is_authenticated %}
+      {% if view_name == 'users:user_following' %}
+        <h3>{{ user_profile }} подписался: {{ following }}</h3>
+      {% else %}
+        <h3>Подписчики {{ user_profile }}: {{ follower }}</h3>
+      {% endif %}
+
+      {% for object in object_list %}
+        {% if view_name == 'users:user_following' %}
+          {{ object.following.username}} - {{ object.following.id}}<br>
+        {% else  %}
+          {{ object.user.username}} - {{ object.user.id}}<br>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+{% endblock %}

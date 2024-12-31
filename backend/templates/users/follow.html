@@ -5,21 +5,39 @@
 {% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/index-index.css' %}" type="text/css">
+{% if user.is_authenticated %}  
   {% with request.resolver_match.view_name as view_name %}
-    {% if user.is_authenticated %}
-      {% if view_name == 'users:user_following' %}
-        <h3>{{ user_profile }} подписался: {{ following}}</h3>
-      {% else %}
-        <h3>Подписчики {{ user_profile }}: {{ follower }}</h3>
-      {% endif %}
-
+    {% if view_name == 'users:user_following' %}
+      <h3>{{ user_profile }} подписался: {{ follow_count }}</h3>
       {% for object in object_list %}
-        {% if view_name == 'users:user_following' %}
-          {{ object.following.username}} - {{ object.following.id}}<br>
-        {% else  %}
-          {{ object.user.username}} - {{ object.user.id}}<br>
-        {% endif %}
+        {% include "users/follow_user.html" with user=object.following %}
+      {% endfor %}
+    {% else %}
+      <h3>Подписчики {{ user_profile }}: {{ follow_count }}</h3>
+      {% for object in object_list %}
+        {% include "users/follow_user.html" with user=object.user %}
       {% endfor %}
     {% endif %}
   {% endwith %}
+{% endif %}
+<p align="center">{% include "includes/paginator.html" %}</p>
+
+
+          {% comment %} <div class="osnova">
+            <div class="osnova-head">
+              <div>
+                {% if object.user.avatar %}
+                  <img src="{{ object.user.avatar.url }}" alt="Аватар">
+                {% else %}
+                  <img src="{% static 'images/no_foto.jpg' %}" alt="Аватар по умолчанию">
+                {% endif %}
+              </div>
+              <div>
+                <h2><a href="{% url 'users:user' username=object.user.username %}">{{ object.user.username }}</a></h2>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+          <p align="center">{% include "includes/paginator.html" %}</p> {% endcomment %}
 {% endblock %}
