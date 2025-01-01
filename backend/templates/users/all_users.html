@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load my_filters %} 
+{% load static %}
+
+{% block title %}
+  Пользователи
+{% endblock %}
+
+{% block content %}   
+<link rel="stylesheet" href="{% static 'css/users.css' %}" type="text/css">
+  <h3>Пользователи</h3>
+
+  <form method="get" action="">
+    <label>Поиск по логину: </label>
+    <input type="text" name="search" placeholder="Поиск по логину" value="{{ request.GET.search }}">
+    <input type="submit" value="Искать">
+  </form>
+
+  <div class="osnova">
+    {% for object in object_list %}
+      {% include "includes/users/object_list.html" with user=object %}
+    {% endfor %}
+  </div>
+
+  <p align="center">{% include "includes/paginator.html" %}</p>
+
+{% endblock %}

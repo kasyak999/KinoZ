@@ -1,6 +1,6 @@
 from typing import Any
 from django.views.generic import UpdateView, ListView
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
@@ -63,7 +63,7 @@ class FollowUserListView(LoginRequiredMixin, ListView):
     """Подписан пользователь"""
     template_name = 'users/follow.html'
     pk_url_kwarg = 'username'
-    paginate_by = settings.OBJECTS_PER_PAGE
+    paginate_by = settings.OBJECTS_PER_PAGE * 2
     list_type = 'list_type'
 
     def get_queryset(self):
@@ -120,6 +120,15 @@ class AvatarUpdateView(UserUpdateBaseView):
     template_name = 'users/avatar.html'
 
 
-def page_not_found(request, exception):
-    """страницы 404"""
-    return render(request, 'users/404.html', status=404)
+class AllUsers(ListView):
+    """Список всех пользователей и поиск"""
+    model = User
+    template_name = 'users/all_users.html'
+    paginate_by = settings.OBJECTS_PER_PAGE * 2
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get('search')
+        if query:
+            queryset = queryset.filter(username__icontains=query)
+        return queryset

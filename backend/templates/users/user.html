@@ -30,6 +30,8 @@
 		<a href='{% url "users:avatar_update" %}'>изменить аватар</a>
 	{% endif %}
 	</p>
+	<p><b>Имя:</b> {{ user_profile.first_name }}</p>
+	<p><b>Фамилия:</b> {{ user_profile.last_name }}</p>
 	<p><b>Email:</b> {{ user_profile.email }}
 		{% if user.username == user_profile.username %}
 			<a href='{% url "users:email_update" %}'>изменить</a>
