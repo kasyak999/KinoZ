@@ -27,14 +27,14 @@
 		<img src="{% static 'images/no_foto.jpg' %}" alt="Аватар по умолчанию" class="avatar">
 	{% endif %}
 	{% if user.username == user_profile.username %}
-		<a href='{% url "users:avatar_update" %}'>изменить аватар</a>
+		<a href='{% url "users:edit_account" username=user.username %}' title="Изменить">
+      <img src="{% static 'images/izm.png' %}" class="izm-del-ico">
+    </a>
 	{% endif %}
 	</p>
-	<p><b>Email:</b> {{ user_profile.email }}
-		{% if user.username == user_profile.username %}
-			<a href='{% url "users:email_update" %}'>изменить</a>
-		{% endif %}
-	</p>
+	<p><b>Имя:</b> {{ user_profile.first_name }}</p>
+	<p><b>Фамилия:</b> {{ user_profile.last_name }}</p>
+	<p><b>Email:</b> {{ user_profile.email }}</p>
 	{% if user.username == user_profile.username %}
 	<p><b>Пароль:</b> *** <a href='{% url "password_change" %}'>изменить</a></p>
 	{% endif %}

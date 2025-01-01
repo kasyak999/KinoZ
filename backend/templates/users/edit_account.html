@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+Личный кабинет
+{% endblock %}
+
+{% block content %}
+    <h3>Редактирование учетной записи</h3>
+    {% if user.is_authenticated %}
+    <form method="post">
+      <table>
+        {% csrf_token %}
+        {{ form.as_table }}
+      </table>
+      <input type="submit" value="Добавить отзыв" name="comment">
+      </form>
+    <a href="{% url 'users:user' username=request.user.username %}">Отмена</a>
+
+    {% endif %}
+{% endblock %}

@@ -35,7 +35,7 @@ class SearchView(ListView):
                 | Q(name_orig__iregex=self.request.GET.get('search'))
             ).select_related('cat').prefetch_related('genres', 'country')
         else:
-            return result.none()
+            return result
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)

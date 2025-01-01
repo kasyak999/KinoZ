@@ -51,7 +51,7 @@ main {
   .menu {
     position: sticky; /* двигается вместе с браузером */
     top: 0;/**/
-    max-height: 200px; /**/
+    max-height: 320px; /**/
     /* height: 260px; /**/
     border: 1px solid #006600;  /*рамка*/
     border-radius: 10px; /*закругление*/
@@ -168,7 +168,9 @@ form input[type="text"] , form textarea {
   border-radius: 30%;
   border: 3px solid #006600;  /*рамка*/
 }
-/* .avatar-ico {
-  width: 40px;
-  height: 40px;
-} */
+
+.izm-del-ico {
+  width: 22px;
+  height: 22px;
+  border: 0
+}

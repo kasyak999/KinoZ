@@ -14,9 +14,9 @@
             {% else %}
               <a href="{% url 'users:user' username=comment.author.username %}">
               {% if comment.author.avatar %}
-                <img src="{{ comment.author.avatar.url }}" alt="Аватар {{ username }}" class='avatar'>
+                <img src="{{ comment.author.avatar.url }}" class='avatar'>
               {% else %}
-                <img src="{% static 'images/no_foto.jpg' %}" alt="Аватар по умолчанию" class='avatar'>
+                <img src="{% static 'images/no_foto.jpg' %}" class='avatar'>
               {% endif %}
               </a>
             {% endif %}
@@ -31,11 +31,11 @@
             <p><a href="{% url 'users:user' username=comment.author.username %}"><b>
             {{ comment.author.username }}</b></a>: {{ comment.text }}&nbsp;&nbsp;
             {% if user == comment.author %}
-              <a href="{% url 'films:edit_comment' comment.film.id_kp comment.id %}">
-                <img src="{% static 'images/izm.png' %}" alt="Изменить" class="izm-del-ico">
+              <a href="{% url 'films:edit_comment' comment.film.id_kp comment.id %}" title="Изменить">
+                <img src="{% static 'images/izm.png' %}" class="izm-del-ico">
               </a>
-              <a href="{% url 'films:delete_comment' comment.film.id_kp comment.id %}">
-                <img src="{% static 'images/del.png' %}" alt="Удалить" class="izm-del-ico">
+              <a href="{% url 'films:delete_comment' comment.film.id_kp comment.id %}" title="Удалить">
+                <img src="{% static 'images/del.png' %}" class="izm-del-ico">
               </a>
             {% endif %}
             </p>

@@ -6,7 +6,10 @@ from users.form import CustomUserCreationForm
 from django.conf.urls.static import static
 
 
-handler404 = 'users.views.page_not_found'
+handler403 = 'pages.views.csrf_failure'
+handler404 = 'pages.views.page_not_found'
+handler500 = 'pages.views.error_500'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('films.urls')),
@@ -21,6 +24,7 @@ urlpatterns = [
         ),
         name='registration',
     ),
+    path('pages/', include('pages.urls'), name='pages'),
 ]
 
 # Если проект запущен в режиме разработки...
