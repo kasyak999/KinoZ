@@ -7,12 +7,12 @@ from django.contrib import messages
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .api import information_film
 from .form import (
     AddFilmBaza, ComentForm, AddFilmFavorites, FilmLinkForm, FormComment)
-from .models import FilmsdModel, Coment
-from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import FilmsdModel
 from .mixin import OnlyAuthorMixin, FilmMixin, CommentMixin
 
 

@@ -27,6 +27,9 @@ class Follow(models.Model):
     user = models.ForeignKey(
         UserProfile, on_delete=models.CASCADE, related_name='followers',
         verbose_name='Подписчик')
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name='Добавлен'
+    )
 
     class Meta:
         """Перевод модели"""

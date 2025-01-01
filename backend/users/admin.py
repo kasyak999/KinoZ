@@ -27,6 +27,6 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 @admin.register(Follow)
 class FollowAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'user', 'following')
+    list_display = ('pk', 'user', 'following', 'created_at')
     search_fields = ('username',)
     list_display_links = ('user',)

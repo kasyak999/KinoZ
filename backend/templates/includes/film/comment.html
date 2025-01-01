@@ -1,33 +1,45 @@
 {% load static %}
-{% with request.resolver_match.view_name as view_name %}
-  {% if page_obj.paginator.count > 0 %}
-    <br><p>Всего отзывов о фильме: {{ len_coments }}</p><br>
-    {% for comment in page_obj %}
-      {% if view_name == 'users:user' %}
-        <p>
-          <a href="{% url "films:film" comment.film.id_kp %}">
-          <b>{{ comment.film.name }} / {{ comment.film.name_orig }} ({{ comment.film.year }})</b></a>
-        </p>
-      {% endif %}
-      <p>
-        {% if comment.author.avatar %}
-          <img src="{{ comment.author.avatar.url }}" alt="Аватар {{ username }}" class="avatar avatar-ico">
-        {% else %}
-          <img src="{% static 'images/no_foto.jpg' %}" alt="Аватар по умолчанию" class="avatar avatar-ico">
-        {% endif %}
-        <a href="{% url 'users:user' username=comment.author.username %}"><b>
-        {{ comment.author.username }}</b></a>: {{ comment.text }}
-        {% if user == comment.author %}
-          <a href="{% url 'films:edit_comment' comment.film.id_kp comment.id %}">
-            <img src="{% static 'images/izm.png' %}" alt="Изменить" class="avatar izm-del-ico">
-          </a>
-          <a href="{% url 'films:delete_comment' comment.film.id_kp comment.id %}">
-            <img src="{% static 'images/del.png' %}" alt="Удалить" class="avatar izm-del-ico">
-          </a>
-        {% endif %}
-      <p>{{ comment.created_at|date:"d M Y H:i" }}</p>
-    </p>
-    {% endfor %}
-    <p align="center">{% include "includes/paginator.html" %}</p>
-  {% endif %}
-{% endwith %}
+{% load my_filters %} 
+<link rel="stylesheet" href="{% static 'css/index-index.css' %}" type="text/css"> 
+
+
+      <div class="osnova">
+        <div class="osnova-head">
+          <div>
+            {% if view_name == 'users:user' %}
+              {% with comment.film.poster|split as poster %}
+                <a href="{% url 'films:film' comment.film.id_kp %}">
+                {% include "includes/film/poster.html" %}</a>
+              {% endwith %}
+            {% else %}
+              <a href="{% url 'users:user' username=comment.author.username %}">
+              {% if comment.author.avatar %}
+                <img src="{{ comment.author.avatar.url }}" alt="Аватар {{ username }}" class='avatar'>
+              {% else %}
+                <img src="{% static 'images/no_foto.jpg' %}" alt="Аватар по умолчанию" class='avatar'>
+              {% endif %}
+              </a>
+            {% endif %}
+          </div>
+          <div>
+            {% if view_name == 'users:user' %}
+              <p>
+                <a href="{% url "films:film" comment.film.id_kp %}">
+                <b>{{ comment.film.name }} / {{ comment.film.name_orig }} ({{ comment.film.year }})</b></a>
+              </p>
+            {% endif %}
+            <p><a href="{% url 'users:user' username=comment.author.username %}"><b>
+            {{ comment.author.username }}</b></a>: {{ comment.text }}&nbsp;&nbsp;
+            {% if user == comment.author %}
+              <a href="{% url 'films:edit_comment' comment.film.id_kp comment.id %}">
+                <img src="{% static 'images/izm.png' %}" alt="Изменить" class="izm-del-ico">
+              </a>
+              <a href="{% url 'films:delete_comment' comment.film.id_kp comment.id %}">
+                <img src="{% static 'images/del.png' %}" alt="Удалить" class="izm-del-ico">
+              </a>
+            {% endif %}
+            </p>
+          </div>
+        </div>
+        <p>{{ comment.created_at|date:"d M Y H:i" }}</p>
+      </div>
