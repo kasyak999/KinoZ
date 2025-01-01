@@ -11,7 +11,7 @@ TEMPLATES_DIR = BASE_DIR / 'templates'
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-DEBUG = True  # False
+DEBUG = False  # False / True
 AUTH_USER_MODEL = 'users.UserProfile'
 
 # ALLOWED_HOSTS = ['89.110.75.220', '127.0.0.1', 'kinoz.ddns.net', 'localhost']
@@ -62,22 +62,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'kinoz.wsgi.application'
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': os.getenv('MYSQL_DATABASE', 'django'),
-#         'USER': os.getenv('MYSQL_USER', 'user'),
-#         'PASSWORD': os.getenv('MYSQL_PASSWORD', 'user_password'),
-#         'HOST': os.getenv('MYSQL_HOST', 'db_mysql'),
-#         'PORT': os.getenv('MYSQL_PORT', 3306),
-#     }
-# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.getenv('MYSQL_DATABASE', 'django'),
+        'USER': os.getenv('MYSQL_USER', 'user'),
+        'PASSWORD': os.getenv('MYSQL_PASSWORD', 'user_password'),
+        'HOST': os.getenv('MYSQL_HOST', 'db_mysql'),
+        'PORT': os.getenv('MYSQL_PORT', 3306),
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
