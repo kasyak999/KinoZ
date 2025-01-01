@@ -7,18 +7,16 @@ from .models import Follow
 User = get_user_model()
 
 
-class EmailUpdateForm(forms.ModelForm):
-    """Форма для изменения email"""
+class EditUserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['email']
-
-
-class AvatarForm(forms.ModelForm):
-    """Форма для изменения email"""
-    class Meta:
-        model = User
-        fields = ['avatar']
+        fields = ['avatar', 'username', 'email', 'first_name', 'last_name']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+        }
 
 
 class CustomUserCreationForm(UserCreationForm):

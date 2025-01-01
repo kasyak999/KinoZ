@@ -1,12 +1,12 @@
 from typing import Any
 from django.views.generic import UpdateView, ListView
 from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 from django.conf import settings
-from django.db.models import Count
-from .form import EmailUpdateForm, AvatarForm, AddFollow
+from django.db.models import Count, Q
+from .form import AddFollow, EditUserForm
 
 
 User = get_user_model()
@@ -42,7 +42,7 @@ class PersonalAccount(LoginRequiredMixin, ListView):
         return context
 
     def post(self, request, *args, **kwargs):
-        """Добавление или удаление фильма из избранного"""
+        """Добавление или удаление подписчика"""
         username = self.kwargs[self.pk_url_kwarg]
         self.get_queryset()
         result = self.user_profile.followings.filter(user=request.user)
@@ -59,65 +59,56 @@ class PersonalAccount(LoginRequiredMixin, ListView):
         return redirect('users:user', username=username)
 
 
+class EditAccountView(LoginRequiredMixin, UpdateView):
+    """Редактирование учетной записи пользователя"""
+    model = User
+    template_name = 'users/edit_account.html'
+    form_class = EditUserForm
+
+    def get_object(self):
+        return self.request.user
+
+    def get_success_url(self):
+        return reverse_lazy(
+            'users:user', kwargs={'username': self.request.user.username})
+
+
 class FollowUserListView(LoginRequiredMixin, ListView):
     """Подписан пользователь"""
     template_name = 'users/follow.html'
     pk_url_kwarg = 'username'
     paginate_by = settings.OBJECTS_PER_PAGE * 2
-    list_type = 'list_type'
 
     def get_queryset(self):
         self.user_profile = get_object_or_404(
             User.objects.annotate(
                 following_count=Count('followers', distinct=True),
                 follower_count=Count('followings', distinct=True),
-                # ).prefetch_related(
-
-                #     # 'followers__user',
-                #     # 'followings__following',
-                # ),
             ), username=self.kwargs[self.pk_url_kwarg]
         )
-        list_type = self.kwargs.get(self.list_type)
-        if list_type == 'following':
-            return self.user_profile.followers.all().select_related(
+        if self.kwargs.get('list_type') == 'following':
+            result = self.user_profile.followers.all().select_related(
                 'following', 'user')
-        return self.user_profile.followings.all().select_related(
-            'following', 'user')
+        else:
+            result = self.user_profile.followings.all().select_related(
+                'following', 'user')
+
+        search = self.request.GET.get('search')
+        if search:
+            result = result.filter(
+                Q(following__username__icontains=search)
+                & Q(user__username__icontains=search)
+            )
+        return result
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context['user_profile'] = self.user_profile
-        if self.kwargs.get(self.list_type) == 'following':
+        if self.kwargs.get('list_type') == 'following':
             context['follow_count'] = self.user_profile.following_count
         else:
             context['follow_count'] = self.user_profile.follower_count
         return context
-
-
-class UserUpdateBaseView(LoginRequiredMixin, UpdateView):
-    """Базовый класс для обновления данных пользователя"""
-
-    def get_success_url(self):
-        return reverse(
-            'users:user', kwargs={'username': self.request.user.username})
-
-    def get_object(self):
-        return self.request.user
-
-
-class EmailUpdateView(UserUpdateBaseView):
-    """Изменение email пользователя"""
-    model = User
-    form_class = EmailUpdateForm
-    template_name = 'registration/email_update.html'
-
-
-class AvatarUpdateView(UserUpdateBaseView):
-    """Изменение аватар пользователя"""
-    model = User
-    form_class = AvatarForm
-    template_name = 'users/avatar.html'
 
 
 class AllUsers(ListView):

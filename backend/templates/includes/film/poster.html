@@ -1,7 +1,7 @@
 {% load static %}
 
 {% if poster %}
-  <img src="{{ poster.1 }}">
+  <img src="{{ poster.1 }}" class="poster">
 {% else %}
-  <img src="{% static "images/no_foto.jpg" %}">
+  <img src="{% static "images/no_foto.jpg" %}" class="poster">
 {% endif %}
