@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+{% load my_filters %}
+{% block title %}
+Изменить комментарий
+{% endblock %}
+
+{% block content %}
+  <h3>
+    {% if not '/delete_comment/' in request.path %}
+      Редактирование комментария
+    {% else %}
+      Удаление комментария
+    {% endif %}
+  </h3>
+
+  <form method="post">
+    {% csrf_token %}
+    {% if not '/delete_comment/' in request.path %}
+      <table>
+        {{ form.as_table }}
+      </table>
+      <p><input type="submit" value="Изменить">
+    {% else %}
+      <p>{{ object.text }}</p>
+      <p><input type="submit" value="Удалить">
+    {% endif %}
+    <a href="{% url 'films:film' id_kp=object.film.id_kp %}">Отмена</a></p>
+  </form>
+
+{% endblock %}

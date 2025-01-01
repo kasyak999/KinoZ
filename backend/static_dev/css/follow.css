@@ -1,0 +1,28 @@
+.osnova {
+  /*border: 1px solid #e23408;  /*рамка*/
+  display: flex;/**/
+  margin-bottom: 10px;
+  padding: 5px;
+  flex-wrap: wrap; /* Позволяет перенос элементов на следующую строку */
+  h2 {
+    margin: 0px;
+  }
+  h2 a {
+    color: #000000;
+  }
+  h2 a:hover {
+    text-decoration:underline; /* подчеркивание*/
+  }
+}
+
+.osnova-head {
+  margin: 10px;
+  .avatar{
+    width: 60px;
+    height: 60px;
+    box-shadow: -5px 5px 7px #003300; /* тень элемента: x y размытие цвет*/
+    border-radius: 10px; /*закругление картинк*/
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+}

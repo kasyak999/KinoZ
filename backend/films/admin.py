@@ -7,6 +7,7 @@ from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from . models import FilmsdModel, Category, Genres, Country, Coment, Favorite
 from django.contrib import messages
+from django.db.models import Count
 
 
 @admin.action(description='Проверено')
@@ -97,13 +98,18 @@ class FilmsAdmin(admin.ModelAdmin):
         'name',
         'created_at',
         'is_published',
-        'verified'
+        'verified',
+        'favorites_count'
     )
     list_display_links = ('name',)
     search_fields = ['name', 'id_kp']
     list_filter = ('is_published', 'verified')
     list_per_page = settings.OBJECTS_PER_PAGE
     actions = [is_published, not_is_published, verified, not_verified]
+
+    @admin.display(description='В избранном')
+    def favorites_count(self, obj):
+        return obj.favorites_count
 
     @admin.display(description='Постер')
     def image_preview(self, obj):
@@ -116,10 +122,16 @@ class FilmsAdmin(admin.ModelAdmin):
             )
         return 'Нет изображения'
 
+    def get_queryset(self, request):
+        result = super().get_queryset(request)
+        return result.annotate(
+            favorites_count=Count('favorites'))
+
 
 @admin.register(Coment)
 class ComentAdmin(admin.ModelAdmin):
     list_display = (
+        'id',
         'image_preview',
         'text',
         'author',
