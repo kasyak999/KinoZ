@@ -29,7 +29,7 @@
       {% else %}
         <!-- А здесь блок ссылок для неавторизованного пользователя -->
         <li><a href="{% url 'login' %}" class="{% if view_name == 'login' %}a-active{% endif %}">Войти</a></li>
-        <li><a class="{% if view_name == 'registration' %}a-active{% endif %}" href="{% url 'registration' %}">Регистрация</a></li>
+        <li><a class="{% if view_name == 'users:registration' %}a-active{% endif %}" href="{% url 'users:registration' %}">Регистрация</a></li>
                  
         <!-- Конец блока ссылок для неавторизованного пользователя -->   
       {% endif %}
