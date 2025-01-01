@@ -18,7 +18,12 @@
         <a href="{% url 'users:user' username=comment.author.username %}"><b>
         {{ comment.author.username }}</b></a>: {{ comment.text }}
         {% if user == comment.author %}
-          <a href="{% url 'films:edit_comment' object.id_kp comment.id %}">изменить</a>
+          <a href="{% url 'films:edit_comment' comment.film.id_kp comment.id %}">
+            <img src="{% static 'images/izm.png' %}" alt="Изменить" class="avatar izm-del-ico">
+          </a>
+          <a href="{% url 'films:delete_comment' comment.film.id_kp comment.id %}">
+            <img src="{% static 'images/del.png' %}" alt="Удалить" class="avatar izm-del-ico">
+          </a>
         {% endif %}
       <p>{{ comment.created_at|date:"d M Y H:i" }}</p>
     </p>

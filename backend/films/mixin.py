@@ -1,7 +1,7 @@
 from django.shortcuts import redirect
-from .models import FilmsdModel
+from .models import FilmsdModel, Coment
 from django.contrib import messages
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 
 
 class OnlyAuthorMixin:
@@ -12,6 +12,22 @@ class OnlyAuthorMixin:
                 'films:film', kwargs['film_id_kp']
             )
         return super().dispatch(request, *args, **kwargs)
+
+
+class CommentMixin:
+    model = Coment
+    template_name = 'films/comment.html'
+    pk_url_kwarg = 'comment_id'
+
+    def get_queryset(self):
+        return super().get_queryset().filter(
+            pk=self.kwargs['comment_id'],
+        )
+
+    def get_success_url(self):
+        return reverse(
+            'films:film', kwargs={'id_kp': self.kwargs['film_id_kp']}
+        )
 
 
 class FilmMixin:

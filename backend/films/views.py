@@ -1,5 +1,5 @@
 from typing import Any
-from django.views.generic import ListView, FormView, UpdateView
+from django.views.generic import ListView, FormView, UpdateView, DeleteView
 from django.shortcuts import redirect
 from django.db.models import Q, Count
 from django.contrib.auth import get_user_model
@@ -13,7 +13,7 @@ from .form import (
     AddFilmBaza, ComentForm, AddFilmFavorites, FilmLinkForm, FormComment)
 from .models import FilmsdModel, Coment
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .mixin import OnlyAuthorMixin, FilmMixin
+from .mixin import OnlyAuthorMixin, FilmMixin, CommentMixin
 
 
 User = get_user_model()
@@ -187,19 +187,14 @@ class AddFilmView(FormView):
         return self.render_to_response(self.get_context_data())
 
 
-class ComentUpdateView(LoginRequiredMixin, OnlyAuthorMixin, UpdateView):
+class ComentUpdateView(
+    LoginRequiredMixin, OnlyAuthorMixin, CommentMixin, UpdateView
+):
     """Изменение комментария"""
-    model = Coment
-    template_name = 'films/comment.html'
     form_class = FormComment
-    pk_url_kwarg = 'comment_id'
 
-    def get_queryset(self):
-        return super().get_queryset().filter(
-            pk=self.kwargs['comment_id'],
-        )
 
-    def get_success_url(self):
-        return reverse(
-            'films:film', kwargs={'id_kp': self.kwargs['film_id_kp']}
-        )
+class CommentDeleteView(
+    LoginRequiredMixin, OnlyAuthorMixin, CommentMixin, DeleteView
+):
+    """Удаление коментария"""

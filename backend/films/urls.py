@@ -16,4 +16,8 @@ urlpatterns = [
         'film/<film_id_kp>/edit_comment/<comment_id>/',
         views.ComentUpdateView.as_view(), name='edit_comment'
     ),
+    path(
+        'film/<film_id_kp>/delete_comment/<comment_id>/',
+        views.CommentDeleteView.as_view(), name='delete_comment'
+    )
 ]

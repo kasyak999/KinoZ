@@ -89,9 +89,9 @@ class FollowUserListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['user_profile'] = self.user_profile
         if self.kwargs.get(self.list_type) == 'following':
-            context['follow_count'] = self.user_profile.follower_count
-        else:
             context['follow_count'] = self.user_profile.following_count
+        else:
+            context['follow_count'] = self.user_profile.follower_count
         return context
 
 
