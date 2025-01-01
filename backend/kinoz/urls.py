@@ -13,6 +13,7 @@ urlpatterns = [
     path('user/', include('django.contrib.auth.urls')),
     path('', include('films.urls')),
     path('', include('users.urls')),
+    path('', include('news.urls')),
     path('pages/', include('pages.urls'), name='pages'),
 ]
 

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load my_filters %} 
+{% load static %}
+
+{% block title %}
+Новости
+{% endblock %}
+
+{% block content %}   
+ 
+  <h3>Новости</h3>
+ 
+
+  {% for object in object_list %}
+    {{ object.user.username }} {{ object.get_event_display }}
+    {{ object.film.name }} {{ object.related_user.username }}
+    {{ object.created_at }}
+    <br>
+  {% endfor %}
+  <p align="center">{% include "includes/paginator.html" %}</p>
+
+{% endblock %}
