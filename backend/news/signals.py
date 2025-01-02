@@ -1,12 +1,8 @@
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from films.models import Favorite, Coment
-from django.contrib.auth import get_user_model
 from users.models import Follow
 from .models import EventUser
-
-
-User = get_user_model()
 
 
 @receiver(post_save, sender=Favorite)
@@ -69,13 +65,4 @@ def delet_comment(sender, instance, **kwargs):
         user=instance.author,
         event='del_comment',
         film=instance.film
-    )
-
-
-@receiver(post_save, sender=User)
-def edit_profile(sender, instance, **kwargs):
-    """Удалил комментарий"""
-    EventUser.objects.create(
-        user=instance,
-        event='edit_profile',
     )
