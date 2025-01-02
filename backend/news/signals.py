@@ -1,8 +1,8 @@
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from films.models import Favorite, Coment
-from users.models import Follow, UserProfile
 from django.contrib.auth import get_user_model
+from users.models import Follow
 from .models import EventUser
 
 
