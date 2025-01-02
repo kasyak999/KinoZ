@@ -34,6 +34,8 @@
 	</p>
 	<p><b>Имя:</b> {{ user_profile.first_name }}</p>
 	<p><b>Фамилия:</b> {{ user_profile.last_name }}</p>
+	<p><b>Страна:</b> {{ user_profile.country }}</p>
+	<p><b>Город:</b> {{ user_profile.city }}</p>
 	<p><b>Email:</b> {{ user_profile.email }}</p>
 	{% if user.username == user_profile.username %}
 	<p><b>Пароль:</b> *** <a href='{% url "password_change" %}'>изменить</a></p>

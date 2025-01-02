@@ -11,7 +11,7 @@ class NewsListView(LoginRequiredMixin, ListView):
     model = EventUser
     template_name = 'news/index.html'
     pk_url_kwarg = 'username'
-    paginate_by = settings.OBJECTS_PER_PAGE * 2
+    paginate_by = settings.OBJECTS_PER_PAGE
 
     def get_queryset(self):
         following_users = self.request.user.followers.values_list(
@@ -25,5 +25,5 @@ class NewsListView(LoginRequiredMixin, ListView):
         result = self.model.objects.filter(
             user__in=following_users,
             created_at__gte=Subquery(following_dates)
-        ).select_related('user')
+        ).select_related('user', 'film', 'related_user')
         return result

@@ -8,6 +8,13 @@ class UserProfile(AbstractUser):
         upload_to='users/', null=True, blank=True,
         verbose_name='Аватар')
 
+    country = models.CharField(
+        max_length=256, blank=True,
+        verbose_name='Страна')
+    city = models.CharField(
+        max_length=256, blank=True,
+        verbose_name='Город')
+
     class Meta:
         """Перевод модели"""
 

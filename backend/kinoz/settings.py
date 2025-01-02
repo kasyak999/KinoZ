@@ -11,7 +11,7 @@ TEMPLATES_DIR = BASE_DIR / 'templates'
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-DEBUG = True  # False / True
+DEBUG = False  # False / True
 AUTH_USER_MODEL = 'users.UserProfile'
 
 # ALLOWED_HOSTS = ['89.110.75.220', '127.0.0.1', 'kinoz.ddns.net', 'localhost']
