@@ -1,9 +1,22 @@
-from django.urls import path
+from django.urls import path, reverse_lazy
+from django.views.generic.edit import CreateView
+from users.form import CustomUserCreationForm
 from . import views
 
 
 app_name = 'users'
+
 urlpatterns = [
+    path(
+        'user/registration/',
+        CreateView.as_view(
+            template_name='registration/registration_form.html',
+            form_class=CustomUserCreationForm,
+            success_url=reverse_lazy('login'),
+        ),
+        name='registration',
+    ),
+
     path('users/', views.AllUsers.as_view(), name='user_list'),
     path('user/<str:username>', views.PersonalAccount.as_view(), name='user'),
     path(

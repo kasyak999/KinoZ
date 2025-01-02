@@ -28,7 +28,8 @@ INSTALLED_APPS = [
 
     'films.apps.FilmsConfig',
     'users.apps.UsersConfig',
-    'pages.apps.PagesConfig'
+    'pages.apps.PagesConfig',
+    'news.apps.NewsConfig',
 ]
 
 MIDDLEWARE = [
@@ -63,22 +64,24 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'kinoz.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('MYSQL_DATABASE', 'django'),
-        'USER': os.getenv('MYSQL_USER', 'user'),
-        'PASSWORD': os.getenv('MYSQL_PASSWORD', 'user_password'),
-        'HOST': os.getenv('MYSQL_HOST', 'db_mysql'),
-        'PORT': os.getenv('MYSQL_PORT', 3306),
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.getenv('MYSQL_DATABASE', 'django'),
+            'USER': os.getenv('MYSQL_USER', 'user'),
+            'PASSWORD': os.getenv('MYSQL_PASSWORD', 'user_password'),
+            'HOST': os.getenv('MYSQL_HOST', 'db_mysql'),
+            'PORT': os.getenv('MYSQL_PORT', 3306),
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {

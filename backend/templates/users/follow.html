@@ -6,21 +6,20 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/users.css' %}" type="text/css">
+{% with request.resolver_match.view_name as view_name %}
+  {% if view_name == 'users:user_following' %}
+    <h3>{{ user_profile }} подписался: {{ follow_count }}</h3>
+  {% else %}
+    <h3>Подписчики {{ user_profile }}: {{ follow_count }}</h3>
+  {% endif %}
 
-{% if view_name == 'users:user_following' %}
-  <h3>{{ user_profile }} подписался: {{ follow_count }}</h3>
-{% else %}
-  <h3>Подписчики {{ user_profile }}: {{ follow_count }}</h3>
-{% endif %}
+  <form method="get" action="">
+    <label>Поиск по логину: </label>
+    <input type="text" name="search" placeholder="Поиск по логину" value="{{ request.GET.search }}">
+    <input type="submit" value="Искать">
+  </form>
 
-<form method="get" action="">
-  <label>Поиск по логину: </label>
-  <input type="text" name="search" placeholder="Поиск по логину" value="{{ request.GET.search }}">
-  <input type="submit" value="Искать">
-</form>
-
-{% if user.is_authenticated %}  
-  {% with request.resolver_match.view_name as view_name %}
+  {% if user.is_authenticated %}  
     {% if view_name == 'users:user_following' %}
       <div class="osnova">
         {% for object in object_list %}
@@ -34,8 +33,7 @@
         {% endfor %}
       </div>
     {% endif %}
-  {% endwith %}
-{% endif %}
-
+  {% endif %}
+{% endwith %}
 <p align="center">{% include "includes/paginator.html" %}</p>
 {% endblock %}
