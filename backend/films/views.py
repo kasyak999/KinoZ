@@ -14,7 +14,6 @@ from .form import (
     AddFilmBaza, ComentForm, AddFilmFavorites, FilmLinkForm, FormComment)
 from .models import FilmsdModel
 from .mixin import OnlyAuthorMixin, FilmMixin, CommentMixin
-from pprint import pprint
 
 
 User = get_user_model()
@@ -29,14 +28,13 @@ class SearchView(ListView):
     def get_queryset(self):
         result = super().get_queryset()
         if self.request.GET.get('search'):
-            result = result.filter(
+            return result.filter(
                 verified=True, is_published=True
             ).filter(
                 Q(name__iregex=self.request.GET.get('search'))
                 | Q(name_orig__iregex=self.request.GET.get('search'))
             ).select_related('cat').prefetch_related(
                 'genres', 'country')
-            return result
         else:
             return self.model.objects.none()
 
