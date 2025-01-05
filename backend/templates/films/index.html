@@ -33,7 +33,7 @@
   <p align="center">{% include "includes/paginator.html" %}</p>
 
   {% if search_kp %}
-    <p>Скорее всего еще не добавлены в базу:</p>
+    <p>Добавьте нужный фильм в базу:</p>
     {% for i in  search_kp %}
       <p><a href="{% url "films:film" i.filmId %}">{{ i.nameRu }} / {{ i.nameEn }} ({{ i.year }})</a></p>
     {% endfor %}

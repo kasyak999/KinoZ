@@ -4,6 +4,7 @@ from django.contrib import messages
 from dotenv import load_dotenv
 import requests
 from .models import FilmsdModel
+from pprint import pprint
 
 
 load_dotenv()
@@ -25,11 +26,19 @@ def search_film(value):
     # print(response_kp)
     if response_kp.status_code == 200:
         response_kp = response_kp.json()
-        result = []
-        for i in response_kp['films']:
-            # print(i['nameRu'])
-            result.append(i)
-        return result
+
+        result_kp = [film for film in response_kp['films']]
+        filmId = [filmId['filmId'] for filmId in result_kp]
+        existing_ids = set(FilmsdModel.objects.filter(
+            id_kp__in=filmId).values_list('id_kp', flat=True))
+
+        for key, value in enumerate(result_kp):
+            if value['filmId'] in existing_ids:
+                result_kp[key] = None
+
+        # Убираем все элементы, которые равны None
+        result_kp = [film for film in result_kp if film is not None]
+        return result_kp
     else:
         print('Ошибка в базе кинопоиска')
 
