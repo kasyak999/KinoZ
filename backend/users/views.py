@@ -97,7 +97,7 @@ class FollowUserListView(LoginRequiredMixin, ListView):
         if search:
             result = result.filter(
                 Q(following__username__icontains=search)
-                & Q(user__username__icontains=search)
+                | Q(user__username__icontains=search)
             )
         return result
 

@@ -9,11 +9,12 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .api import information_film
+from .api import information_film, search_film
 from .form import (
     AddFilmBaza, ComentForm, AddFilmFavorites, FilmLinkForm, FormComment)
 from .models import FilmsdModel
 from .mixin import OnlyAuthorMixin, FilmMixin, CommentMixin
+from pprint import pprint
 
 
 User = get_user_model()
@@ -28,20 +29,25 @@ class SearchView(ListView):
     def get_queryset(self):
         result = super().get_queryset()
         if self.request.GET.get('search'):
-            return result.filter(
+            result = result.filter(
                 verified=True, is_published=True
             ).filter(
                 Q(name__iregex=self.request.GET.get('search'))
                 | Q(name_orig__iregex=self.request.GET.get('search'))
-            ).select_related('cat').prefetch_related('genres', 'country')
-        else:
+            ).select_related('cat').prefetch_related(
+                'genres', 'country')
             return result
+        else:
+            return self.model.objects.none()
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         if self.request.GET.get('search'):
             context['html_name'] = f'Поиск «{self.request.GET.get('search')}»'
-            context['search'] = self.get_queryset().count()
+            context['search'] = context['paginator'].count
+            if context['paginator'].count == 0:
+                context['search_kp'] = search_film(
+                    self.request.GET.get('search'))
         else:
             context['html_name'] = 'Поиск'
         return context
