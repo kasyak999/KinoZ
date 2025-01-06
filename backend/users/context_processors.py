@@ -1,7 +1,3 @@
-from .models import Message
-from news.models import EventUser
-
-
 def unread_messages_count(request):
     """Возвращает количество непрочитанных сообщений текущего пользователя."""
     if request.user.is_authenticated:
