@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load my_filters %} 
+{% load static %}
+
+{% block title %}
+  Сообщения
+{% endblock %}
+
+{% block content %}   
+<link rel="stylesheet" href="{% static 'css/index-index.css' %}" type="text/css"> 
+  <h3>Сообщения</h3>
+  {% if user.is_authenticated %}
+    {% for object in object_list %}
+      <div class="osnova">
+        <div class="osnova-head">
+          <div>
+            <p><b>
+              От <a href="{% url 'users:user' username=object.sender.username %}">{{ object.sender.username }}</a>
+              к <a href="{% url 'users:user' username=object.receiver.username %}">{{ object.receiver.username }}</a>
+              :</b>
+              {% if not object.is_read %}
+                (не прочитано)
+              {% endif %}
+            </p>
+            <p> {{ object.content|linebreaks|urlize }}</p>
+          </div>
+        </div>
+        <p>
+          {{ object.created_at }}
+          {% if user.username == object.sender.username %}
+            <a href="{% url 'users:message_username' username=object.receiver.username %}">Ответить</a>
+          {% else %}
+            <a href="{% url 'users:message_username' username=object.sender.username %}">Ответить</a>
+          {% endif %}
+        </p>
+      </div>
+    {% endfor %}
+
+
+    <p align="center">{% include "includes/paginator.html" %}</p>
+  {% endif %}
+{% endblock %}

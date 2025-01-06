@@ -28,8 +28,12 @@
 	{% endif %}
 	{% if user.username == user_profile.username %}
 		<a href='{% url "users:edit_account" username=user.username %}' title="Изменить">
-      <img src="{% static 'images/izm.png' %}" class="izm-del-ico">
-    </a>
+      		<img src="{% static 'images/izm.png' %}" class="izm-del-ico">
+    	</a>
+	{% else %}
+		<button onclick="window.location.href='{% url 'users:message_username' user_profile.username %}';">
+			Написать сообщение
+		</button>
 	{% endif %}
 	</p>
 	<p><b>Имя:</b> {{ user_profile.first_name }}</p>

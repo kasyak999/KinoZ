@@ -15,7 +15,6 @@ EVENT_CHOICES = [
 
 
 class EventUser(models.Model):
-    """Подписки пользователей"""
     event = models.CharField(
         max_length=256, verbose_name='Событие', choices=EVENT_CHOICES)
     user = models.ForeignKey(

@@ -13,9 +13,12 @@
 				<li><a href="{% url 'users:user' username=user %}" class="{% if view_name == 'users:user' %}a-active{% endif %}">Личный кабинет</a></li>
         <li><a href="{% url 'films:favorite' %}" class="{% if view_name == 'films:favorite' %}a-active{% endif %}">Избранное</a></li>
         <li><a href="{% url 'users:user_following' username=user %}" class="{% if view_name == 'users:user_following' %}a-active{% endif %}">Мои подписки</a></li>
-        <li><a href="{% url 'users:user_followers' username=user %}" class="{% if view_name == 'users:user_followers' %}a-active{% endif %}">Мои подписчики</a></li>
         <li><a href="{% url 'news:news_list' %}" class="{% if view_name == 'news:news_list' %}a-active{% endif %}">Новости</a></li>
         <li>
+          <a href="{% url 'users:message_list' %}" class="{% if view_name == 'users:message_list' %}a-active{% endif %}">Сообщения</a>
+          {% if unread_messages_count > 0 %}({{ unread_messages_count }}){% endif %}
+        </li>
+        <br><li>
 					<a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
 						Выйти
 					</a>

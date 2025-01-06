@@ -51,7 +51,7 @@ main {
   .menu {
     position: sticky; /* двигается вместе с браузером */
     top: 0;/**/
-    max-height: 320px; /**/
+    max-height: 350px; /**/
     /* height: 260px; /**/
     border: 1px solid #006600;  /*рамка*/
     border-radius: 10px; /*закругление*/
@@ -146,7 +146,8 @@ table {
 form input[type="file"],
 form input,
 form textarea,
-form select {
+form select,
+button {
   border: 3px solid #006600;  /*рамка*/
   border-radius: 10px; /*закругление*/
   padding: 3px;

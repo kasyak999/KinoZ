@@ -28,4 +28,8 @@ urlpatterns = [
     path(
         'user/<str:username>/followers/', views.FollowUserListView.as_view(),
         {'list_type': 'followers'}, name='user_followers'),
+    path('message/', views.MessageListView.as_view(), name='message_list'),
+    path(
+        'message/<str:username>', views.MessageDetailView.as_view(),
+        name='message_username'),
 ]

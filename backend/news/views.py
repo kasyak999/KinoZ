@@ -1,9 +1,9 @@
 from django.conf import settings
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import EventUser
-from users.models import Follow
 from django.db.models import Subquery, OuterRef
+from users.models import Follow
+from .models import EventUser
 
 
 class NewsListView(LoginRequiredMixin, ListView):
@@ -11,7 +11,7 @@ class NewsListView(LoginRequiredMixin, ListView):
     model = EventUser
     template_name = 'news/index.html'
     pk_url_kwarg = 'username'
-    paginate_by = settings.OBJECTS_PER_PAGE
+    paginate_by = settings.OBJECTS_PER_PAGE * 2
 
     def get_queryset(self):
         following_users = self.request.user.followers.values_list(

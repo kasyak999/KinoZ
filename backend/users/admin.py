@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 # from django.contrib.auth.admin import UserAdmin
 from django.utils.safestring import mark_safe
-from .models import Follow
+from .models import Follow, Message
 
 
 User = get_user_model()
@@ -30,3 +30,11 @@ class FollowAdmin(admin.ModelAdmin):
     list_display = ('pk', 'user', 'following', 'created_at')
     search_fields = ('username',)
     list_display_links = ('user',)
+
+
+@admin.register(Message)
+class MessageAdmin(admin.ModelAdmin):
+    list_display = (
+        'pk', 'sender', 'receiver', 'content', 'created_at', 'is_read')
+    search_fields = ('sender', 'receiver')
+    list_display_links = ('content',)
