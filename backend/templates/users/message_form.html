@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load my_filters %} 
+{% load static %}
+
+{% block title %}
+  Сообщения
+{% endblock %}
+
+{% block content %}   
+<h3>Отправить сообщение {{ recipient }}</h3>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="Отправить">
+</form>
+
+{% endblock %}

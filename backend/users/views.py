@@ -1,12 +1,14 @@
 from typing import Any
-from django.views.generic import UpdateView, ListView
+from django.views.generic import UpdateView, ListView, CreateView, FormView
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.db.models import Count, Q
-from .form import AddFollow, EditUserForm
+from .form import AddFollow, EditUserForm, MessageForm
+from .models import Message
+from django.urls import reverse_lazy, reverse
 
 
 User = get_user_model()
@@ -123,3 +125,51 @@ class AllUsers(ListView):
         if query:
             queryset = queryset.filter(username__icontains=query)
         return queryset
+
+
+class MessageListView(LoginRequiredMixin, ListView):
+    """Список всех сообщений"""
+    model = Message
+    template_name = 'users/message_list.html'
+    paginate_by = settings.OBJECTS_PER_PAGE
+
+    def get_queryset(self):
+        queryset = Message.objects.filter(
+            Q(sender=self.request.user) | Q(receiver=self.request.user)
+        ).select_related('sender', 'receiver')
+
+        queryset.filter(receiver=self.request.user, is_read=False).update(is_read=True)
+        return queryset
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['messages'] = None
+        return context
+
+
+class MessageDetailView(LoginRequiredMixin, CreateView):
+    """Отправить сообщение"""
+    model = Message
+    template_name = 'users/message_form.html'
+    form_class = MessageForm
+    pk_url_kwarg = 'username'
+    paginate_by = settings.OBJECTS_PER_PAGE
+
+    def get_form(self, form_class=None):
+        """Устанавливаем sender и receiver перед валидацией"""
+        form = super().get_form(form_class)
+        form.instance.sender = self.request.user
+        receiver = get_object_or_404(
+            User,
+            username=self.kwargs[self.pk_url_kwarg]
+        )
+        form.instance.receiver = receiver
+        return form
+
+    def get_success_url(self):
+        return reverse('users:message_list')
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['recipient'] = self.kwargs[self.pk_url_kwarg]
+        return context

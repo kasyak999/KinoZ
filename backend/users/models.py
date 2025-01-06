@@ -56,3 +56,33 @@ class Follow(models.Model):
 
     def __str__(self):
         return f'Подписчик {self.user}'
+
+
+class Message(models.Model):
+    sender = models.ForeignKey(
+        UserProfile, on_delete=models.CASCADE,
+        related_name='sent_messages', verbose_name='Отправитель')
+    receiver = models.ForeignKey(
+        UserProfile, on_delete=models.CASCADE,
+        related_name='received_messages', verbose_name='Получатель')
+    content = models.TextField(verbose_name='Текст')
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name='Добавлен')
+    is_read = models.BooleanField(
+        default=False, verbose_name='Метка о прочтении')
+
+    class Meta:
+        """Перевод модели"""
+        verbose_name = 'сообщение'
+        verbose_name_plural = 'Сообщения'
+        ordering = ('-created_at',)
+
+    def clean(self):
+        if self.sender == self.receiver:
+            raise ValidationError('Нельзя отправить саму себя.')
+
+    def __str__(self):
+        return (
+            f'От {self.sender.username} к {self.receiver.username}'
+            f': {self.content[:20]}...'
+        )
