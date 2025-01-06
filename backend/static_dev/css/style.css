@@ -146,7 +146,8 @@ table {
 form input[type="file"],
 form input,
 form textarea,
-form select {
+form select,
+button {
   border: 3px solid #006600;  /*рамка*/
   border-radius: 10px; /*закругление*/
   padding: 3px;

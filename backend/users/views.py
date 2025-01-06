@@ -1,14 +1,14 @@
 from typing import Any
-from django.views.generic import UpdateView, ListView, CreateView, FormView
+from django.views.generic import UpdateView, ListView, CreateView
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.db.models import Count, Q
+from django.urls import reverse_lazy, reverse
 from .form import AddFollow, EditUserForm, MessageForm
 from .models import Message
-from django.urls import reverse_lazy, reverse
 
 
 User = get_user_model()
@@ -129,7 +129,7 @@ class AllUsers(ListView):
 
 class MessageListView(LoginRequiredMixin, ListView):
     """Список всех сообщений"""
-    model = Message
+    model = User
     template_name = 'users/message_list.html'
     paginate_by = settings.OBJECTS_PER_PAGE
 
@@ -138,7 +138,8 @@ class MessageListView(LoginRequiredMixin, ListView):
             Q(sender=self.request.user) | Q(receiver=self.request.user)
         ).select_related('sender', 'receiver')
 
-        queryset.filter(receiver=self.request.user, is_read=False).update(is_read=True)
+        queryset.filter(
+            receiver=self.request.user, is_read=False).update(is_read=True)
         return queryset
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
