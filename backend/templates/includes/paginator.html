@@ -1,4 +1,4 @@
-{% with request.GET.search as search %}
+{% comment %} {% with request.GET.search as search %}
   {% if page_obj.has_other_pages %}
     {% if page_obj.has_previous %}
       {% if page_obj.previous_page_number != 1 %}
@@ -16,4 +16,26 @@
       {% endif %}
     {% endif %}
   {% endif %}
+{% endwith %} {% endcomment %}
+
+
+{% with request.GET as params %}
+  {% if page_obj.has_other_pages %}
+    {% if page_obj.has_previous %}
+      {% if page_obj.previous_page_number != 1 %}
+        <a href="?{% if params.search %}search={{ params.search }}&{% endif %}{% if params.categori %}categori={{ params.categori }}&{% endif %}{% if params.genre %}genre={{ params.genre }}&{% endif %}page=1">1</a>
+      {% endif %}
+      <a href="?{% if params.search %}search={{ params.search }}&{% endif %}{% if params.categori %}categori={{ params.categori }}&{% endif %}{% if params.genre %}genre={{ params.genre }}&{% endif %}page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+    {% endif %}
+
+    {{ page_obj.number }}
+
+    {% if page_obj.has_next %}
+      <a href="?{% if params.search %}search={{ params.search }}&{% endif %}{% if params.categori %}categori={{ params.categori }}&{% endif %}{% if params.genre %}genre={{ params.genre }}&{% endif %}page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+      {% if page_obj.next_page_number != page_obj.paginator.num_pages %}
+        <a href="?{% if params.search %}search={{ params.search }}&{% endif %}{% if params.categori %}categori={{ params.categori }}&{% endif %}{% if params.genre %}genre={{ params.genre }}&{% endif %}page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+      {% endif %}
+    {% endif %}
+  {% endif %}
 {% endwith %}
+

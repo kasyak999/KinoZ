@@ -12,7 +12,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .api import information_film, search_film
 from .form import (
     AddFilmBaza, ComentForm, AddFilmFavorites, FilmLinkForm, FormComment)
-from .models import FilmsdModel
+from .models import FilmsdModel, Genres, Category
 from .mixin import OnlyAuthorMixin, FilmMixin, CommentMixin
 
 
@@ -26,15 +26,32 @@ class SearchView(ListView):
     paginate_by = settings.OBJECTS_PER_PAGE
 
     def get_queryset(self):
-        result = super().get_queryset()
-        if self.request.GET.get('search'):
+        result = super().get_queryset().select_related(
+            'cat'
+        ).prefetch_related(
+            'genres', 'country'
+        )
+
+        search_query = self.request.GET.get('search')
+        genre_filter = self.request.GET.get('genre')
+        category_filter = self.request.GET.get('categori')
+
+        if search_query:
             return result.filter(
                 verified=True, is_published=True
             ).filter(
-                Q(name__iregex=self.request.GET.get('search'))
-                | Q(name_orig__iregex=self.request.GET.get('search'))
-            ).select_related('cat').prefetch_related(
-                'genres', 'country')
+                Q(name__iregex=search_query)
+                | Q(name_orig__iregex=search_query)
+                | Q(actors__iregex=search_query)
+            )
+        elif genre_filter or category_filter:
+            filters = Q()
+            if genre_filter:
+                filters &= Q(genres__id=genre_filter)
+            if category_filter:
+                filters &= Q(cat_id=category_filter)
+
+            return result.filter(filters)
         else:
             return self.model.objects.none()
 
@@ -48,6 +65,10 @@ class SearchView(ListView):
                     self.request.GET.get('search'))
         else:
             context['html_name'] = 'Поиск'
+            context['genres'] = Genres.objects.all()
+            context['categories'] = Category.objects.all()
+            context['selected_genre'] = self.request.GET.get('genre', '')
+            context['selected_category'] = self.request.GET.get('categori', '')
         return context
 
 

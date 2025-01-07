@@ -7,10 +7,39 @@
     <p>По вашему запросу ничего не найдено.</p><br>
   {% else %}
   <form action="/search/" method="get">
-    <label>Поиск по названию фильма: </label>
+    <label>Поиск по названию фильма, актерам: </label>
     <input type="text" size="25" placeholder='Введите название фильма' name="search"
     value="{{ request.GET.search }}">
     <input type="submit" value="поиск">
   </form>
   {% endif %}
+
+
+  <br>
+  <form method="get">
+    <label for="categories">Выберите категорию:</label>
+    <select name="categori" id="categories">
+      <option value="">Все жанры</option> <!-- Опция для сброса фильтра -->
+      {% for categori in categories %}
+          <option value="{{ categori.id }}"
+            {% if categori.id|stringformat:"s" == selected_category %}selected{% endif %}>
+            {{ categori.name }}
+          </option>
+      {% endfor %}
+    </select>
+    <br>
+    <label for="genres">Выберите жанр:</label>
+    <select name="genre" id="genres">
+      <option value="">Все жанры</option> <!-- Опция для сброса фильтра -->
+      {% for genre in genres %}
+          <option value="{{ genre.id }}"
+            {% if genre.id|stringformat:"s" == selected_genre %}selected{% endif %}>
+            {{ genre.name }}
+          </option>
+      {% endfor %}
+    </select>
+    <br>
+    <button type="submit">Применить</button>
+</form>
+
 {% endif %}
