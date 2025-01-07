@@ -1,3 +1,5 @@
+{% load my_filters %}
+
 {% if object.year %}
 <p><b>Год выпуска</b> {{ object.year }}</p>
 {% endif %}
@@ -25,7 +27,7 @@
 {% endif %}
 
 {% if object.rating %}
-	<p><b>Рейтинг кинопоиска</b> {{ object.rating }} (оценок {{ object.votecount }})</p>
+	<p><b>Рейтинг кинопоиска</b> {{ object.rating }} (оценок {{ object.votecount|numeric }})</p>
 {% endif %}
 
 {% if object.cat %}

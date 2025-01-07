@@ -41,9 +41,9 @@
   </div>
   <div class="text">
     {% if object.actors %}
-      {% for key, value in object.actors|to_dict %}
+      {% for key, value in object.actors|str_to_dict %}
         <p>
-          <b>{{ key }}</b>: {{ value|join_list }}
+          <b>{{ key }}</b>: {{ value|list_to_str }}
         </p>
       {% endfor %}<br>
     {% endif %}
