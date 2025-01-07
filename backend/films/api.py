@@ -4,7 +4,7 @@ from django.contrib import messages
 from dotenv import load_dotenv
 import requests
 from .models import FilmsdModel
-from pprint import pprint
+# from pprint import pprint
 
 
 load_dotenv()
@@ -33,7 +33,8 @@ def actors_film(value):
             if profession['professionText'] not in professions_dict:
                 professions_dict[profession['professionText']] = []
 
-            professions_dict[profession['professionText']].append(profession['nameRu'])
+            professions_dict[profession['professionText']].append(
+                profession['nameRu'])
         return professions_dict
     else:
         print('Ошибка в базе кинопоиска')
