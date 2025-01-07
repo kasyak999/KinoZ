@@ -4,7 +4,7 @@ from django.contrib import messages
 from dotenv import load_dotenv
 import requests
 from .models import FilmsdModel
-# from pprint import pprint
+from pprint import pprint
 
 
 load_dotenv()
@@ -16,6 +16,27 @@ DATA_KP = {  # Параметры запроса к кинопоиску
     'X-API-KEY': os.getenv('KINOPOISK_API_KEY'),
     'Content-Type': 'application/json'
 }
+
+
+# /api/v1/staff?filmId=666
+def actors_film(value):
+    """Поиск фильма, пока не используется"""
+    data_kp = KINOPOISK_URL + '/api/v1/staff'
+    response_kp = requests.get(
+        data_kp, headers=DATA_KP, params={'filmId': value})
+    # print(response_kp)
+    if response_kp.status_code == 200:
+        response_kp = response_kp.json()
+
+        professions_dict = {}
+        for profession in response_kp:
+            if profession['professionText'] not in professions_dict:
+                professions_dict[profession['professionText']] = []
+
+            professions_dict[profession['professionText']].append(profession['nameRu'])
+        return professions_dict
+    else:
+        print('Ошибка в базе кинопоиска')
 
 
 def search_film(value):
@@ -68,7 +89,8 @@ def connection_api(kp: int):
     response_kp = requests.get(data_kp, headers=DATA_KP)
     print(response_kp)
     if response_kp.status_code == 200:
-        scrinshot = add_scrinshot_film(data_kp)
+        # actors = actors_film(kp)
+        # scrinshot = add_scrinshot_film(data_kp)
         response_kp = response_kp.json()
         # pprint(response_kp)
         if response_kp['type'] == 'FILM':
@@ -98,7 +120,8 @@ def connection_api(kp: int):
             'votecount': response_kp['ratingKinopoiskVoteCount'],
             'description': response_kp['description'],
             'cat': cat,
-            'scrinshot': scrinshot,
+            'scrinshot': add_scrinshot_film(data_kp),
+            'actors': actors_film(kp)
         }
         return result
     # raise Http404

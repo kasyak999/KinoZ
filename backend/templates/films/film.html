@@ -40,6 +40,14 @@
     </div>
   </div>
   <div class="text">
+    {% if object.actors %}
+      {% for key, value in object.actors|to_dict %}
+        <p>
+          <b>{{ key }}</b>: {{ value|join_list }}
+        </p>
+      {% endfor %}<br>
+    {% endif %}
+
     <p><b>О фильме:</b>
       {{ object.description }}
     </p>

@@ -61,7 +61,7 @@ class FilmsdModelForm(forms.ModelForm):
                 self.fields['poster'].help_text = format_html(
                     f'<a href="{image[0]}" target="_blank">'
                     f'<img src="{image[1]}" alt="Image" '
-                    f'style="max-height: 100px; max-width: 100px;">'
+                    f'style="max-height: 100px; max-width: 100px;"></a>'
                 )
 
 
