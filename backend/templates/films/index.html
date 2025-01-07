@@ -32,6 +32,16 @@
   {% endfor %}
   <p align="center">{% include "includes/paginator.html" %}</p>
 
+
+  {% with request.resolver_match.view_name as view_name %}
+    {% if view_name == 'films:favorite' and not object_list %}
+      <p>У вас пока что нет избранных фильмов.</p>
+    {% elif view_name == 'films:index' and not object_list %}
+      <p>Чтобы добавить фильм в базу данных, воспользуйтесь
+        <a href="{% url "films:search" %}">поиском</a>.
+      </p>
+    {% endif %}
+  {% endwith %}
   {% if search_kp %}
     <p>Добавьте нужный фильм в базу:</p>
     {% for i in  search_kp %}

@@ -11,6 +11,11 @@
   <h3>Новости</h3>
  
 
+{% if not object_list %}
+<p>
+  У вас пока что нет новостей.
+</p>
+{% endif %}
   {% for object in object_list %}
     <p>
       <a href='{% url "users:user" username=object.user.username %}'>

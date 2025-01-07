@@ -10,6 +10,11 @@
 <link rel="stylesheet" href="{% static 'css/index-index.css' %}" type="text/css"> 
   <h3>Сообщения</h3>
   {% if user.is_authenticated %}
+    {% if not object_list%}
+      <p>
+        У вас пока что нет сообщений.
+      </p>
+    {% endif %}
     {% for object in object_list %}
       <div class="osnova">
         <div class="osnova-head">

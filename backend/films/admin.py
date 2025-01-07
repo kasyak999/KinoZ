@@ -140,18 +140,20 @@ class ComentAdmin(admin.ModelAdmin):
     )
     list_display_links = ('text',)
     list_per_page = settings.OBJECTS_PER_PAGE
-    list_filter = ('author',)
+    list_filter = ('author__username',)
 
     @admin.display(description='Название фильма')
     def film_name(self, obj):
-        url = reverse('admin:films_filmsdmodel_change', args=[obj.film.id])
-        return format_html(f'<a href="{url}">{obj.film.name}</a>')
+        if obj.film:
+            url = reverse('admin:films_filmsdmodel_change', args=[obj.film.id])
+            return format_html(f'<a href="{url}">{obj.film.name}</a>')
+        return 'Нет фильма'
 
     @admin.display(description='Постер')
     def image_preview(self, obj):
         """Показывать миниатюру изображения"""
-        image = obj.film.poster.split(',')
-        if obj.film.poster:
+        if obj.film:
+            image = obj.film.poster.split(',')
             return mark_safe(
                 f'<img src="{image[1]}" alt="Image" '
                 f'style="max-height: 100px; max-width: 100px;"/>'

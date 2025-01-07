@@ -121,12 +121,12 @@ class Coment(models.Model):
         auto_now_add=True, verbose_name='Добавлен'
     )
     film = models.ForeignKey(
-        FilmsdModel,
-        on_delete=models.CASCADE,
+        FilmsdModel, on_delete=models.CASCADE,
         verbose_name='Фильм'
     )
     author = models.ForeignKey(
-        User, on_delete=models.CASCADE, verbose_name='Автор'
+        User, on_delete=models.CASCADE,
+        verbose_name='Автор'
     )
 
     class Meta(MainModel.Meta):
@@ -161,6 +161,9 @@ class Favorite(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=['user', 'film'], name='unique_user_film')
+        ]
+        indexes = [
+            models.Index(fields=['user', 'film']),
         ]
 
     def __str__(self):

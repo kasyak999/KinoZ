@@ -42,6 +42,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # Добавьте вашу middleware в список
+    'users.middleware.AdminActionMiddleware',
 ]
 
 ROOT_URLCONF = 'kinoz.urls'
