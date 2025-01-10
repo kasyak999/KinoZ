@@ -1,0 +1,33 @@
+.qwert {
+    padding-top: 40px;
+    font-size: 59px;
+    font-weight: 800;
+    font-family: 'Roboto', sans-serif;
+    color: #4CAF50; /* Зеленый цвет текста */
+    text-shadow:
+        6px 6px 4px #000000,
+
+        -1px -1px 2px #000000,
+        1px 1px 2px #000000,
+        1px 0px 2px #000000,
+        0px 1px 2px #000000,
+        -1px 0px 2px #000000,
+        0px -1px 2px #000000;
+    transform: rotate(-4deg) scaleX(3); /* Легкий угол наклона текста */
+}
+
+.qwert1 {
+    font-size: 28px;
+    font-weight: 800;
+    font-family: 'Roboto', sans-serif;
+    color: #ffffff; /* Зеленый цвет текста */
+    text-shadow: 
+        -3px -3px 2px #000000,
+        3px 3px 2px #000000,
+        3px 0px 2px #000000,
+        0px 3px 2px #000000,
+        -3px 0px 2px #000000,
+        0px -3px 2px #000000;
+    padding-bottom: 20px;
+    transform: rotate(-3deg);
+}

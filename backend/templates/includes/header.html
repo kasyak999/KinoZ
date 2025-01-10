@@ -1,7 +1,10 @@
 {% load static %}
 
 <header>
-  <div><a href="{% url 'films:index' %}"><img src="{% static 'images/kinozfun.png' %}"></a></div>
+  <link rel="stylesheet" href="{% static 'css/text.css' %}" type="text/css">
+  {% comment %} <div><a href="{% url 'films:index' %}"><img src="{% static 'images/kinozfun.png' %}"></a></div> {% endcomment %}
+  <div class="qwert">KinoZ</div>
+  <div class="qwert1">онлайн - платформа для любителей кино</div>
   <div class="menu-top">
     <div>Здравствуйте <b>
       {% if user.is_authenticated %}
