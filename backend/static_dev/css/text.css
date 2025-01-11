@@ -1,33 +1,31 @@
 .qwert {
     padding-top: 40px;
-    font-size: 62px;
+    font-size: 5vw;
     font-weight: 800;
     font-family: 'Roboto', sans-serif;
     color: #4CAF50; /* Зеленый цвет текста */
     text-shadow:
-        6px 6px 4px #000000,
-
-        -1px -1px 2px #000000,
-        1px 1px 2px #000000,
-        1px 0px 2px #000000,
-        0px 1px 2px #000000,
-        -1px 0px 2px #000000,
-        0px -1px 2px #000000;
+        -0.05em -0.05em 0.1em #000000,
+        0.05em 0.05em 0.1em #000000,
+        0.05em 0em 0.1em #000000,
+        0em 0.05em 0.1em #000000,
+        -0.05em 0em 0.1em #000000,
+        0em -0.05em 0.1em #000000;
     transform: rotate(-4deg) scaleX(3); /* Легкий угол наклона текста */
 }
 
 .qwert1 {
-    font-size: 28px;
+    font-size: 2vw;
     font-weight: 800;
     font-family: 'Roboto', sans-serif;
     color: #ffffff; /* Зеленый цвет текста */
     text-shadow: 
-        -3px -3px 2px #000000,
-        3px 3px 2px #000000,
-        3px 0px 2px #000000,
-        0px 3px 2px #000000,
-        -3px 0px 2px #000000,
-        0px -3px 2px #000000;
+        -0.15em -0.15em 0.1em #000000,
+        0.15em 0.15em 0.1em #000000,
+        0.15em 0 0.1em #000000,
+        0 0.15em 0.1em #000000,
+        -0.15em 0 0.1em #000000,
+        0 -0.15em 0.1em #000000;
     padding-bottom: 20px;
     transform: rotate(-3deg);
 }
