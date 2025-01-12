@@ -4,7 +4,7 @@ from django.contrib import messages
 from dotenv import load_dotenv
 import requests
 from .models import FilmsdModel
-# from pprint import pprint
+from pprint import pprint
 
 
 load_dotenv()
@@ -18,9 +18,25 @@ DATA_KP = {  # Параметры запроса к кинопоиску
 }
 
 
+# /api/v2.2/films/{id}/videos
+def trailer_film(value):
+    """трейлеры к фильму"""
+    data_kp = KINOPOISK_URL + f'/api/v2.2/films/{value}/videos'
+    response_kp = requests.get(
+        data_kp, headers=DATA_KP)
+    # print(response_kp)
+    if response_kp.status_code == 200:
+        response_kp = response_kp.json()
+        # pprint(response_kp)
+        return response_kp['items']
+    
+    else:
+        print('Ошибка в базе кинопоиска')
+
+
 # /api/v1/staff?filmId=666
 def actors_film(value):
-    """Поиск фильма, пока не используется"""
+    """актеры для фильма"""
     data_kp = KINOPOISK_URL + '/api/v1/staff'
     response_kp = requests.get(
         data_kp, headers=DATA_KP, params={'filmId': value})
@@ -88,7 +104,7 @@ def connection_api(kp: int):
     """Собираем информацию о фильме из кинопоиска"""
     data_kp = KINOPOISK_URL + KINOPOISK_URL_MAIN + str(kp)
     response_kp = requests.get(data_kp, headers=DATA_KP)
-    print(response_kp)
+    # print(response_kp)
     if response_kp.status_code == 200:
         # actors = actors_film(kp)
         # scrinshot = add_scrinshot_film(data_kp)
@@ -122,7 +138,8 @@ def connection_api(kp: int):
             'description': response_kp['description'],
             'cat': cat,
             'scrinshot': add_scrinshot_film(data_kp),
-            'actors': actors_film(kp)
+            'actors': actors_film(kp),
+            'trailer': trailer_film(kp),
         }
         return result
     # raise Http404

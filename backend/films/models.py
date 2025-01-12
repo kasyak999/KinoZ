@@ -61,8 +61,11 @@ class FilmsdModel(MainModel):
             '[{"imageUrl": "ссылка", "previewUrl": "ссылка"}, ]'
         )
     )
-    actors = models.TextField(
+    actors = models.JSONField(
         verbose_name='Актеры', null=True, blank=True
+    )
+    trailer = models.JSONField(
+        verbose_name='Трейлеры', null=True, blank=True
     )
     cat = models.ForeignKey(
         'Category',

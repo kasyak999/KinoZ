@@ -41,7 +41,7 @@
   </div>
   <div class="text">
     {% if object.actors %}
-      {% for key, value in object.actors|str_to_dict %}
+      {% for key, value in object.actors.items %}
         <p>
           <b>{{ key }}</b>: {{ value|list_to_str }}
         </p>
@@ -51,6 +51,13 @@
     <p><b>О фильме:</b>
       {{ object.description }}
     </p>
+
+    {% if object.trailer %}
+      <br><p><b>Трейлеры:</b></p>
+      {% for i in object.trailer %}
+        <p>{{ i.name }} ({{ i.site }}): <a href="{{ i.url }}" target="_blank">смотреть</a></p>
+      {% endfor %}
+    {% endif %}
   </div>
   <br>
   <style>

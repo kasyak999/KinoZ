@@ -1,4 +1,3 @@
-import ast
 import json
 from django import template
 
@@ -22,13 +21,6 @@ def numeric(value):
 def json_to_list(value):
     """Преобразует строку JSON в список."""
     return json.loads(value)
-
-
-@register.filter
-def str_to_dict(value):
-    """Фильтр преобразует строку в словарь"""
-    result = ast.literal_eval(value)
-    return result.items()
 
 
 @register.filter

@@ -1,3 +1,4 @@
+import json
 from django.contrib import admin
 from django.utils.html import format_html
 from django import forms
@@ -38,7 +39,17 @@ def not_is_published(modeladmin, request, queryset):
         request, "Выбранные записи были успешно отмечены как не опубликовано.")
 
 
+class PrettyJSONEncoder(json.JSONEncoder):
+    """Для красивого отображения Json"""
+    def __init__(self, *args, indent, sort_keys, **kwargs):
+        super().__init__(*args, indent=2, sort_keys=True, **kwargs)
+
+
 class FilmsdModelForm(forms.ModelForm):
+    scrinshot = forms.JSONField(encoder=PrettyJSONEncoder)
+    actors = forms.JSONField(encoder=PrettyJSONEncoder)
+    trailer = forms.JSONField(encoder=PrettyJSONEncoder)
+
     class Meta:
         model = FilmsdModel
         fields = '__all__'
@@ -63,20 +74,6 @@ class FilmsdModelForm(forms.ModelForm):
                     f'<img src="{image[1]}" alt="Image" '
                     f'style="max-height: 100px; max-width: 100px;"></a>'
                 )
-
-
-class FilmsCountMixin(admin.ModelAdmin):
-    list_display = (
-        'name',
-        'films_count',
-        'created_at',
-    )
-    search_fields = ['name',]
-    list_per_page = settings.OBJECTS_PER_PAGE
-
-    @admin.display(description='Количество фильмов')
-    def films_count(self, obj):
-        return obj.posts.count()
 
 
 @admin.register(LogEntry)
@@ -159,6 +156,20 @@ class ComentAdmin(admin.ModelAdmin):
                 f'style="max-height: 100px; max-width: 100px;"/>'
             )
         return 'Нет изображения'
+
+
+class FilmsCountMixin(admin.ModelAdmin):
+    list_display = (
+        'name',
+        'films_count',
+        'created_at',
+    )
+    search_fields = ['name',]
+    list_per_page = settings.OBJECTS_PER_PAGE
+
+    @admin.display(description='Количество фильмов')
+    def films_count(self, obj):
+        return obj.posts.count()
 
 
 @admin.register(Category)
