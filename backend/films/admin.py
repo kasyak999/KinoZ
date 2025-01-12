@@ -46,9 +46,9 @@ class PrettyJSONEncoder(json.JSONEncoder):
 
 
 class FilmsdModelForm(forms.ModelForm):
-    scrinshot = forms.JSONField(encoder=PrettyJSONEncoder)
-    actors = forms.JSONField(encoder=PrettyJSONEncoder)
-    trailer = forms.JSONField(encoder=PrettyJSONEncoder)
+    scrinshot = forms.JSONField(encoder=PrettyJSONEncoder, required=False)
+    actors = forms.JSONField(encoder=PrettyJSONEncoder, required=False)
+    trailer = forms.JSONField(encoder=PrettyJSONEncoder, required=False)
 
     class Meta:
         model = FilmsdModel
