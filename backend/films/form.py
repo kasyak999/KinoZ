@@ -35,7 +35,9 @@ class AddFilmBaza(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Устанавливаем скрытое поле
-        for value in ['poster', 'scrinshot', 'rating', 'votecount', 'actors', 'trailer']:
+        for value in [
+            'poster', 'scrinshot', 'rating', 'votecount', 'actors', 'trailer'
+        ]:
             self.fields[value].widget = forms.HiddenInput()
         # Устанавливаем поле id_kp как доступное только для чтения
         for value in ['id_kp', 'name', 'name_orig', 'year', 'description']:

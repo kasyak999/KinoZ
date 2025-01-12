@@ -4,7 +4,7 @@ from django.contrib import messages
 from dotenv import load_dotenv
 import requests
 from .models import FilmsdModel
-from pprint import pprint
+# from pprint import pprint
 
 
 load_dotenv()
@@ -29,7 +29,6 @@ def trailer_film(value):
         response_kp = response_kp.json()
         # pprint(response_kp)
         return response_kp['items']
-    
     else:
         print('Ошибка в базе кинопоиска')
 
