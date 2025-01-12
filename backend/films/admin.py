@@ -104,6 +104,7 @@ class FilmsAdmin(admin.ModelAdmin):
     formfield_overrides = {
         JSONField: {'widget': JSONEditorWidget},
     }
+    filter_horizontal = ('country', 'genres',)
 
     @admin.display(description='В избранном')
     def favorites_count(self, obj):
