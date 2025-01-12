@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
+    'django_json_widget',
 
     'films.apps.FilmsConfig',
     'users.apps.UsersConfig',

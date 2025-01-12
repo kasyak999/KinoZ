@@ -7,7 +7,8 @@ from django.urls import reverse
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib import messages
-from django.db.models import Count
+from django.db.models import Count, JSONField
+from django_json_widget.widgets import JSONEditorWidget
 from . models import FilmsdModel, Category, Genres, Country, Coment, Favorite
 
 
@@ -46,9 +47,6 @@ class PrettyJSONEncoder(json.JSONEncoder):
 
 
 class FilmsdModelForm(forms.ModelForm):
-    scrinshot = forms.JSONField(encoder=PrettyJSONEncoder, required=False)
-    actors = forms.JSONField(encoder=PrettyJSONEncoder, required=False)
-    trailer = forms.JSONField(encoder=PrettyJSONEncoder, required=False)
 
     class Meta:
         model = FilmsdModel
@@ -103,6 +101,9 @@ class FilmsAdmin(admin.ModelAdmin):
     list_filter = ('is_published', 'verified')
     list_per_page = settings.OBJECTS_PER_PAGE
     actions = [is_published, not_is_published, verified, not_verified]
+    formfield_overrides = {
+        JSONField: {'widget': JSONEditorWidget},
+    }
 
     @admin.display(description='В избранном')
     def favorites_count(self, obj):
