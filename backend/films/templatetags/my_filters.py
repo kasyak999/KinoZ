@@ -6,13 +6,13 @@ register = template.Library()
 
 
 @register.filter
-def split(value):
+def split(value: str):
     """Фильтр, создает список."""
     return value.split(', ')
 
 
 @register.filter
-def numeric(value):
+def numeric(value: int):
     """Фильтр, который разделяет число по тысячам."""
     return f"{value:,}".replace(',', ' ')
 
@@ -24,6 +24,6 @@ def json_to_list(value):
 
 
 @register.filter
-def list_to_str(value):
+def list_to_str(value: list):
     """Преобразует список в строку"""
-    return str.join(', ', value)
+    return ', '.join(value)
