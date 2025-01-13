@@ -29,7 +29,7 @@
               </p>
             {% endif %}
             <p><a href="{% url 'users:user' username=comment.author.username %}"><b>
-            {{ comment.author.username }}</b></a>: {{ comment.text }}&nbsp;&nbsp;
+            {{ comment.author.username }}</b></a>: {{ comment.text|linebreaks|urlize }}&nbsp;&nbsp;
             {% if user == comment.author %}
               <a href="{% url 'films:edit_comment' comment.film.id_kp comment.id %}" title="Изменить">
                 <img src="{% static 'images/izm.png' %}" class="izm-del-ico">
