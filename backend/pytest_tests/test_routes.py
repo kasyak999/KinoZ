@@ -5,11 +5,11 @@ from django.urls import reverse
 
 
 @pytest.fixture
-def urls(films_baza, author, comments_add):
+def urls(films_true, author, comments_add):
     """Фикстура для url"""
     return {
         'index': reverse('films:index'),
-        'film': reverse('films:film', args=[films_baza.id_kp]),
+        'film': reverse('films:film', args=[films_true.id_kp]),
         'search': reverse('films:search'),
         'add_film': reverse('films:add_film'),
         'user_list': reverse('users:user_list'),
@@ -28,12 +28,12 @@ def urls(films_baza, author, comments_add):
 
         'edit_comment': reverse(
             'films:edit_comment', kwargs={
-                'film_id_kp': films_baza.id_kp,
+                'film_id_kp': films_true.id_kp,
                 'comment_id': comments_add.id}
         ),
         'delete_comment': reverse(
             'films:delete_comment', kwargs={
-                'film_id_kp': films_baza.id_kp,
+                'film_id_kp': films_true.id_kp,
                 'comment_id': comments_add.id}
         ),
     }

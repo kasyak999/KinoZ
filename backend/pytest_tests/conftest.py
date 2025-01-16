@@ -1,6 +1,6 @@
 import pytest
 from django.test.client import Client
-from films.models import FilmsdModel, Coment
+from films.models import FilmsdModel, Coment, Favorite
 
 
 @pytest.fixture
@@ -30,20 +30,61 @@ def not_author_client(not_author):
 
 
 @pytest.fixture
-def films_baza():
+def films_true():
     return FilmsdModel.objects.create(
         is_published=True,
         verified=True,
         id_kp=1,
-        name_orig='Оригинальное название',
+        name='Оригинальное название',
         year=2024,
     )
 
 
 @pytest.fixture
-def comments_add(films_baza, author):
+def is_published_false():
+    return FilmsdModel.objects.create(
+        is_published=False,
+        verified=True,
+        id_kp=2,
+        name='Оригинальное название2',
+        year=2024,
+    )
+
+
+@pytest.fixture
+def verified_false():
+    return FilmsdModel.objects.create(
+        is_published=True,
+        verified=False,
+        id_kp=3,
+        name='Оригинальное название3',
+        year=2024,
+    )
+
+
+@pytest.fixture
+def films_false():
+    return FilmsdModel.objects.create(
+        is_published=False,
+        verified=False,
+        id_kp=4,
+        name='Оригинальное название4',
+        year=2024,
+    )
+
+
+@pytest.fixture
+def comments_add(films_true, author):
     return Coment.objects.create(
         text='Какой то текст',
-        film=films_baza,
+        film=films_true,
         author=author,
+    )
+
+
+@pytest.fixture
+def favorite(films_true, author):
+    return Favorite.objects.create(
+        user=author,
+        film=films_true,
     )

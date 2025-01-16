@@ -90,6 +90,9 @@ class FilmsdModel(MainModel):
         default_related_name = 'posts'
         ordering = ('-created_at',)
 
+    def __str__(self):
+        return f'{self.name}'
+
 
 class Category(MainModel):
     """Катагории фильмов"""
