@@ -8,6 +8,8 @@ register = template.Library()
 @register.filter
 def split(value: str):
     """Фильтр, создает список."""
+    if value is None:
+        return []
     return value.split(', ')
 
 
