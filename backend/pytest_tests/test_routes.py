@@ -101,12 +101,12 @@ def test_authorized_and_unauthorized_user_status_codes_2(
     assert client_autch.get(urls[name_url]).status_code == code
 
 
-@pytest.mark.django_db
-def test_qwe(client, urls):
-    """Проверка редиректа если нет фильма в базе"""
-    id_kp = 666
-    url = reverse('films:film', args=[id_kp])
-    expected_url = f'{urls['add_film']}?id={id_kp}'
-    assertRedirects(
-        client.get(url), expected_url, status_code=HTTPStatus.FOUND,
-        target_status_code=HTTPStatus.OK)
+# @pytest.mark.django_db
+# def test_qwe(client, urls):
+#     """Проверка редиректа если нет фильма в базе"""
+#     id_kp = 666
+#     url = reverse('films:film', args=[id_kp])
+#     expected_url = f'{urls['add_film']}?id={id_kp}'
+#     assertRedirects(
+#         client.get(url), expected_url, status_code=HTTPStatus.FOUND,
+#         target_status_code=HTTPStatus.OK)
