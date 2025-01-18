@@ -20,6 +20,10 @@ jobs:
           pip install flake8
       - name: Проверяем flake8
         run: python -m flake8 backend/
+      - name: Запуск тестов pytest
+        run: |
+          pip install -r ./backend/requirements.txt
+          pytest
   push_to_dockerhub_backend:
     name: Отправка образа backend
     runs-on: ubuntu-latest
