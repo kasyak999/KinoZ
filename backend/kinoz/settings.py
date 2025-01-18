@@ -9,7 +9,7 @@ OBJECTS_PER_PAGE = 10  # Кол-во объектов на странице
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = BASE_DIR / 'templates'
 
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY', 123)
 
 DEBUG = False  # False / True
 AUTH_USER_MODEL = 'users.UserProfile'
@@ -131,7 +131,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 # Указываем директорию, в которую будут сохраняться файлы писем:
 EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
 
-CSRF_TRUSTED_ORIGINS = os.getenv('DOMEN').split(',')
+CSRF_TRUSTED_ORIGINS = os.getenv('DOMEN', '').split(',')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
