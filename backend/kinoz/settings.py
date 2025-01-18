@@ -15,7 +15,7 @@ DEBUG = False  # False / True
 AUTH_USER_MODEL = 'users.UserProfile'
 
 # ALLOWED_HOSTS = ['89.110.75.220', '127.0.0.1', 'kinoz.ddns.net', 'localhost']
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1').split(',')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
