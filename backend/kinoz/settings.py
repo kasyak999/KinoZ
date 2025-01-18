@@ -11,7 +11,7 @@ TEMPLATES_DIR = BASE_DIR / 'templates'
 
 SECRET_KEY = os.getenv('SECRET_KEY', 123)
 
-DEBUG = True  # False / True
+DEBUG = False  # False / True
 AUTH_USER_MODEL = 'users.UserProfile'
 
 # ALLOWED_HOSTS = ['89.110.75.220', '127.0.0.1', 'kinoz.ddns.net', 'localhost']
@@ -69,7 +69,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'kinoz.wsgi.application'
 
-if DEBUG:
+if DEBUG or os.getenv("GITHUB_ACTIONS"):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',

@@ -23,6 +23,7 @@ jobs:
         run: python -m flake8 backend/
       - name: Запуск тестов pytest
         env:
+          GITHUB_ACTIONS: true
           ALLOWED_HOSTS: "localhost,127.0.0.1"
         run: |
           pytest backend/
