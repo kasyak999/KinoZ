@@ -23,7 +23,7 @@ jobs:
       - name: Запуск тестов pytest
         run: |
           pip install -r ./backend/requirements.txt
-          pytest
+          pytest backend/
   push_to_dockerhub_backend:
     name: Отправка образа backend
     runs-on: ubuntu-latest
