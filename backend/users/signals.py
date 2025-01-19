@@ -1,9 +1,17 @@
+import os
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
-from films.models import Favorite, Coment
+from films.models import Favorite, Coment, Torrent
 from news.models import EventUser
 from .middleware import is_from_admin
 from .models import Follow
+
+
+@receiver(post_delete, sender=Torrent)
+def delete_torrent_file(sender, instance, **kwargs):
+    """Удаление файла после удаление записи"""
+    if instance.file and os.path.isfile(instance.file.path):
+        os.remove(instance.file.path)
 
 
 @receiver(post_save, sender=Favorite)
