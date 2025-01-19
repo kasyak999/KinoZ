@@ -58,6 +58,10 @@
         <p>{{ i.name }} ({{ i.site }}): <a href="{{ i.url }}" target="_blank">смотреть</a></p>
       {% endfor %}
     {% endif %}
+
+    {% if object.torrent %}
+      <br><p><b>Скачать торрент файл:</b> <a href="{{ object.torrent.url }}">{{ object.torrent }}</a></p>
+    {% endif %}
   </div>
   <br>
   <style>

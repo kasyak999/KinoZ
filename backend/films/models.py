@@ -67,6 +67,8 @@ class FilmsdModel(MainModel):
     trailer = models.JSONField(
         verbose_name='Трейлеры', null=True, blank=True
     )
+    torrent = models.FileField(
+        upload_to='torrent/', null=True, blank=True, verbose_name='Торрент')
     cat = models.ForeignKey(
         'Category',
         max_length=256,
