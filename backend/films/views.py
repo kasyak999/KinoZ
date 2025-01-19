@@ -12,7 +12,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .api import information_film, search_film
 from .form import (
     AddFilmBaza, ComentForm, AddFilmFavorites, FilmLinkForm, FormComment)
-from .models import FilmsdModel, Genres, Category, Torrent
+from .models import FilmsdModel, Genres, Category
 from .mixin import OnlyAuthorMixin, FilmMixin, CommentMixin
 
 
