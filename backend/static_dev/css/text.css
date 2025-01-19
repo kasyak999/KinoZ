@@ -11,7 +11,7 @@
         -0.05em 0em 0.1em #000000,
         0em -0.05em 0.1em #000000;
     transform: rotate(-4deg) scaleY(0.5); /* Легкий угол наклона текста */
-    /*border: 1px solid #d9f00e;  /*рамка*/
+    border: 1px solid #d9f00e;  /*рамка*/
 }
 
 .qwert1 {
@@ -27,6 +27,6 @@
         0 0.15em 0.1em #000000,
         -0.15em 0 0.1em #000000,
         0 -0.15em 0.1em #000000;
-    transform: rotate(4deg) translateY(-25px);;/**/
-    /*border: 1px solid #d9f00e;  /*рамка*/
+    transform: rotate(3deg) translateY(-65%);;/**/
+    border: 1px solid #d9f00e;  /*рамка*/
 }
