@@ -1,6 +1,7 @@
 import pytest
 from django.test.client import Client
 from films.models import FilmsdModel, Coment, Favorite
+from users.models import Follow, Message
 
 
 @pytest.fixture
@@ -87,4 +88,21 @@ def favorite(films_true, author):
     return Favorite.objects.create(
         user=author,
         film=films_true,
+    )
+
+
+@pytest.fixture
+def follow(author, not_author):
+    return Follow.objects.create(
+        user=author,
+        following=not_author,
+    )
+
+
+@pytest.fixture
+def message(author, not_author):
+    return Message.objects.create(
+        sender=author,
+        receiver=not_author,
+        content='Текст',
     )

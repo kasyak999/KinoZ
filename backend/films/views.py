@@ -7,8 +7,9 @@ from django.contrib import messages
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import Http404
 from .api import information_film, search_film
 from .form import (
     AddFilmBaza, ComentForm, AddFilmFavorites, FilmLinkForm, FormComment)
@@ -77,6 +78,15 @@ class IndexListView(ListView):
     model = FilmsdModel
     template_name = 'films/index.html'
     paginate_by = settings.OBJECTS_PER_PAGE
+
+    def dispatch(self, request, *args, **kwargs):
+        if (
+            not request.user.is_authenticated
+            and self.kwargs.get('list_type') == 'favorite'
+        ):
+            login_url = f"{reverse('login')}?next={self.request.path}"
+            return redirect(login_url)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
         result = super().get_queryset().filter(

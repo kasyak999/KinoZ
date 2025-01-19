@@ -19,6 +19,7 @@ def urls(author, films_true, not_author, comments_add):
         'add_film': reverse('films:add_film'),
         'edit_comment': reverse('films:edit_comment', args=[
             films_true.id_kp, comments_add.id]),
+        'message_list': reverse('users:message_list'),
     }
 
 
@@ -80,12 +81,20 @@ def test_favorite_films(favorite, urls, avtar, status, request):
     ('film', 'user')
 )
 @pytest.mark.django_db
-def test_user_comments(comments_add, url, urls, author_client):
+def test_user_comments(comments_add, url, urls, author_client, message):
     """Есть ли комментарии пользователя на странице пользователя"""
     response = author_client.get(urls[url])
     object_list = response.context['object_list']
     assert comments_add in object_list, (
         'Отсутствуют комментарии пользователя')
+
+
+@pytest.mark.django_db
+def test_user_message(urls, author_client, message):
+    response = author_client.get(urls['message_list'])
+    object_list = response.context['object_list']
+    assert message in object_list, (
+        'Отсутствуют сообщения')
 
 
 @pytest.mark.parametrize(

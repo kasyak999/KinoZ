@@ -1,16 +1,15 @@
 from django.shortcuts import redirect
-from .models import FilmsdModel, Coment
 from django.contrib import messages
 from django.urls import reverse_lazy, reverse
+from django.http import Http404
+from .models import FilmsdModel, Coment
 
 
 class OnlyAuthorMixin:
     def dispatch(self, request, *args, **kwargs):
         coment = self.get_object()
         if coment.author != self.request.user:
-            return redirect(
-                'films:film', kwargs['film_id_kp']
-            )
+            raise Http404
         return super().dispatch(request, *args, **kwargs)
 
 
