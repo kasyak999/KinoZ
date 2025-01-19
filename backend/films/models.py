@@ -67,8 +67,6 @@ class FilmsdModel(MainModel):
     trailer = models.JSONField(
         verbose_name='Трейлеры', null=True, blank=True
     )
-    torrent = models.FileField(
-        upload_to='torrent/', null=True, blank=True, verbose_name='Торрент')
     cat = models.ForeignKey(
         'Category',
         max_length=256,
@@ -94,6 +92,25 @@ class FilmsdModel(MainModel):
 
     def __str__(self):
         return f'{self.name}'
+
+
+class Torrent(models.Model):
+    film = models.ForeignKey(
+        FilmsdModel,
+        on_delete=models.CASCADE,
+        related_name='torrents',
+        verbose_name='Фильм'
+    )
+    file = models.FileField(upload_to='torrent/', verbose_name='Торрент')
+
+    class Meta:
+        verbose_name = 'торрент'
+        verbose_name_plural = 'Торренты'
+        default_related_name = 'torrents'
+        ordering = ('-id',)
+
+    def __str__(self):
+        return f'{self.file}'
 
 
 class Category(MainModel):

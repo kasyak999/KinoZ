@@ -12,7 +12,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .api import information_film, search_film
 from .form import (
     AddFilmBaza, ComentForm, AddFilmFavorites, FilmLinkForm, FormComment)
-from .models import FilmsdModel, Genres, Category
+from .models import FilmsdModel, Genres, Category, Torrent
 from .mixin import OnlyAuthorMixin, FilmMixin, CommentMixin
 
 
@@ -128,7 +128,8 @@ class DetailFilm(FilmMixin, ListView):
             # is_favorite=Exists(Favorite.objects.filter(
             #     film=OuterRef('pk'), user=self.request.user)
             # )
-        ).prefetch_related('genres', 'country').select_related('cat').get(
+        ).prefetch_related(
+            'genres', 'country', 'torrents').select_related('cat').get(
             id_kp=self.kwargs[self.pk_url_kwarg], verified=True,
             is_published=True)
 

@@ -59,8 +59,13 @@
       {% endfor %}
     {% endif %}
 
-    {% if object.torrent %}
-      <br><p><b>Скачать торрент файл:</b> <a href="{{ object.torrent.url }}">{{ object.torrent }}</a></p>
+    {% if object.torrents.all %}
+      <br><p><b>Скачать торрент файл:</b></p>
+      <ol>
+      {% for torrent in object.torrents.all %}
+        <li><a href="{{ torrent.file.url }}">{{ torrent.file }}</a></li>
+      {% endfor %}
+      </ol>
     {% endif %}
   </div>
   <br>

@@ -9,7 +9,8 @@ from django.contrib.admin.models import LogEntry
 from django.contrib import messages
 from django.db.models import Count, JSONField
 from django_json_widget.widgets import JSONEditorWidget
-from . models import FilmsdModel, Category, Genres, Country, Coment, Favorite
+from . models import (
+    FilmsdModel, Category, Genres, Country, Coment, Favorite, Torrent)
 
 
 @admin.action(description='Проверено')
@@ -84,9 +85,17 @@ class LogEntryAdmin(admin.ModelAdmin):
     list_per_page = settings.OBJECTS_PER_PAGE
 
 
+class TorrentFileInline(admin.TabularInline):
+    model = Torrent
+    extra = 1  # Количество пустых форм
+    verbose_name = "Торрент файл"
+    verbose_name_plural = "Торрент файлы"
+
+
 @admin.register(FilmsdModel)
 class FilmsAdmin(admin.ModelAdmin):
     form = FilmsdModelForm
+    inlines = [TorrentFileInline]
     list_display = (
         'image_preview',
         'id_kp',
@@ -104,7 +113,7 @@ class FilmsAdmin(admin.ModelAdmin):
     formfield_overrides = {
         JSONField: {'widget': JSONEditorWidget},
     }
-    filter_horizontal = ('country', 'genres',)
+    filter_horizontal = ('country', 'genres')
 
     @admin.display(description='В избранном')
     def favorites_count(self, obj):
@@ -193,4 +202,10 @@ class CountryAdmin(FilmsCountMixin):
 @admin.register(Favorite)
 class FavoriteAdmin(admin.ModelAdmin):
     list_display = ('user', 'film', 'created_at')
+    list_per_page = settings.OBJECTS_PER_PAGE
+
+
+@admin.register(Torrent)
+class TorrentAdmin(admin.ModelAdmin):
+    list_display = ('film',)
     list_per_page = settings.OBJECTS_PER_PAGE
