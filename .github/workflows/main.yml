@@ -103,6 +103,8 @@ jobs:
     name: Отправка сообщения в телеграмм
     runs-on: ubuntu-latest
     needs: deploy
+    permissions: 
+      contents: read
     steps:
     - name: Send message
       uses: appleboy/telegram-action@master
