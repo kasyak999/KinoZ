@@ -1,5 +1,14 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
+import base64
+
+
+def my_view(request):
+    html_content = "<h1>Секретная информация</h1>"
+    # encoded_html = base64.b64encode(html_content.encode()).decode()
+    encoded_html = base64.b64encode(html_content.encode()).decode()
+    print(encoded_html)
+    return render(request, 'pages/test.html', {'encoded_html': encoded_html})
 
 
 class About(TemplateView):

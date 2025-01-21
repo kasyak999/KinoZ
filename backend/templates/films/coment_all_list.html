@@ -9,6 +9,11 @@
 {% block content %}   
   <h3>Комментарии</h3>
 
+  {% with request.resolver_match.view_name as view_name %}
+    {% if view_name == 'films:coment_all_list' and not object_list %}
+      <p>Нет комментариев к фильмам.</p>
+    {% endif %}
+  {% endwith %}
 
   {% for comment in object_list %}
     {% include "includes/film/comment.html" %}

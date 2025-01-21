@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     'news.apps.NewsConfig',
 ]
 
+INSTALLED_APPS += ['htmlmin']
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -42,11 +44,14 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+    'htmlmin.middleware.HtmlMinifyMiddleware',
+    'htmlmin.middleware.MarkRequestMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     # Добавьте вашу middleware в список
     'users.middleware.AdminActionMiddleware',
 ]
-
+HTML_MINIFY = True
+KEEP_COMMENTS_ON_MINIFYING = False  # Убрать комментарии из кода
 ROOT_URLCONF = 'kinoz.urls'
 
 TEMPLATES = [
