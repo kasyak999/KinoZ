@@ -110,5 +110,4 @@ def test_qwe(client, urls):
     url = reverse('films:film', args=[id_kp])
     expected_url = f'{urls['add_film']}?id={id_kp}'
     assertRedirects(
-        client.get(url), expected_url, status_code=HTTPStatus.FOUND,
-        target_status_code=HTTPStatus.OK)
+        client.get(url), expected_url)

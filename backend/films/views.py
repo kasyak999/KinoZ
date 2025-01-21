@@ -183,7 +183,7 @@ class AddFilmView(FormView):
     """Добавление фильма с двумя этапами"""
     template_name = 'films/add_film.html'
     form_class = FilmLinkForm  # Форма для проверки ссылки
-    second_form_class = AddFilmBaza  # Основная форма для добавления фильма
+    second_form_class = AddFilmBaza  # форма для добавления фильма
 
     def get_context_data(self, **kwargs):
         """Контекст для отображения формы"""
