@@ -12,7 +12,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .api import information_film, search_film
 from .form import (
     AddFilmBaza, ComentForm, AddFilmFavorites, FilmLinkForm, FormComment)
-from .models import FilmsdModel, Genres, Category
+from .models import FilmsdModel, Genres, Category, Coment
 from .mixin import OnlyAuthorMixin, FilmMixin, CommentMixin
 
 
@@ -106,6 +106,13 @@ class IndexListView(ListView):
         else:
             context['html_name'] = 'Главная страница'
         return context
+
+
+class ComentView(ListView):
+    """Все комментарии пользователей"""
+    model = Coment
+    template_name = 'films/coment_all_list.html'
+    paginate_by = settings.OBJECTS_PER_PAGE
 
 
 class DetailFilm(FilmMixin, ListView):

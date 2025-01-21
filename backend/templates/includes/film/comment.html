@@ -2,11 +2,11 @@
 {% load my_filters %} 
 <link rel="stylesheet" href="{% static 'css/index-index.css' %}" type="text/css"> 
 
-
+    {% with request.resolver_match.view_name as view_name %}
       <div class="osnova">
         <div class="osnova-head">
           <div>
-            {% if view_name == 'users:user' %}
+            {% if view_name == 'users:user' or view_name == 'films:coment_all_list' %}
               {% with comment.film.poster|split as poster %}
                 <a href="{% url 'films:film' comment.film.id_kp %}">
                 {% include "includes/film/poster.html" %}</a>
@@ -22,7 +22,7 @@
             {% endif %}
           </div>
           <div>
-            {% if view_name == 'users:user' %}
+            {% if view_name == 'users:user' or view_name == 'films:coment_all_list' %}
               <p>
                 <a href="{% url "films:film" comment.film.id_kp %}">
                 <b>{{ comment.film.name }} / {{ comment.film.name_orig }} ({{ comment.film.year }})</b></a>
@@ -43,3 +43,4 @@
         </div>
         <p>{{ comment.created_at|date:"d M Y H:i" }}</p>
       </div>
+    {% endwith %}

@@ -5,6 +5,7 @@
       <li><a href="{% url 'films:search' %}" class="{% if view_name == 'films:search' %}a-active{% endif %}">Поиск</a></li>
       <li><a href="{% url 'films:add_film' %}" class="{% if view_name == 'films:add_film' %}a-active{% endif %}">Добавить фильм</a></li>
       <li><a href="{% url 'users:user_list' %}" class="{% if view_name == 'users:user_list' %}a-active{% endif %}">Пользователи</a></li>
+      <li><a href="{% url 'films:coment_all_list' %}" class="{% if view_name == 'films:coment_all_list' %}a-active{% endif %}">Комментарии</a></li>
       <br>
       <li><a href="{% url 'pages:about' %}" class="{% if view_name == 'pages:about' %}a-active{% endif %}">О проекте</a></li>
       <br>

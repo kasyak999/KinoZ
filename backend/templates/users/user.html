@@ -57,14 +57,12 @@
 		Подписок: <a href="{% url 'users:user_following' user_profile.username %}">{{ following }}</a>
 		Подписчики: <a href="{% url 'users:user_followers' user_profile.username %}">{{ follower  }}</a>
 	</p>
-	{% with request.resolver_match.view_name as view_name %}
-		{% if page_obj.paginator.count > 0 %}
-			<br><p>Все комментарии: {{ len_coments }}</p><br>
-			{% for comment in page_obj %}
-				{% include "includes/film/comment.html" %}
-			{% endfor %}
-		{% endif %}
-	{% endwith %}
+	{% if page_obj.paginator.count > 0 %}
+		<br><p>Все комментарии: {{ len_coments }}</p><br>
+		{% for comment in page_obj %}
+			{% include "includes/film/comment.html" %}
+		{% endfor %}
+	{% endif %}
 	<p align="center">{% include "includes/paginator.html" %}</p>
 {% endif %}
 {% endblock %}

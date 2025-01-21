@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load my_filters %} 
+{% load static %}
+
+{% block title %}
+  {{ html_name }}
+{% endblock %}
+
+{% block content %}   
+  <h3>Комментарии</h3>
+
+
+  {% for comment in object_list %}
+    {% include "includes/film/comment.html" %}
+  {% endfor %}
+  <p align="center">{% include "includes/paginator.html" %}</p>
+
+{% endblock %}

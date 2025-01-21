@@ -51,7 +51,7 @@ main {
   .menu {
     position: sticky; /* двигается вместе с браузером */
     top: 0;/**/
-    max-height: 350px; /**/
+    max-height: 370px; /**/
     /* height: 260px; /**/
     border: 1px solid #006600;  /*рамка*/
     border-radius: 10px; /*закругление*/

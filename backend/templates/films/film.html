@@ -92,13 +92,12 @@
     </form> {% endcomment %}
     </center>
   {% endif %}
-  {% with request.resolver_match.view_name as view_name %}
-		{% if page_obj.paginator.count > 0 %}
-			<br><p>Всего отзывов о фильме: {{ len_coments }}</p><br>
-			{% for comment in page_obj %}
-        {% include "includes/film/comment.html" %}
-      {% endfor %}
-    {% endif %}
-  {% endwith %}
+
+  {% if page_obj.paginator.count > 0 %}
+    <br><p>Всего отзывов о фильме: {{ len_coments }}</p><br>
+    {% for comment in page_obj %}
+      {% include "includes/film/comment.html" %}
+    {% endfor %}
+  {% endif %}
   <p align="center">{% include "includes/paginator.html" %}</p>
 {% endblock %}

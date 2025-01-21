@@ -36,4 +36,5 @@ h1 {
 
 .text {
   margin-top: 5px;
+  overflow-wrap: break-word
 }
