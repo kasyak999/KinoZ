@@ -1,7 +1,7 @@
 asgiref==3.8.1
 certifi==2024.7.4
 charset-normalizer==3.3.2
-Django==5.1.4
+Django==5.1.5
 django-debug-toolbar==4.4.6
 django-json-widget==2.0.1
 gunicorn==23.0.0
