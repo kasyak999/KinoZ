@@ -5,6 +5,8 @@ on:
     - main
 jobs:
   backend_tests:
+    permissions: 
+      contents: read
     name: Тестирование backend
     runs-on: ubuntu-latest
     steps:
@@ -27,6 +29,8 @@ jobs:
         run: |
           pytest backend/
   push_to_dockerhub_backend:
+    permissions: 
+      contents: read
     name: Отправка образа backend
     runs-on: ubuntu-latest
     needs: backend_tests
@@ -47,6 +51,8 @@ jobs:
           push: true
           tags: kasyak999/kinoz_backend:latest
   push_to_dockerhub_nginx:
+    permissions: 
+      contents: read
     name: Отправка образа nginx
     runs-on: ubuntu-latest
     needs: backend_tests
@@ -67,6 +73,8 @@ jobs:
           push: true
           tags: kasyak999/kinoz_nginx:latest
   deploy:
+    permissions: 
+      contents: read
     name: Загрузка на удаленный сервер
     runs-on: ubuntu-latest
     needs: 
