@@ -36,6 +36,7 @@ def urls(films_true, author, comments_add):
                 'film_id_kp': films_true.id_kp,
                 'comment_id': comments_add.id}
         ),
+        'coment_all_list': reverse('films:coment_all_list'),
     }
 
 
@@ -47,7 +48,8 @@ def urls(films_true, author, comments_add):
         'search',
         'add_film',
         'user_list',
-        'registration'
+        'registration',
+        'coment_all_list',
     )
 )
 @pytest.mark.parametrize(
@@ -101,12 +103,12 @@ def test_authorized_and_unauthorized_user_status_codes_2(
     assert client_autch.get(urls[name_url]).status_code == code
 
 
-# @pytest.mark.django_db
-# def test_qwe(client, urls):
-#     """Проверка редиректа если нет фильма в базе"""
-#     id_kp = 666
-#     url = reverse('films:film', args=[id_kp])
-#     expected_url = f'{urls['add_film']}?id={id_kp}'
-#     assertRedirects(
-#         client.get(url), expected_url, status_code=HTTPStatus.FOUND,
-#         target_status_code=HTTPStatus.OK)
+@pytest.mark.django_db
+def test_qwe(client, urls):
+    """Проверка редиректа если нет фильма в базе"""
+    id_kp = 666
+    url = reverse('films:film', args=[id_kp])
+    expected_url = f'{urls['add_film']}?id={id_kp}'
+    assertRedirects(
+        client.get(url), expected_url, status_code=HTTPStatus.FOUND,
+        target_status_code=HTTPStatus.OK)
