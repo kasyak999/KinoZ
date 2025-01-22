@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.http import url_has_allowed_host_and_scheme
 from .api import information_film, search_film
 from .form import (
     AddFilmBaza, ComentForm, AddFilmFavorites, FilmLinkForm, FormComment)
@@ -83,8 +84,17 @@ class IndexListView(ListView):
             not request.user.is_authenticated
             and self.kwargs.get('list_type') == 'favorite'
         ):
-            login_url = f"{reverse('login')}?next={self.request.path}"
-            return redirect(login_url)
+            # login_url = f"{reverse('login')}?next={self.request.path}"
+            # return redirect(login_url)
+
+            login_url = reverse('login')
+            next_url = self.request.path
+            if url_has_allowed_host_and_scheme(
+                next_url, allowed_hosts={request.get_host()}
+            ):  # Проверяем, является ли путь безопасным
+                login_url = f"{login_url}?next={next_url}"
+                return redirect(login_url)
+
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
