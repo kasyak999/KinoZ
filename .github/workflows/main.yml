@@ -84,7 +84,7 @@ jobs:
     - name: Получение исходного кода из репозитория
       uses: actions/checkout@v3
     - name: Копируем docker-compose.production.yml на сервер
-      uses: appleboy/scp-action@master
+      uses: appleboy/scp-action@917f8b81dfc1ccd331fef9e2d61bdc6c8be94634
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USER }}
@@ -92,7 +92,7 @@ jobs:
         source: "docker-compose.production.yml"
         target: "kinoz"
     - name: Выполнение удаленных команд ssh для развертывания
-      uses: appleboy/ssh-action@v1.2.0
+      uses: appleboy/ssh-action@703ffa3c1ee959aa3694ac64b3a8a9bfa38c2c20
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USER }}
