@@ -11,6 +11,7 @@ from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.http import url_has_allowed_host_and_scheme
 from .api import information_film, search_film
+# from .api import information_film, search_film, connection_api
 from .form import (
     AddFilmBaza, ComentForm, AddFilmFavorites, FilmLinkForm, FormComment)
 from .models import FilmsdModel, Genres, Category, Coment
@@ -133,10 +134,10 @@ class DetailFilm(FilmMixin, ListView):
     paginate_by = settings.OBJECTS_PER_PAGE
     # success_url = reverse_lazy('birthday:list')
 
-    @property
-    def _result_api(self):
-        rez = information_film(self.kwargs[self.pk_url_kwarg])
-        return rez
+    # @property
+    # def _result_api(self):
+    #     rez = information_film(self.kwargs[self.pk_url_kwarg])
+    #     return rez
 
     @property
     def get_film(self):
@@ -162,6 +163,8 @@ class DetailFilm(FilmMixin, ListView):
         if self.request.user.is_authenticated:
             context['is_favorite'] = self.request.user.favorites.filter(
                 film=self.result).exists()
+        # rez = connection_api(self.kwargs[self.pk_url_kwarg])
+        # print(rez)
         return context
 
     @method_decorator(login_required())
